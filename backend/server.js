@@ -1,12 +1,12 @@
-const { randomUUID } = require('crypto');
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
+const mongoose = require('mongoose');
 const Anthropic = require('@anthropic-ai/sdk');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const User = require('./models/User');
 
 
 const app = express();
@@ -18,34 +18,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+// ─── MongoDB Connection ────────────────────────────────────────────────────────
+mongoose.connect(process.env.MONGODB_URI, {
+  maxPoolSize: 10,
+}).then(() => {
+  console.log('  MongoDB connected successfully');
+}).catch((err) => {
+  console.error('  MongoDB connection error:', err.message);
+  process.exit(1);
+});
+
 // Anthropic client
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
-
-// ─── User Database (JSON file) ─────────────────────────────────────────────────
-const DB_PATH = path.join(__dirname, 'data/users.json');
-
-function loadDB() {
-  try {
-    if (!fs.existsSync(DB_PATH)) {
-      fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-      fs.writeFileSync(DB_PATH, JSON.stringify({ users: [] }, null, 2));
-    }
-    return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
-  } catch (e) {
-    return { users: [] };
-  }
-}
-
-function saveDB(data) {
-  try {
-    fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-  } catch (e) {
-    console.error('DB save error:', e);
-  }
-}
 
 // ─── JWT Middleware ────────────────────────────────────────────────────────────
 function authMiddleware(req, res, next) {
@@ -138,33 +124,27 @@ app.post('/api/auth/register', async (req, res) => {
   if (password.length < 6) {
     return res.status(400).json({ error: 'Password must be at least 6 characters' });
   }
-  const db = loadDB();
-  if (db.users.find(u => u.email === email.toLowerCase().trim())) {
-    return res.status(409).json({ error: 'An account with this email already exists' });
+  try {
+    const existing = await User.findOne({ email: email.toLowerCase().trim() });
+    if (existing) {
+      return res.status(409).json({ error: 'An account with this email already exists' });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      password: hashedPassword,
+    });
+    const token = jwt.sign({ id: user._id.toString(), email: user.email }, JWT_SECRET, { expiresIn: '30d' });
+    res.json({
+      success: true,
+      token,
+      user: { id: user._id.toString(), name: user.name, email: user.email, profile: user.profile },
+    });
+  } catch (err) {
+    console.error('Register error:', err);
+    res.status(500).json({ error: 'Registration failed. Please try again.' });
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = {
-    id: randomUUID(),
-    name: name.trim(),
-    email: email.toLowerCase().trim(),
-    password: hashedPassword,
-    createdAt: new Date().toISOString(),
-    profile: {
-      language: 'english',
-      zodiacSystem: 'western',
-      zodiacSign: '',
-      rashi: '',
-    },
-    chatHistory: [],
-  };
-  db.users.push(user);
-  saveDB(db);
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '30d' });
-  res.json({
-    success: true,
-    token,
-    user: { id: user.id, name: user.name, email: user.email, profile: user.profile },
-  });
 });
 
 app.post('/api/auth/login', async (req, res) => {
@@ -172,55 +152,71 @@ app.post('/api/auth/login', async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
   }
-  const db = loadDB();
-  const user = db.users.find(u => u.email === email.toLowerCase().trim());
-  if (!user) return res.status(401).json({ error: 'Invalid email or password' });
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '30d' });
-  res.json({
-    success: true,
-    token,
-    user: { id: user.id, name: user.name, email: user.email, profile: user.profile },
-    chatHistory: user.chatHistory || [],
-  });
+  try {
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) return res.status(401).json({ error: 'Invalid email or password' });
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
+    const token = jwt.sign({ id: user._id.toString(), email: user.email }, JWT_SECRET, { expiresIn: '30d' });
+    res.json({
+      success: true,
+      token,
+      user: { id: user._id.toString(), name: user.name, email: user.email, profile: user.profile },
+      chatHistory: user.chatHistory || [],
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ error: 'Login failed. Please try again.' });
+  }
 });
 
-app.get('/api/auth/me', authMiddleware, (req, res) => {
-  const db = loadDB();
-  const user = db.users.find(u => u.id === req.user.id);
-  if (!user) return res.status(404).json({ error: 'User not found' });
-  res.json({
-    user: { id: user.id, name: user.name, email: user.email, profile: user.profile },
-    chatHistory: user.chatHistory || [],
-  });
+app.get('/api/auth/me', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json({
+      user: { id: user._id.toString(), name: user.name, email: user.email, profile: user.profile },
+      chatHistory: user.chatHistory || [],
+    });
+  } catch (err) {
+    console.error('Me error:', err);
+    res.status(500).json({ error: 'Could not fetch user data.' });
+  }
 });
 
-app.put('/api/auth/profile', authMiddleware, (req, res) => {
+app.put('/api/auth/profile', authMiddleware, async (req, res) => {
   const { name, language, zodiacSystem, zodiacSign, rashi } = req.body;
-  const db = loadDB();
-  const idx = db.users.findIndex(u => u.id === req.user.id);
-  if (idx === -1) return res.status(404).json({ error: 'User not found' });
-  if (name) db.users[idx].name = name.trim();
-  if (language) db.users[idx].profile.language = language;
-  if (zodiacSystem) db.users[idx].profile.zodiacSystem = zodiacSystem;
-  if (zodiacSign !== undefined) db.users[idx].profile.zodiacSign = zodiacSign;
-  if (rashi !== undefined) db.users[idx].profile.rashi = rashi;
-  saveDB(db);
-  res.json({
-    success: true,
-    user: { id: db.users[idx].id, name: db.users[idx].name, email: db.users[idx].email, profile: db.users[idx].profile },
-  });
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (name) user.name = name.trim();
+    if (language) user.profile.language = language;
+    if (zodiacSystem) user.profile.zodiacSystem = zodiacSystem;
+    if (zodiacSign !== undefined) user.profile.zodiacSign = zodiacSign;
+    if (rashi !== undefined) user.profile.rashi = rashi;
+    await user.save();
+    res.json({
+      success: true,
+      user: { id: user._id.toString(), name: user.name, email: user.email, profile: user.profile },
+    });
+  } catch (err) {
+    console.error('Profile update error:', err);
+    res.status(500).json({ error: 'Profile update failed.' });
+  }
 });
 
-app.post('/api/auth/save-history', authMiddleware, (req, res) => {
+app.post('/api/auth/save-history', authMiddleware, async (req, res) => {
   const { history } = req.body;
-  const db = loadDB();
-  const idx = db.users.findIndex(u => u.id === req.user.id);
-  if (idx === -1) return res.status(404).json({ error: 'User not found' });
-  db.users[idx].chatHistory = (history || []).slice(-40);
-  saveDB(db);
-  res.json({ success: true });
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    user.chatHistory = (history || []).slice(-40);
+    await user.save();
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Save history error:', err);
+    res.status(500).json({ error: 'Could not save chat history.' });
+  }
 });
 
 // ─── Health check ─────────────────────────────────────────────────────────────
