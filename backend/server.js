@@ -1,3 +1,4 @@
+const { randomUUID } = require('crypto');
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
@@ -6,7 +7,7 @@ const fs = require('fs');
 const Anthropic = require('@anthropic-ai/sdk');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { v4: uuidv4 } = require('uuid');
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -143,7 +144,7 @@ app.post('/api/auth/register', async (req, res) => {
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = {
-    id: uuidv4(),
+    id: randomUUID(),
     name: name.trim(),
     email: email.toLowerCase().trim(),
     password: hashedPassword,
