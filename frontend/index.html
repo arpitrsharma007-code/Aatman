@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Aatman — A Hindu Spiritual AI Companion. Find wisdom, peace, and guidance through the ancient teachings of the Bhagavad Gita, Upanishads, and more." />
+  <title>Aatman ॐ — Hindu Spiritual AI Companion</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       AUTH OVERLAY (shown before app if not authenticated)
+  ════════════════════════════════════════════ -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-bg-mandala" aria-hidden="true">
+      <div class="auth-ring ring-1"></div>
+      <div class="auth-ring ring-2"></div>
+    </div>
+    <div class="auth-card">
+      <!-- Logo -->
+      <div class="auth-logo">
+        <div class="auth-om">ॐ</div>
+        <h1 class="auth-title">Aatman</h1>
+        <p class="auth-subtitle">आत्मन् · The Eternal Self</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="loginTabBtn">Sign In</button>
+        <button class="auth-tab" id="signupTabBtn">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="loginForm">
+        <div class="auth-form-group">
+          <label class="auth-label" for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" class="auth-input" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="auth-form-group">
+          <label class="auth-label" for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="auth-input" placeholder="Your password" required autocomplete="current-password" />
+        </div>
+        <div class="auth-error hidden" id="loginError"></div>
+        <button type="submit" class="auth-submit-btn" id="loginSubmitBtn">
+          <span>Enter the Sacred Space 🙏</span>
+        </button>
+      </form>
+
+      <!-- Signup Form -->
+      <form class="auth-form hidden" id="signupForm">
+        <div class="auth-form-group">
+          <label class="auth-label" for="signupName">Your Name</label>
+          <input type="text" id="signupName" class="auth-input" placeholder="How shall we call you?" required autocomplete="name" />
+        </div>
+        <div class="auth-form-group">
+          <label class="auth-label" for="signupEmail">Email</label>
+          <input type="email" id="signupEmail" class="auth-input" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="auth-form-group">
+          <label class="auth-label" for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" class="auth-input" placeholder="At least 6 characters" required autocomplete="new-password" />
+        </div>
+        <div class="auth-error hidden" id="signupError"></div>
+        <button type="submit" class="auth-submit-btn" id="signupSubmitBtn">
+          <span>Begin Your Journey 🌸</span>
+        </button>
+      </form>
+
+      <!-- Guest option -->
+      <div class="auth-divider"><span>or</span></div>
+      <button class="auth-guest-btn" id="guestBtn">Continue as Guest</button>
+      <p class="auth-guest-note">Guest mode: your history won't be saved across sessions</p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       LANGUAGE SELECTION MODAL
+  ════════════════════════════════════════════ -->
+  <div class="lang-modal hidden" id="langModal" role="dialog" aria-modal="true" aria-label="Choose your language">
+    <div class="lang-modal-overlay"></div>
+    <div class="lang-modal-card">
+      <div class="lang-modal-om">ॐ</div>
+      <h2 class="lang-modal-title">Choose Your Language</h2>
+      <p class="lang-modal-subtitle">Aatman will respond in your chosen language</p>
+      <div class="lang-options-grid" id="langOptionsGrid">
+        <button class="lang-option active" data-lang="english">
+          <span class="lang-flag">🇬🇧</span>
+          <span class="lang-name">English</span>
+        </button>
+        <button class="lang-option" data-lang="hindi">
+          <span class="lang-flag">🇮🇳</span>
+          <span class="lang-name">हिंदी</span>
+          <span class="lang-subname">Hindi</span>
+        </button>
+        <button class="lang-option" data-lang="tamil">
+          <span class="lang-flag">🇮🇳</span>
+          <span class="lang-name">தமிழ்</span>
+          <span class="lang-subname">Tamil</span>
+        </button>
+        <button class="lang-option" data-lang="telugu">
+          <span class="lang-flag">🇮🇳</span>
+          <span class="lang-name">తెలుగు</span>
+          <span class="lang-subname">Telugu</span>
+        </button>
+        <button class="lang-option" data-lang="bengali">
+          <span class="lang-flag">🇮🇳</span>
+          <span class="lang-name">বাংলা</span>
+          <span class="lang-subname">Bengali</span>
+        </button>
+        <button class="lang-option" data-lang="marathi">
+          <span class="lang-flag">🇮🇳</span>
+          <span class="lang-name">मराठी</span>
+          <span class="lang-subname">Marathi</span>
+        </button>
+        <button class="lang-option" data-lang="gujarati">
+          <span class="lang-flag">🇮🇳</span>
+          <span class="lang-name">ગુજરાતી</span>
+          <span class="lang-subname">Gujarati</span>
+        </button>
+      </div>
+      <button class="lang-confirm-btn" id="langConfirmBtn">Begin My Journey 🙏</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       SACRED BACKGROUND ELEMENTS
+  ════════════════════════════════════════════ -->
+  <div class="bg-mandala" aria-hidden="true">
+    <div class="mandala-ring ring-1"></div>
+    <div class="mandala-ring ring-2"></div>
+    <div class="mandala-ring ring-3"></div>
+    <div class="mandala-ring ring-4"></div>
+  </div>
+  <div class="bg-om" aria-hidden="true">ॐ</div>
+
+  <!-- ════════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════════ -->
+  <header class="header" role="banner">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a class="logo" href="#" aria-label="Aatman Home">
+        <div class="logo-symbol">
+          <span class="om">ॐ</span>
+          <div class="lotus-petals" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">Aatman</span>
+          <span class="logo-tagline">आत्मन् · The Eternal Self</span>
+        </div>
+      </a>
+
+      <!-- Navigation -->
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <button class="nav-btn active" data-section="chat" aria-current="page">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Chat</span>
+        </button>
+        <button class="nav-btn" data-section="wisdom" aria-current="false">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>Daily Wisdom</span>
+        </button>
+        <button class="nav-btn" data-section="bhakti" aria-current="false">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
+          </svg>
+          <span>Bhakti</span>
+        </button>
+        <button class="nav-btn" data-section="profile" aria-current="false" id="profileNavBtn">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span id="profileNavLabel">Profile</span>
+        </button>
+      </nav>
+
+      <!-- Mobile menu toggle -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <button class="nav-btn active" data-section="chat">
+        <span>💬</span> Chat
+      </button>
+      <button class="nav-btn" data-section="wisdom">
+        <span>🪷</span> Daily Wisdom
+      </button>
+      <button class="nav-btn" data-section="bhakti">
+        <span>🎵</span> Bhakti
+      </button>
+      <button class="nav-btn" data-section="profile">
+        <span>🙏</span> Profile
+      </button>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════════ -->
+  <main class="main" role="main">
+
+    <!-- ─────────────────────────────────────────
+         SECTION 1 · CHAT
+    ───────────────────────────────────────── -->
+    <section id="section-chat" class="section active" aria-label="Spiritual chat">
+
+      <!-- Horoscope Dashboard Card (shown when user has sign set) -->
+      <div class="horoscope-banner hidden" id="horoscopeBanner">
+        <div class="horoscope-banner-inner">
+          <div class="horoscope-banner-loading hidden" id="horoscopeBannerLoading">
+            <span class="horoscope-spinner">ॐ</span>
+            <span>Fetching your spiritual guidance...</span>
+          </div>
+          <div class="horoscope-banner-content" id="horoscopeBannerContent">
+            <div class="horoscope-banner-left">
+              <div class="horoscope-sign-badge" id="horoscopeSignBadge">♈</div>
+              <div class="horoscope-banner-text">
+                <div class="horoscope-banner-label">Today's Spiritual Guidance</div>
+                <div class="horoscope-sign-name" id="horoscopeSignName">Your Sign</div>
+              </div>
+            </div>
+            <div class="horoscope-banner-guidance" id="horoscopeBannerGuidance"></div>
+            <button class="horoscope-expand-btn" id="horoscopeExpandBtn" title="View full guidance">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </div>
+          <!-- Expanded detail -->
+          <div class="horoscope-detail hidden" id="horoscopeDetail">
+            <div class="horoscope-detail-grid">
+              <div class="horoscope-detail-item">
+                <span class="horoscope-detail-label">🕉 Mantra</span>
+                <span class="horoscope-detail-value" id="horoscopeMantra"></span>
+              </div>
+              <div class="horoscope-detail-item">
+                <span class="horoscope-detail-label">🙏 Deity</span>
+                <span class="horoscope-detail-value" id="horoscopeDeity"></span>
+              </div>
+              <div class="horoscope-detail-item">
+                <span class="horoscope-detail-label">🌅 Practice</span>
+                <span class="horoscope-detail-value" id="horoscopePractice"></span>
+              </div>
+              <div class="horoscope-detail-item">
+                <span class="horoscope-detail-label">🎨 Color</span>
+                <span class="horoscope-detail-value" id="horoscopeColor"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages area -->
+      <div class="chat-wrapper">
+        <div class="messages-container" id="messagesContainer" role="log" aria-live="polite" aria-label="Conversation">
+
+          <!-- Welcome message -->
+          <div class="message message--assistant" id="welcomeMsg">
+            <div class="msg-avatar" aria-hidden="true">ॐ</div>
+            <div class="msg-body">
+              <div class="msg-bubble">
+                <p>Namaste 🙏 I am <strong>Aatman</strong> — your Hindu spiritual companion.</p>
+                <p>I carry the wisdom of the Bhagavad Gita, Upanishads, Ramayana, Vedas, and the great sages who walked this earth. Whatever weighs upon your heart — anxiety, grief, confusion, longing — bring it here. We will seek the light together.</p>
+                <p>What is stirring in your soul today?</p>
+              </div>
+              <span class="msg-time">Now</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Suggested Questions -->
+        <div class="suggestions" id="suggestions" aria-label="Suggested questions">
+          <p class="suggestions-label">Or begin with a question:</p>
+          <div class="suggestions-grid">
+            <button class="suggestion-chip" data-msg="I am feeling very anxious and overwhelmed. Can you help me?">
+              😟 I am feeling anxious
+            </button>
+            <button class="suggestion-chip" data-msg="I need guidance on finding my true purpose in life.">
+              🌟 I need guidance on my purpose
+            </button>
+            <button class="suggestion-chip" data-msg="I am going through grief and loss. How do I cope?">
+              💔 I am going through grief
+            </button>
+            <button class="suggestion-chip" data-msg="I am struggling with a difficult relationship. What does Hindu wisdom say?">
+              🤝 I struggle with relationships
+            </button>
+            <button class="suggestion-chip" data-msg="What is karma and how does it work in everyday life?">
+              ⚖️ Help me understand karma
+            </button>
+            <button class="suggestion-chip" data-msg="What is dharma and how do I discover my dharma?">
+              🌸 What is my dharma?
+            </button>
+            <button class="suggestion-chip" data-msg="I feel lost and disconnected. I'm searching for something deeper in life.">
+              🔍 I feel spiritually lost
+            </button>
+            <button class="suggestion-chip" data-msg="I am afraid of change and the uncertainty of the future.">
+              🌊 I fear change and uncertainty
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-wrapper">
+          <!-- Language Switcher -->
+          <div class="lang-switcher-bar" id="langSwitcherBar">
+            <button class="lang-switch-btn" id="langSwitchBtn" title="Change language">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span id="currentLangDisplay">English</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+            <div class="lang-dropdown hidden" id="langDropdown">
+              <button class="lang-drop-item active" data-lang="english">🇬🇧 English</button>
+              <button class="lang-drop-item" data-lang="hindi">🇮🇳 Hindi · हिंदी</button>
+              <button class="lang-drop-item" data-lang="tamil">🇮🇳 Tamil · தமிழ்</button>
+              <button class="lang-drop-item" data-lang="telugu">🇮🇳 Telugu · తెలుగు</button>
+              <button class="lang-drop-item" data-lang="bengali">🇮🇳 Bengali · বাংলা</button>
+              <button class="lang-drop-item" data-lang="marathi">🇮🇳 Marathi · मराठी</button>
+              <button class="lang-drop-item" data-lang="gujarati">🇮🇳 Gujarati · ગુજરાતી</button>
+            </div>
+          </div>
+
+          <div class="chat-input-box" id="chatInputBox">
+            <textarea
+              id="chatInput"
+              class="chat-textarea"
+              placeholder="Share what is in your heart... (Press Enter to send, Shift+Enter for new line)"
+              rows="1"
+              aria-label="Type your message"
+              maxlength="4000"
+            ></textarea>
+            <!-- Stop button (visible during streaming) -->
+            <button class="stop-btn hidden" id="stopBtn" aria-label="Stop response" title="Stop generating">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <rect x="5" y="5" width="14" height="14" rx="2"/>
+              </svg>
+            </button>
+            <button class="send-btn" id="sendBtn" aria-label="Send message" title="Send (Enter)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+          <p class="input-hint">
+            <span class="om-small">ॐ</span>
+            Powered by Claude · Ancient wisdom for the modern soul
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 2 · DAILY WISDOM
+    ───────────────────────────────────────── -->
+    <section id="section-wisdom" class="section" aria-label="Daily wisdom scheduler" hidden>
+      <div class="wisdom-layout">
+
+        <!-- Left Panel: Settings -->
+        <aside class="wisdom-sidebar">
+          <div class="card wisdom-settings-card">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+              </svg>
+              Daily Wisdom Settings
+            </h2>
+
+            <div class="form-group">
+              <label class="form-label" for="wisdomTime">Daily Reminder Time</label>
+              <input type="time" id="wisdomTime" class="form-input" value="07:00" />
+              <p class="form-hint">We'll show your wisdom when the app is open at this time</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="wisdomScripture">Sacred Scripture</label>
+              <select id="wisdomScripture" class="form-input form-select">
+                <option value="Bhagavad Gita">Bhagavad Gita</option>
+                <option value="Upanishads">Upanishads</option>
+                <option value="Ramayana">Ramayana</option>
+                <option value="Mahabharata">Mahabharata</option>
+                <option value="Rigveda">Rigveda</option>
+                <option value="Yoga Sutras of Patanjali">Yoga Sutras of Patanjali</option>
+                <option value="Dhammapada">Dhammapada</option>
+                <option value="random">Surprise Me 🎲</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="wisdomTheme">Theme (optional)</label>
+              <select id="wisdomTheme" class="form-input form-select">
+                <option value="">Any wisdom</option>
+                <option value="peace and equanimity">Peace & Equanimity</option>
+                <option value="courage and strength">Courage & Strength</option>
+                <option value="love and devotion">Love & Devotion</option>
+                <option value="purpose and dharma">Purpose & Dharma</option>
+                <option value="letting go and surrender">Letting Go</option>
+                <option value="gratitude and abundance">Gratitude</option>
+                <option value="self-knowledge and awareness">Self-Knowledge</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="notifEnabled" />
+                <span class="checkbox-custom"></span>
+                Enable browser notifications
+              </label>
+            </div>
+
+            <button class="btn btn--primary btn--full" id="saveWisdomSettings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+              Save Settings
+            </button>
+
+            <button class="btn btn--secondary btn--full" id="fetchWisdomNow" style="margin-top: 0.5rem;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+              </svg>
+              Receive Wisdom Now
+            </button>
+          </div>
+
+          <!-- Scheduler Status -->
+          <div class="card scheduler-status-card" id="schedulerStatus">
+            <div class="status-indicator" id="statusIndicator">
+              <span class="status-dot"></span>
+              <span class="status-text">Scheduler inactive</span>
+            </div>
+            <p class="status-detail" id="statusDetail">Save your settings to activate the daily wisdom scheduler.</p>
+          </div>
+        </aside>
+
+        <!-- Right Panel: Today's Wisdom + History -->
+        <div class="wisdom-main">
+
+          <!-- Today's Wisdom Card -->
+          <div class="today-wisdom-area" id="todayWisdomArea">
+            <div class="card wisdom-placeholder" id="wisdomPlaceholder">
+              <div class="placeholder-symbol">🪷</div>
+              <h3>Your Daily Wisdom Awaits</h3>
+              <p>Set your preferences and click "Receive Wisdom Now" to receive today's sacred verse, or wait for your scheduled time.</p>
+            </div>
+
+            <div class="card wisdom-card hidden" id="wisdomCard">
+              <div class="wisdom-card-header">
+                <div class="wisdom-meta">
+                  <span class="wisdom-scripture-tag" id="wisdomScriptureTag">Bhagavad Gita</span>
+                  <span class="wisdom-ref" id="wisdomRef"></span>
+                </div>
+                <div class="wisdom-card-actions">
+                  <button class="icon-btn" id="wisdomShareBtn" title="Share this wisdom">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                  </button>
+                  <button class="icon-btn" id="wisdomSaveBtn" title="Save to collection">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="wisdom-verse-block">
+                <p class="verse-devanagari" id="verseDevanagari"></p>
+                <p class="verse-transliteration" id="verseTranslit"></p>
+                <blockquote class="verse-translation" id="verseTranslation"></blockquote>
+              </div>
+
+              <div class="wisdom-meaning">
+                <h4>Meaning & Reflection</h4>
+                <p id="verseMeaning"></p>
+              </div>
+
+              <div class="wisdom-practice" id="wisdomPracticeBlock">
+                <div class="practice-icon">🌅</div>
+                <p id="versePractice"></p>
+              </div>
+
+              <div class="wisdom-deity" id="wisdomDeityBlock">
+                <span class="deity-label">Sacred connection:</span>
+                <span id="verseDeity"></span>
+              </div>
+
+              <div class="wisdom-date">
+                <span id="wisdomDate"></span>
+              </div>
+            </div>
+
+            <!-- Loading state -->
+            <div class="card wisdom-loading hidden" id="wisdomLoading">
+              <div class="loading-mandala">ॐ</div>
+              <p>Summoning sacred wisdom...</p>
+            </div>
+          </div>
+
+          <!-- Wisdom History -->
+          <div class="wisdom-history-section">
+            <h2 class="section-heading">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              Your Wisdom Journey
+            </h2>
+            <div class="wisdom-history-grid" id="wisdomHistoryGrid">
+              <div class="history-empty" id="historyEmpty">
+                <p>Your received verses will appear here. Each one is a step on your path. 🌸</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 3 · BHAKTI
+    ───────────────────────────────────────── -->
+    <section id="section-bhakti" class="section" aria-label="Bhakti music dashboard" hidden>
+
+      <!-- Bhakti Header -->
+      <div class="bhakti-hero">
+        <div class="bhakti-hero-text">
+          <h2 class="bhakti-title">
+            <span class="devanagari-large">भक्ति</span>
+            <span>Bhakti</span>
+          </h2>
+          <p class="bhakti-subtitle">Devotional music to elevate your spirit and open your heart</p>
+        </div>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="bhakti-filters">
+        <div class="filter-group">
+          <span class="filter-label">Category:</span>
+          <div class="filter-tabs" id="categoryTabs">
+            <button class="filter-tab active" data-category="all">All</button>
+            <button class="filter-tab" data-category="morning-aarti">Morning Aarti</button>
+            <button class="filter-tab" data-category="meditation">Meditation</button>
+            <button class="filter-tab" data-category="bhajan">Bhajans</button>
+            <button class="filter-tab" data-category="mantra">Mantras</button>
+            <button class="filter-tab" data-category="festival">Festival</button>
+            <button class="filter-tab" data-category="evening">Evening Prayers</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deity Tabs -->
+      <div class="deity-section">
+        <div class="deity-tabs" id="deityTabs">
+          <button class="deity-tab active" data-deity="all">
+            <span class="deity-symbol">🌸</span>
+            <span>All Deities</span>
+          </button>
+          <button class="deity-tab" data-deity="ganesha">
+            <span class="deity-symbol">🐘</span>
+            <span>Ganesha</span>
+          </button>
+          <button class="deity-tab" data-deity="shiva">
+            <span class="deity-symbol">🔱</span>
+            <span>Shiva</span>
+          </button>
+          <button class="deity-tab" data-deity="vishnu">
+            <span class="deity-symbol">🪷</span>
+            <span>Vishnu</span>
+          </button>
+          <button class="deity-tab" data-deity="krishna">
+            <span class="deity-symbol">🦚</span>
+            <span>Krishna</span>
+          </button>
+          <button class="deity-tab" data-deity="durga">
+            <span class="deity-symbol">🌙</span>
+            <span>Durga</span>
+          </button>
+          <button class="deity-tab" data-deity="hanuman">
+            <span class="deity-symbol">🌟</span>
+            <span>Hanuman</span>
+          </button>
+          <button class="deity-tab" data-deity="saraswati">
+            <span class="deity-symbol">🎶</span>
+            <span>Saraswati</span>
+          </button>
+          <button class="deity-tab" data-deity="ram">
+            <span class="deity-symbol">🏹</span>
+            <span>Ram</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bhajan Grid -->
+      <div class="bhajan-grid" id="bhajanGrid">
+        <!-- Cards injected by bhakti.js -->
+      </div>
+
+      <!-- YouTube Player Modal -->
+      <div class="yt-modal" id="ytModal" role="dialog" aria-modal="true" aria-label="YouTube Player" hidden>
+        <div class="yt-modal-overlay" id="ytModalOverlay"></div>
+        <div class="yt-modal-content">
+          <div class="yt-modal-header">
+            <div>
+              <h3 class="yt-modal-title" id="ytModalTitle">Bhajan</h3>
+              <p class="yt-modal-artist" id="ytModalArtist"></p>
+            </div>
+            <button class="yt-close-btn" id="ytCloseBtn" aria-label="Close player">✕</button>
+          </div>
+          <div class="yt-player-area">
+            <div class="yt-search-info" id="ytSearchInfo">
+              <p>This will open YouTube to search for:</p>
+              <p class="yt-query-preview" id="ytQueryPreview"></p>
+            </div>
+            <div class="yt-actions">
+              <a class="btn btn--primary" id="ytSearchLink" href="#" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                Open on YouTube
+              </a>
+              <button class="btn btn--secondary" id="ytEmbedBtn">
+                Try Embedded Player
+              </button>
+            </div>
+            <div class="yt-embed-area hidden" id="ytEmbedArea">
+              <iframe
+                id="ytIframe"
+                src=""
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                title="Bhajan Player"
+              ></iframe>
+            </div>
+          </div>
+          <div class="yt-modal-footer">
+            <p class="yt-description" id="ytDescription"></p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 4 · PROFILE
+    ───────────────────────────────────────── -->
+    <section id="section-profile" class="section" aria-label="User profile" hidden>
+      <div class="profile-layout">
+
+        <!-- Profile Header Card -->
+        <div class="profile-header-card card">
+          <div class="profile-avatar-area">
+            <div class="profile-avatar" id="profileAvatar">🙏</div>
+            <div class="profile-info">
+              <h2 class="profile-display-name" id="profileDisplayName">Seeker</h2>
+              <p class="profile-email" id="profileEmail"></p>
+              <p class="profile-member-since" id="profileMemberSince"></p>
+            </div>
+          </div>
+          <button class="btn btn--secondary" id="logoutBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Sign Out
+          </button>
+        </div>
+
+        <div class="profile-grid">
+
+          <!-- Edit Profile Card -->
+          <div class="card profile-edit-card">
+            <h3 class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              Edit Profile
+            </h3>
+            <div class="form-group">
+              <label class="form-label" for="profileNameInput">Display Name</label>
+              <input type="text" id="profileNameInput" class="form-input" placeholder="Your name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profileLangSelect">Preferred Language</label>
+              <select id="profileLangSelect" class="form-input form-select">
+                <option value="english">🇬🇧 English</option>
+                <option value="hindi">🇮🇳 Hindi · हिंदी</option>
+                <option value="tamil">🇮🇳 Tamil · தமிழ்</option>
+                <option value="telugu">🇮🇳 Telugu · తెలుగు</option>
+                <option value="bengali">🇮🇳 Bengali · বাংলা</option>
+                <option value="marathi">🇮🇳 Marathi · मराठी</option>
+                <option value="gujarati">🇮🇳 Gujarati · ગુજરાતી</option>
+              </select>
+            </div>
+            <button class="btn btn--primary" id="saveProfileBtn">Save Profile</button>
+          </div>
+
+          <!-- Zodiac / Rashi Card -->
+          <div class="card zodiac-card">
+            <h3 class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              Your Star Sign & Rashi
+            </h3>
+
+            <!-- System Toggle -->
+            <div class="zodiac-system-toggle">
+              <button class="zodiac-sys-btn active" data-system="western" id="westernBtn">Western Zodiac</button>
+              <button class="zodiac-sys-btn" data-system="vedic" id="vedicBtn">Vedic Rashi</button>
+            </div>
+
+            <!-- Western Zodiac Grid -->
+            <div class="zodiac-grid" id="westernZodiacGrid">
+              <button class="zodiac-sign-btn" data-sign="Aries" data-system="western"><span class="zodiac-glyph">♈</span><span>Aries</span><span class="zodiac-date">Mar 21–Apr 19</span></button>
+              <button class="zodiac-sign-btn" data-sign="Taurus" data-system="western"><span class="zodiac-glyph">♉</span><span>Taurus</span><span class="zodiac-date">Apr 20–May 20</span></button>
+              <button class="zodiac-sign-btn" data-sign="Gemini" data-system="western"><span class="zodiac-glyph">♊</span><span>Gemini</span><span class="zodiac-date">May 21–Jun 20</span></button>
+              <button class="zodiac-sign-btn" data-sign="Cancer" data-system="western"><span class="zodiac-glyph">♋</span><span>Cancer</span><span class="zodiac-date">Jun 21–Jul 22</span></button>
+              <button class="zodiac-sign-btn" data-sign="Leo" data-system="western"><span class="zodiac-glyph">♌</span><span>Leo</span><span class="zodiac-date">Jul 23–Aug 22</span></button>
+              <button class="zodiac-sign-btn" data-sign="Virgo" data-system="western"><span class="zodiac-glyph">♍</span><span>Virgo</span><span class="zodiac-date">Aug 23–Sep 22</span></button>
+              <button class="zodiac-sign-btn" data-sign="Libra" data-system="western"><span class="zodiac-glyph">♎</span><span>Libra</span><span class="zodiac-date">Sep 23–Oct 22</span></button>
+              <button class="zodiac-sign-btn" data-sign="Scorpio" data-system="western"><span class="zodiac-glyph">♏</span><span>Scorpio</span><span class="zodiac-date">Oct 23–Nov 21</span></button>
+              <button class="zodiac-sign-btn" data-sign="Sagittarius" data-system="western"><span class="zodiac-glyph">♐</span><span>Sagittarius</span><span class="zodiac-date">Nov 22–Dec 21</span></button>
+              <button class="zodiac-sign-btn" data-sign="Capricorn" data-system="western"><span class="zodiac-glyph">♑</span><span>Capricorn</span><span class="zodiac-date">Dec 22–Jan 19</span></button>
+              <button class="zodiac-sign-btn" data-sign="Aquarius" data-system="western"><span class="zodiac-glyph">♒</span><span>Aquarius</span><span class="zodiac-date">Jan 20–Feb 18</span></button>
+              <button class="zodiac-sign-btn" data-sign="Pisces" data-system="western"><span class="zodiac-glyph">♓</span><span>Pisces</span><span class="zodiac-date">Feb 19–Mar 20</span></button>
+            </div>
+
+            <!-- Vedic Rashi Grid -->
+            <div class="zodiac-grid hidden" id="vedicRashiGrid">
+              <button class="zodiac-sign-btn" data-sign="Mesha" data-system="vedic"><span class="zodiac-glyph">♈</span><span>Mesha</span><span class="zodiac-date">मेष · Aries</span></button>
+              <button class="zodiac-sign-btn" data-sign="Vrishabha" data-system="vedic"><span class="zodiac-glyph">♉</span><span>Vrishabha</span><span class="zodiac-date">वृषभ · Taurus</span></button>
+              <button class="zodiac-sign-btn" data-sign="Mithuna" data-system="vedic"><span class="zodiac-glyph">♊</span><span>Mithuna</span><span class="zodiac-date">मिथुन · Gemini</span></button>
+              <button class="zodiac-sign-btn" data-sign="Karka" data-system="vedic"><span class="zodiac-glyph">♋</span><span>Karka</span><span class="zodiac-date">कर्क · Cancer</span></button>
+              <button class="zodiac-sign-btn" data-sign="Simha" data-system="vedic"><span class="zodiac-glyph">♌</span><span>Simha</span><span class="zodiac-date">सिंह · Leo</span></button>
+              <button class="zodiac-sign-btn" data-sign="Kanya" data-system="vedic"><span class="zodiac-glyph">♍</span><span>Kanya</span><span class="zodiac-date">कन्या · Virgo</span></button>
+              <button class="zodiac-sign-btn" data-sign="Tula" data-system="vedic"><span class="zodiac-glyph">♎</span><span>Tula</span><span class="zodiac-date">तुला · Libra</span></button>
+              <button class="zodiac-sign-btn" data-sign="Vrishchika" data-system="vedic"><span class="zodiac-glyph">♏</span><span>Vrishchika</span><span class="zodiac-date">वृश्चिक · Scorpio</span></button>
+              <button class="zodiac-sign-btn" data-sign="Dhanu" data-system="vedic"><span class="zodiac-glyph">♐</span><span>Dhanu</span><span class="zodiac-date">धनु · Sagittarius</span></button>
+              <button class="zodiac-sign-btn" data-sign="Makara" data-system="vedic"><span class="zodiac-glyph">♑</span><span>Makara</span><span class="zodiac-date">मकर · Capricorn</span></button>
+              <button class="zodiac-sign-btn" data-sign="Kumbha" data-system="vedic"><span class="zodiac-glyph">♒</span><span>Kumbha</span><span class="zodiac-date">कुम्भ · Aquarius</span></button>
+              <button class="zodiac-sign-btn" data-sign="Meena" data-system="vedic"><span class="zodiac-glyph">♓</span><span>Meena</span><span class="zodiac-date">मीन · Pisces</span></button>
+            </div>
+
+            <div class="zodiac-selected-display" id="zodiacSelectedDisplay">
+              <p class="zodiac-no-selection">Select your sign above to receive daily spiritual guidance on the chat dashboard.</p>
+            </div>
+
+            <button class="btn btn--primary" id="saveZodiacBtn" style="margin-top:1rem;">Save Star Sign</button>
+          </div>
+
+          <!-- Chat History Management Card -->
+          <div class="card chat-history-card">
+            <h3 class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              Chat History
+            </h3>
+            <div class="chat-history-stats" id="chatHistoryStats">
+              <div class="stat-item">
+                <span class="stat-number" id="statMessages">0</span>
+                <span class="stat-label">Messages</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number" id="statConversations">0</span>
+                <span class="stat-label">Exchanges</span>
+              </div>
+            </div>
+            <p class="form-hint" style="margin-bottom:1rem;">Your conversations are saved and will reload when you sign back in.</p>
+            <button class="btn btn--secondary" id="exportHistoryBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Export History
+            </button>
+            <button class="btn btn--danger" id="clearHistoryBtn" style="margin-top:0.5rem;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+              Clear All History
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ════════════════════════════════════════════
+       TOAST NOTIFICATIONS
+  ════════════════════════════════════════════ -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ════════════════════════════════════════════
+       WISDOM NOTIFICATION POPUP
+  ════════════════════════════════════════════ -->
+  <div class="wisdom-notif hidden" id="wisdomNotif" role="alertdialog" aria-label="Daily wisdom notification">
+    <div class="wisdom-notif-inner">
+      <button class="notif-close" id="notifClose" aria-label="Close">✕</button>
+      <div class="notif-symbol">🌅</div>
+      <h3>Your Daily Wisdom</h3>
+      <p class="notif-scripture" id="notifScripture"></p>
+      <p class="notif-verse" id="notifVerse"></p>
+      <button class="btn btn--primary" id="notifViewBtn">View Full Wisdom</button>
+    </div>
+  </div>
+
+  <!-- Scripts (order matters) -->
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/wisdom.js"></script>
+  <script src="js/bhakti.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>
