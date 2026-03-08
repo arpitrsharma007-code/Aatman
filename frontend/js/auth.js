@@ -328,6 +328,7 @@
       if (data.user) {
         currentUser = data.user;
         localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
+        hideAuthOverlay();
       }
     }
   }
@@ -387,6 +388,7 @@
           if (window.Aatman?.profile?.onUserLogin) {
             Aatman.profile.onUserLogin(currentUser);
           }
+          hideAuthOverlay();
           localStorage.setItem(LANG_SET_KEY, '1');
         } else {
           // Token invalid
