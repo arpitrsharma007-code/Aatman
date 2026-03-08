@@ -10,7 +10,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
+<link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#FF9933">
+  <link rel="apple-touch-icon" href="/icon-192.png">
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -48,8 +50,7 @@
           <label class="auth-label" for="loginPassword">Password</label>
           <input type="password" id="loginPassword" class="auth-input" placeholder="Your password" required autocomplete="current-password" />
         </div>
-         <div class="auth-error hidden" id="loginError"></div>
-        <p style="text-align:right;margin:0 0 8px 0;"><a href="mailto:arpitrsharma007@gmail.com?subject=Aatman%20Password%20Reset&body=Please%20reset%20my%20password.%20My%20email%20is%3A%20" style="color:#C9A96E;font-size:0.85rem;text-decoration:none;">Forgot Password?</a></p>
+        <div class="auth-error hidden" id="loginError"></div>
         <button type="submit" class="auth-submit-btn" id="loginSubmitBtn">
           <span>Enter the Sacred Space 🙏</span>
         </button>
@@ -854,5 +855,10 @@
   <script src="js/wisdom.js"></script>
   <script src="js/bhakti.js"></script>
   <script src="js/profile.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
 </body>
 </html>
