@@ -2,7 +2,7 @@
 
 **Your personal spiritual guide powered by AI. Wisdom from the Bhagavad Gita, Vedas, Upanishads & more.**
 
-[Try Aatman Live →](https://aatman-production.up.railway.app)
+[Try Aatman Live →]aatman-production.up.railway.app
 
 ---
 
