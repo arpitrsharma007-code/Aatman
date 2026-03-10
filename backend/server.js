@@ -265,7 +265,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
     const stream = anthropic.messages.stream({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
+      max_tokens: 2048,
       system: AATMAN_SYSTEM_PROMPT + languageInstruction,
       messages,
     });
