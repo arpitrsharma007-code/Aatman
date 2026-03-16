@@ -209,6 +209,13 @@
     if (window.Aatman?.profile?.onUserLogin) {
       Aatman.profile.onUserLogin(currentUser);
     }
+
+    // Sync subscription state
+    if (data.subscription && window.Aatman?.subscription) {
+      Aatman.subscription.handleAuthSubscription(data.subscription);
+    } else if (window.Aatman?.subscription) {
+      Aatman.subscription.fetchStatus();
+    }
   }
 
   // ─── Language Modal ────────────────────────────────────────────────────
@@ -387,6 +394,12 @@
           updateProfileUI();
           if (window.Aatman?.profile?.onUserLogin) {
             Aatman.profile.onUserLogin(currentUser);
+          }
+          // Sync subscription state
+          if (data.subscription && window.Aatman?.subscription) {
+            Aatman.subscription.handleAuthSubscription(data.subscription);
+          } else if (window.Aatman?.subscription) {
+            Aatman.subscription.fetchStatus();
           }
           hideAuthOverlay();
           localStorage.setItem(LANG_SET_KEY, '1');

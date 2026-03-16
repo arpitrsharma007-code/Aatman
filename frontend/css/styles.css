@@ -2541,3 +2541,263 @@ img { max-width: 100%; display: block; }
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   SUBSCRIPTION CARD & UPGRADE BANNER
+──────────────────────────────────────────────────────────────────── */
+
+/* ─── Subscription Card ──────────────────────────────────────────── */
+.subscription-card {
+  border: 1px solid var(--gold-light);
+  background: linear-gradient(135deg, var(--cream-warm), var(--cream));
+}
+
+.sub-current-plan {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.sub-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.sub-badge--free {
+  background: var(--cream-dark);
+  color: var(--brown-warm);
+  border: 1px solid var(--cream-border);
+}
+
+.sub-badge--premium {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: #fff;
+  border: 1px solid var(--gold);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.sub-badge--cancelled {
+  background: #fdecea;
+  color: #a0392d;
+  border: 1px solid #f5c6cb;
+}
+
+.sub-limit-text {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.sub-upgrade-intro {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  color: var(--text-body);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* ─── Plan Buttons ───────────────────────────────────────────────── */
+.sub-plans {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sub-plan-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0.75rem;
+  border: 2px solid var(--cream-border);
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sub-plan-btn:hover {
+  border-color: var(--saffron);
+  box-shadow: 0 2px 12px rgba(255, 153, 51, 0.15);
+  transform: translateY(-1px);
+}
+
+.sub-plan-btn--popular {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #fffdf5, #fff8e0);
+}
+
+.sub-plan-popular-tag {
+  position: absolute;
+  top: -10px;
+  background: var(--gold);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+
+.sub-plan-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.sub-plan-price {
+  font-family: 'Lora', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sub-plan-price small {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.sub-plan-savings {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--saffron-dark);
+  margin-top: 0.25rem;
+}
+
+/* ─── Feature List ───────────────────────────────────────────────── */
+.sub-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sub-features-list li {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9rem;
+  color: var(--text-body);
+  padding: 0.35rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.sub-features-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* ─── Active Subscription Details ────────────────────────────────── */
+.sub-active-details {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  color: var(--text-body);
+  line-height: 1.8;
+}
+
+.sub-active-details strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.btn--small {
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+}
+
+/* ─── Upgrade Banner (overlay) ───────────────────────────────────── */
+.upgrade-banner {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(28, 8, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.upgrade-banner.hidden {
+  display: none;
+}
+
+.upgrade-banner-inner {
+  background: var(--cream-warm);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--gold-light);
+}
+
+.upgrade-banner-inner h3 {
+  font-family: 'Lora', serif;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin: 0.5rem 0;
+}
+
+.upgrade-banner-inner p {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  color: var(--text-body);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.upgrade-banner-btns {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.upgrade-banner-btns .btn {
+  flex: 1;
+  min-width: 140px;
+}
+
+.btn--gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-color: var(--gold);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.btn--gold:hover {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-glow));
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── Responsive adjustments ─────────────────────────────────────── */
+@media (max-width: 480px) {
+  .sub-plans {
+    flex-direction: column;
+  }
+  .upgrade-banner-btns {
+    flex-direction: column;
+  }
+}

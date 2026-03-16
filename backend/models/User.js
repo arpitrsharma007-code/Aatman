@@ -11,6 +11,17 @@ const userSchema = new mongoose.Schema({
     rashi: { type: String, default: '' },
   },
   chatHistory: { type: Array, default: [] },
+  subscription: {
+    status: { type: String, enum: ['free', 'active', 'cancelled', 'expired', 'past_due'], default: 'free' },
+    razorpaySubscriptionId: { type: String, default: null },
+    razorpayCustomerId: { type: String, default: null },
+    planType: { type: String, enum: ['monthly', 'yearly', null], default: null },
+    currentPeriodStart: { type: Date, default: null },
+    currentPeriodEnd: { type: Date, default: null },
+    cancelledAt: { type: Date, default: null },
+  },
+  dailyMessageCount: { type: Number, default: 0 },
+  lastMessageDate: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now },
 });
 

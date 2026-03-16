@@ -232,7 +232,27 @@
         }),
       });
 
-      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+      if (!response.ok) {
+        // Handle daily message limit (429)
+        if (response.status === 429) {
+          const limitData = await response.json();
+          if (limitData.upgradeRequired && Aatman.subscription) {
+            removeTypingIndicator();
+            // Remove the user message we just added
+            conversationHistory.pop();
+            const lastUserBubble = messagesEl.querySelector('.message--user:last-of-type');
+            if (lastUserBubble) lastUserBubble.remove();
+            // Show upgrade banner
+            Aatman.subscription.showUpgradeBanner();
+            Aatman.toast(limitData.message || 'Daily message limit reached.', 'info');
+            isStreaming = false;
+            inputEl.disabled = false;
+            hideStopBtn();
+            return;
+          }
+        }
+        throw new Error(`Server error: ${response.status}`);
+      }
       if (!response.body) throw new Error('No response body');
 
       const reader  = response.body.getReader();
