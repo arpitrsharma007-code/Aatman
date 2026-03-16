@@ -7,6 +7,9 @@ const Anthropic = require('@anthropic-ai/sdk');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
+const Payment = require('./models/Payment');
+const subscriptionRoutes = require('./routes/subscription');
+const webhookRoutes = require('./routes/webhook');
 
 
 const app = express();
@@ -53,6 +56,54 @@ function optionalAuth(req, res, next) {
   next();
 }
 
+// ─── Feature Gating: Message Limit for Free Users ───────────────────────────
+const FREE_DAILY_LIMIT = 5;
+
+async function checkMessageLimit(req, res, next) {
+  // If not authenticated, allow (optionalAuth may not have user)
+  if (!req.user) return next();
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return next();
+
+    // Premium users — unlimited
+    if (user.subscription && user.subscription.status === 'active') {
+      return next();
+    }
+
+    // Check daily limit for free users
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    if (user.lastMessageDate !== today) {
+      // New day — reset counter
+      user.dailyMessageCount = 0;
+      user.lastMessageDate = today;
+    }
+
+    if (user.dailyMessageCount >= FREE_DAILY_LIMIT) {
+      return res.status(429).json({
+        error: 'daily_limit_reached',
+        message: `You've used all ${FREE_DAILY_LIMIT} free messages today. Upgrade to Bhakt for unlimited conversations.`,
+        upgradeRequired: true,
+        limit: FREE_DAILY_LIMIT,
+        used: user.dailyMessageCount,
+      });
+    }
+
+    // Increment counter
+    user.dailyMessageCount += 1;
+    await user.save();
+    next();
+  } catch (err) {
+    console.error('Message limit check error:', err);
+    next(); // Don't block on errors
+  }
+}
+
+// ─── Mount Subscription & Webhook Routes ────────────────────────────────────
+app.use('/api/subscription', authMiddleware, subscriptionRoutes);
+app.use('/api/webhooks', webhookRoutes); // No auth — Razorpay calls this directly
+
 // ─── System Prompt ────────────────────────────────────────────────────────────
 const AATMAN_SYSTEM_PROMPT = `You are Aatman, a warm Hindu spiritual guide.
 
@@ -91,7 +142,7 @@ app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Name, email, and password are required' });
-  } 
+  }
   if (password.length < 6) {
     return res.status(400).json({ error: 'Password must be at least 6 characters' });
   }
@@ -129,11 +180,18 @@ app.post('/api/auth/login', async (req, res) => {
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
     const token = jwt.sign({ id: user._id.toString(), email: user.email }, JWT_SECRET, { expiresIn: '30d' });
+    const sub = user.subscription || {};
     res.json({
       success: true,
       token,
       user: { id: user._id.toString(), name: user.name, email: user.email, profile: user.profile },
       chatHistory: user.chatHistory || [],
+      subscription: {
+        status: sub.status || 'free',
+        planType: sub.planType || null,
+        currentPeriodEnd: sub.currentPeriodEnd || null,
+        isPremium: sub.status === 'active',
+      },
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -145,9 +203,17 @@ app.get('/api/auth/me', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
+    const sub = user.subscription || {};
     res.json({
       user: { id: user._id.toString(), name: user.name, email: user.email, profile: user.profile },
       chatHistory: user.chatHistory || [],
+      subscription: {
+        status: sub.status || 'free',
+        planType: sub.planType || null,
+        currentPeriodEnd: sub.currentPeriodEnd || null,
+        cancelledAt: sub.cancelledAt || null,
+        isPremium: sub.status === 'active',
+      },
     });
   } catch (err) {
     console.error('Me error:', err);
@@ -206,7 +272,7 @@ const LANGUAGE_MAP = {
   gujarati: 'Gujarati (ગુજરાતી)',
 };
 
-app.post('/api/chat', optionalAuth, async (req, res) => {
+app.post('/api/chat', optionalAuth, checkMessageLimit, async (req, res) => {
   console.log('📨 /api/chat hit — body keys:', Object.keys(req.body || {}));
   const { message, history = [], language = 'english' } = req.body || {};
   console.log('   message:', message ? `"${message.slice(0, 60)}..."` : '(empty)');
@@ -404,5 +470,7 @@ app.listen(PORT, () => {
   console.log(`  Server running at: http://localhost:${PORT}`);
   console.log(`  Environment:       ${process.env.NODE_ENV || 'development'}`);
   console.log(`  API key present:   ${!!process.env.ANTHROPIC_API_KEY}`);
+  console.log(`  Razorpay:          ${process.env.RAZORPAY_KEY_ID ? 'configured' : 'not configured'}`);
+  console.log(`  Razorpay mode:     ${process.env.RAZORPAY_KEY_ID?.startsWith('rzp_test_') ? 'TEST' : 'LIVE'}`);
   console.log('');
 });
