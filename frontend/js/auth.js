@@ -422,6 +422,11 @@
           }
           hideAuthOverlay();
           localStorage.setItem(LANG_SET_KEY, '1');
+          // ─── Compliance: Show onboarding if not seen ───────────
+          if (!localStorage.getItem('aatman_onboarding_seen')) {
+            const modal = document.getElementById('onboardingModal');
+            if (modal) modal.classList.remove('hidden');
+          }
         } else {
           // Token invalid
           localStorage.removeItem(TOKEN_KEY);

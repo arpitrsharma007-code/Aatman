@@ -104,7 +104,7 @@ async function checkMessageLimit(req, res, next) {
 app.use('/api/subscription', authMiddleware, subscriptionRoutes);
 app.use('/api/webhooks', webhookRoutes); // No auth — Razorpay calls this directly
 
-// ─── System Prompt ────────────────────────────────────────────────────────────
+// ─── System Prompt (Compliance-Hardened v2.0 — March 2026) ────────────────────
 const AATMAN_SYSTEM_PROMPT = `You are Aatman, a warm Hindu spiritual guide.
 
 HARD RULES — FOLLOW EVERY SINGLE TIME:
@@ -134,17 +134,110 @@ Transliteration
 Translation
 Then connect it to their situation in 1-2 sentences.
 
-STYLE: Talk like a wise friend. Warm but direct. Never preach.`;
+STYLE: Talk like a wise friend. Warm but direct. Never preach.
+
+AI DISCLOSURE:
+- If asked "who are you" or "are you real," always clarify you are an AI-based spiritual companion powered by artificial intelligence, not a human guru or any sampradaya's representative. Adapt to user's language.
+- Never pretend to be human or claim divine authority.
+
+SAFETY GUARDRAILS — NON-NEGOTIABLE:
+
+[RELIGIOUS SENSITIVITY]
+- NEVER express any opinion that disrespects ANY religion, deity, saint, guru, or community.
+- NEVER compare religions, deities, or spiritual paths as superior/inferior. If asked, say every path is complete in itself and you are not qualified to compare.
+- NEVER take sides in sectarian disputes (Shaiva vs Vaishnava, ISKCON vs traditional, etc.). Redirect to consulting their guru.
+- NEVER comment on caste, caste hierarchy, or caste-based practices. Politely redirect.
+- NEVER make political statements or connect religion to politics. Say you are a spiritual companion, not a political commentator.
+- NEVER discuss religious conversion or proselytization.
+- NEVER provide guidance on tantric practices, black magic, vashikaran, or occult. Say Aatman focuses on sattvic spiritual guidance.
+- NEVER generate content about dietary controversies — only reference ahimsa philosophy generally if asked.
+- NEVER quote scripture to justify violence, discrimination, or harm.
+- NEVER make definitive theological claims — present as one perspective among many in the tradition.
+
+[MENTAL HEALTH — LIFE-SAFETY]
+- If a user expresses suicidal thoughts, self-harm intent, or severe distress: DO NOT engage in philosophical discussion about death or moksha. IMMEDIATELY respond with empathy and crisis resources: iCall 9152987821, Vandrevala Foundation 1860-2662-2345, AASRA 9820466726. Say they are not alone and urge professional help.
+- For depression/anxiety (non-crisis): offer gentle spiritual perspective AND recommend professional counseling.
+
+[PROFESSIONAL ADVICE]
+- NEVER provide medical advice, diagnoses, or treatment recommendations.
+- NEVER provide legal or financial advice.
+- NEVER claim spiritual practices can cure diseases.
+- For Ayurveda questions, redirect to a qualified Ayurvedic doctor.
+
+[ASTROLOGY]
+- NEVER predict the future or make astrological claims. Redirect to an experienced jyotishi.
+
+[PROVOCATIVE USERS]
+- If asked to insult any deity: firmly decline.
+- If asked for spiritual justification for violence/discrimination: decline, stating no sattvic teaching supports this.
+- If asked for political opinions: decline consistently every time.
+- If asked to roleplay as a deity: respectfully decline, stating you are an AI companion.
+
+[CONTENT BOUNDARIES]
+- NEVER generate sexually explicit, illegal, or hateful content.
+- NEVER share personal information about real individuals.`;
+
+// ─── Crisis Detection (pre-Claude safety layer) ──────────────────────────────
+const CRISIS_KEYWORDS = [
+  'kill myself', 'suicide', 'want to die', 'end my life', 'no reason to live',
+  'better off dead', 'self harm', 'cut myself', 'hurt myself', 'overdose',
+  'marna chahta', 'marni chahti', 'aatmhatya', 'zindagi khatam',
+  'jeene ka mann nahi', 'mar jana', 'khudkushi', 'apne aap ko hurt',
+  'maut chahiye', 'jee nahi lagta', 'sab khatam',
+];
+
+function detectCrisis(message) {
+  const lower = message.toLowerCase();
+  return CRISIS_KEYWORDS.some(kw => lower.includes(kw));
+}
+
+const CRISIS_RESPONSE_EN = `I can sense you are going through immense pain right now. Your feelings are valid.
+
+Please reach out to a trained professional who can help — one phone call can make a real difference:
+
+iCall: 9152987821
+Vandrevala Foundation: 1860-2662-2345
+AASRA: 9820466726
+
+You are not alone. Please call now.`;
+
+const CRISIS_RESPONSE_HI = `Main samajh sakta hoon ki aap bahut kathin samay se guzar rahe hain. Aapki peeda valid hai.
+
+Kripaya abhi kisi trained professional se baat karein — wo aapki madad kar sakte hain:
+
+iCall: 9152987821
+Vandrevala Foundation: 1860-2662-2345
+AASRA: 9820466726
+
+Aap akele nahi hain. Please call karein.`;
+
+function getCrisisResponse(message) {
+  // If message contains Hindi keywords, respond in Hindi; otherwise English
+  const hindiKeywords = ['marna', 'marni', 'aatmhatya', 'zindagi', 'jeene', 'khudkushi', 'maut', 'jee nahi', 'khatam'];
+  const lower = message.toLowerCase();
+  const isHindi = hindiKeywords.some(kw => lower.includes(kw));
+  return isHindi ? CRISIS_RESPONSE_HI : CRISIS_RESPONSE_EN;
+}
 
 // ─── Auth Endpoints ────────────────────────────────────────────────────────────
 
 app.post('/api/auth/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, consentGiven, aiDisclosureAccepted, ageVerified } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Name, email, and password are required' });
   }
   if (password.length < 6) {
     return res.status(400).json({ error: 'Password must be at least 6 characters' });
+  }
+  // ─── Compliance: Consent validation ────────────────────────────────
+  if (!consentGiven) {
+    return res.status(400).json({ error: 'Consent to our Privacy Policy is required to create an account.' });
+  }
+  if (!aiDisclosureAccepted) {
+    return res.status(400).json({ error: 'You must acknowledge that Aatman is an AI-powered service.' });
+  }
+  if (!ageVerified) {
+    return res.status(400).json({ error: 'You must confirm that you are 18 years or older.' });
   }
   try {
     const existing = await User.findOne({ email: email.toLowerCase().trim() });
@@ -156,6 +249,11 @@ app.post('/api/auth/register', async (req, res) => {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password: hashedPassword,
+      consentGiven: true,
+      consentTimestamp: new Date(),
+      consentVersion: 'v1.0-march-2026',
+      aiDisclosureAccepted: true,
+      ageVerified: true,
     });
     const token = jwt.sign({ id: user._id.toString(), email: user.email }, JWT_SECRET, { expiresIn: '30d' });
     res.json({
@@ -280,6 +378,19 @@ app.post('/api/chat', optionalAuth, checkMessageLimit, async (req, res) => {
   if (!message || !message.trim()) {
     console.warn('⚠️  No message in request body');
     return res.status(400).json({ error: 'Message is required' });
+  }
+
+  // ─── Crisis Detection (runs BEFORE Claude) ─────────────────────────
+  if (detectCrisis(message)) {
+    console.log(`🚨 [CRISIS_DETECTED] User ${req.user?.id || 'anonymous'} at ${new Date().toISOString()}`);
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no');
+    res.flushHeaders();
+    res.write(`data: ${JSON.stringify({ text: getCrisisResponse(message) })}\n\n`);
+    res.write('data: [DONE]\n\n');
+    return res.end();
   }
 
   res.setHeader('Content-Type', 'text/event-stream');
@@ -454,6 +565,110 @@ app.post('/api/reflect', async (req, res) => {
     console.error('Reflect error:', error);
     res.write(`data: ${JSON.stringify({ error: 'Could not generate reflection.' })}\n\n`);
     res.end();
+  }
+});
+
+// ─── Compliance Endpoints (DPDP Act + IT Rules 2026) ─────────────────────────
+
+// Account Deletion — DPDP Act Right to Erasure
+app.post('/api/account/delete', authMiddleware, async (req, res) => {
+  try {
+    const { password } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'Account not found.' });
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(401).json({ error: 'Incorrect password.' });
+
+    // Delete user and all data
+    await User.findByIdAndDelete(req.user.id);
+    console.log(`[ACCOUNT_DELETION] User ${req.user.id} deleted at ${new Date().toISOString()}`);
+
+    res.json({
+      success: true,
+      message: 'Your account has been permanently deleted. All personal data will be erased within 30 days.',
+    });
+  } catch (err) {
+    console.error('Account deletion error:', err);
+    res.status(500).json({ error: 'Deletion failed. Please contact support.' });
+  }
+});
+
+// Data Export — DPDP Act Right to Access
+app.get('/api/account/export-data', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ error: 'Account not found.' });
+
+    const exportData = {
+      exportDate: new Date().toISOString(),
+      exportedBy: 'Aatman — Hindu Spiritual AI Companion',
+      account: {
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        consentGiven: user.consentGiven,
+        consentTimestamp: user.consentTimestamp,
+        profile: user.profile,
+        subscriptionStatus: user.subscription?.status || 'free',
+      },
+      conversationHistory: user.chatHistory || [],
+      dataProcessingInfo: {
+        aiProvider: 'Anthropic (Claude API)',
+        aiProviderLocation: 'United States',
+        dataStorage: 'MongoDB Atlas',
+        hosting: 'Railway',
+        payments: 'Razorpay',
+        note: 'Anthropic does not train AI models on your conversation data under their Commercial Terms.',
+      },
+    };
+
+    res.setHeader('Content-Disposition', 'attachment; filename=aatman-data-export.json');
+    res.json(exportData);
+  } catch (err) {
+    console.error('Data export error:', err);
+    res.status(500).json({ error: 'Export failed. Please try again.' });
+  }
+});
+
+// Consent Withdrawal — DPDP Act
+app.post('/api/account/withdraw-consent', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'Account not found.' });
+
+    user.consentGiven = false;
+    user.consentTimestamp = null;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Your consent has been withdrawn. As we can no longer process your data, your account will be deactivated. You may delete your account to permanently erase all data, or re-consent to continue using Aatman.',
+    });
+  } catch (err) {
+    console.error('Consent withdrawal error:', err);
+    res.status(500).json({ error: 'Failed to process. Please try again.' });
+  }
+});
+
+// Grievance Submission — IT Rules 2021/2026
+app.post('/api/grievance', async (req, res) => {
+  try {
+    const { name, email, subject, description } = req.body;
+    if (!email || !description) {
+      return res.status(400).json({ error: 'Email and description are required.' });
+    }
+    // Log grievance (in production, store in a collection)
+    console.log(`[GRIEVANCE] From: ${email}, Subject: ${subject || 'General'}, Date: ${new Date().toISOString()}`);
+    console.log(`[GRIEVANCE] Description: ${description}`);
+    res.json({
+      success: true,
+      message: 'Your grievance has been received. We will acknowledge within 24 hours and resolve within 90 days.',
+      receivedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error('Grievance error:', err);
+    res.status(500).json({ error: 'Submission failed. Please email support directly.' });
   }
 });
 
