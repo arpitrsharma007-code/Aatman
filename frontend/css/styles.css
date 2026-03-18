@@ -3006,3 +3006,552 @@ img { max-width: 100%; display: block; }
   color: var(--saffron, #E65100);
   text-decoration: none;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   LANDING PAGE STYLES
+════════════════════════════════════════════════════════════════════ */
+
+/* === LANDING CONTAINER === */
+.aatman-landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #0D0B0E;
+    font-family: 'DM Sans', sans-serif;
+    color: #EDE6DB;
+}
+
+/* === AMBIENT BACKGROUND === */
+.aatman-landing::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: -10%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(232, 147, 47, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.aatman-landing::after {
+    content: '';
+    position: fixed;
+    bottom: -20%;
+    right: -10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(ellipse, rgba(199, 91, 42, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* === MANDALA WATERMARK === */
+.aatman-landing .mandala-watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 700px;
+    opacity: 0.018;
+    pointer-events: none;
+    z-index: 0;
+    animation: lp-mandala-spin 120s linear infinite;
+}
+
+@keyframes lp-mandala-spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* === NAV BAR === */
+.aatman-landing .aatman-nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(212, 168, 67, 0.12);
+}
+
+.aatman-landing .aatman-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.aatman-landing .om-symbol {
+    font-size: 1.6rem;
+    color: #E8932F;
+    line-height: 1;
+}
+
+.aatman-landing .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #F5EDE0;
+    letter-spacing: 0.04em;
+}
+
+.aatman-landing .logo-sanskrit {
+    font-size: 0.7rem;
+    color: #9A9090;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: -2px;
+}
+
+.aatman-landing .nav-lang {
+    font-size: 0.8rem;
+    color: #9A9090;
+    border: 1px solid rgba(212, 168, 67, 0.12);
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.aatman-landing .nav-lang:hover {
+    border-color: #D4A843;
+}
+
+/* === HERO SECTION === */
+.aatman-landing .aatman-hero {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px 40px;
+    animation: lp-hero-fade-in 0.8s ease-out;
+}
+
+@keyframes lp-hero-fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.aatman-landing .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1A1520;
+    border: 1px solid rgba(212, 168, 67, 0.12);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.75rem;
+    color: #F0D68A;
+    margin-bottom: 28px;
+    letter-spacing: 0.04em;
+}
+
+.aatman-landing .hero-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ADE80;
+    animation: lp-pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes lp-pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.aatman-landing .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    line-height: 1.15;
+    color: #F5EDE0;
+    margin-bottom: 8px;
+    max-width: 600px;
+}
+
+.aatman-landing .hero-title .saffron {
+    color: #E8932F;
+}
+
+.aatman-landing .hero-sanskrit {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: #D4A843;
+    margin-bottom: 20px;
+    opacity: 0.85;
+}
+
+.aatman-landing .hero-subtitle {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #B8AFA3;
+    max-width: 480px;
+    margin-bottom: 36px;
+}
+
+.aatman-landing .hero-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.aatman-landing .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #E8932F, #C75B2A);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 4px 24px rgba(232, 147, 47, 0.25);
+    text-decoration: none;
+}
+
+.aatman-landing .cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(232, 147, 47, 0.35);
+}
+
+.aatman-landing .cta-secondary {
+    font-size: 0.82rem;
+    color: #9A9090;
+}
+
+.aatman-landing .cta-secondary strong {
+    color: #F0D68A;
+    font-weight: 600;
+}
+
+/* === SOCIAL PROOF STRIP === */
+.aatman-landing .social-proof {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 20px 24px;
+    border-top: 1px solid rgba(212, 168, 67, 0.12);
+    border-bottom: 1px solid rgba(212, 168, 67, 0.12);
+    animation: lp-hero-fade-in 0.8s ease-out 0.2s both;
+}
+
+.aatman-landing .proof-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #B8AFA3;
+}
+
+.aatman-landing .proof-icon {
+    font-size: 1rem;
+}
+
+.aatman-landing .proof-number {
+    font-weight: 600;
+    color: #F0D68A;
+}
+
+/* === DEMO SECTION === */
+.aatman-landing .demo-section {
+    position: relative;
+    z-index: 5;
+    padding: 48px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: lp-hero-fade-in 0.8s ease-out 0.4s both;
+}
+
+.aatman-landing .demo-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #9A9090;
+    margin-bottom: 20px;
+}
+
+.aatman-landing .demo-chat {
+    width: 100%;
+    max-width: 520px;
+    background: #1A1520;
+    border: 1px solid rgba(212, 168, 67, 0.12);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+
+.aatman-landing .demo-chat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(212, 168, 67, 0.12);
+    background: #231D2B;
+}
+
+.aatman-landing .demo-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E8932F, #D4A843);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.aatman-landing .demo-chat-header span {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #F5EDE0;
+}
+
+.aatman-landing .demo-chat-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.aatman-landing .demo-msg-user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #E8932F, #C75B2A);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 14px 14px 4px 14px;
+    font-size: 0.9rem;
+    max-width: 85%;
+    line-height: 1.5;
+}
+
+.aatman-landing .demo-msg-ai {
+    align-self: flex-start;
+    background: #231D2B;
+    border: 1px solid rgba(212, 168, 67, 0.12);
+    color: #EDE6DB;
+    padding: 12px 16px;
+    border-radius: 14px 14px 14px 4px;
+    font-size: 0.88rem;
+    max-width: 90%;
+    line-height: 1.65;
+}
+
+.aatman-landing .demo-msg-ai .shloka {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #D4A843;
+    margin: 8px 0 4px;
+    line-height: 1.5;
+    padding-left: 10px;
+    border-left: 2px solid #D4A843;
+}
+
+.aatman-landing .demo-msg-ai .shloka-ref {
+    font-size: 0.72rem;
+    color: #9A9090;
+    margin-bottom: 8px;
+    padding-left: 10px;
+}
+
+.aatman-landing .demo-ai-footer {
+    font-size: 0.68rem;
+    color: #9A9090;
+    margin-top: 6px;
+    opacity: 0.7;
+}
+
+/* === SAMPLE QUESTIONS === */
+.aatman-landing .sample-questions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    max-width: 520px;
+}
+
+.aatman-landing .sample-q {
+    background: #1A1520;
+    border: 1px solid rgba(212, 168, 67, 0.12);
+    color: #B8AFA3;
+    font-size: 0.78rem;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: default;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+.aatman-landing .sample-q:hover {
+    border-color: #D4A843;
+    color: #F0D68A;
+}
+
+/* === TESTIMONIALS === */
+.aatman-landing .testimonial-section {
+    position: relative;
+    z-index: 5;
+    padding: 40px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: lp-hero-fade-in 0.8s ease-out 0.6s both;
+}
+
+.aatman-landing .testimonial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 680px;
+    width: 100%;
+}
+
+.aatman-landing .testimonial-card {
+    background: #1A1520;
+    border: 1px solid rgba(212, 168, 67, 0.12);
+    border-radius: 14px;
+    padding: 24px;
+    position: relative;
+}
+
+.aatman-landing .testimonial-card::before {
+    content: '\201C';
+    position: absolute;
+    top: -8px;
+    left: 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    color: #E8932F;
+    line-height: 1;
+    opacity: 0.5;
+}
+
+.aatman-landing .testimonial-text {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: #B8AFA3;
+    font-style: italic;
+    margin-bottom: 16px;
+    padding-top: 8px;
+}
+
+.aatman-landing .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.aatman-landing .testimonial-flag {
+    font-size: 1.3rem;
+}
+
+.aatman-landing .testimonial-info .author-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #F5EDE0;
+}
+
+.aatman-landing .testimonial-info .author-location {
+    font-size: 0.75rem;
+    color: #9A9090;
+}
+
+/* === FEATURES STRIP === */
+.aatman-landing .features-strip {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(212, 168, 67, 0.12);
+    margin: 32px 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: lp-hero-fade-in 0.8s ease-out 0.8s both;
+}
+
+.aatman-landing .feature-cell {
+    background: #1A1520;
+    padding: 22px 16px;
+    text-align: center;
+}
+
+.aatman-landing .feature-emoji {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.aatman-landing .feature-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #F5EDE0;
+    margin-bottom: 4px;
+}
+
+.aatman-landing .feature-desc {
+    font-size: 0.7rem;
+    color: #9A9090;
+    line-height: 1.4;
+}
+
+/* === BOTTOM CTA === */
+.aatman-landing .bottom-cta {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    padding: 24px 24px 48px;
+    animation: lp-hero-fade-in 0.8s ease-out 1s both;
+}
+
+.aatman-landing .bottom-cta p {
+    font-size: 0.82rem;
+    color: #9A9090;
+    margin-bottom: 16px;
+}
+
+.aatman-landing .bottom-cta p strong {
+    color: #F0D68A;
+}
+
+/* === LANDING PAGE RESPONSIVE === */
+@media (max-width: 600px) {
+    .aatman-landing .social-proof {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .aatman-landing .features-strip {
+        grid-template-columns: 1fr;
+        margin: 24px 16px;
+    }
+
+    .aatman-landing .testimonial-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .aatman-landing .hero-title {
+        font-size: 2rem;
+    }
+
+    .aatman-landing .aatman-hero {
+        padding: 40px 20px 32px;
+    }
+
+    .aatman-landing .demo-section {
+        padding: 32px 16px;
+    }
+}

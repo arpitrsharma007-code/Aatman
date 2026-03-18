@@ -63,6 +63,17 @@
     }
   }
 
+  // ─── Landing Page Visibility ────────────────────────────────────
+  function hideLanding() {
+    const lp = document.getElementById('aatmanLanding');
+    if (lp) lp.style.display = 'none';
+  }
+
+  function showLanding() {
+    const lp = document.getElementById('aatmanLanding');
+    if (lp) lp.style.display = '';
+  }
+
   // ─── Tab switching ────────────────────────────────────────────────────
   if (loginTabBtn) {
     loginTabBtn.addEventListener('click', () => {
@@ -195,6 +206,7 @@
     }
 
     hideAuthOverlay();
+    hideLanding();
 
     // Load server chat history
     if (data.chatHistory && data.chatHistory.length) {
@@ -335,6 +347,8 @@
     localStorage.removeItem('aatman_chat_history');
     // Show auth overlay
     showAuthOverlay();
+    // Show landing page
+    showLanding();
     // Clear chat UI
     if (window.Aatman?.chat?.clearHistory) {
       Aatman.chat.clearHistory();
@@ -421,6 +435,7 @@
             Aatman.subscription.fetchStatus();
           }
           hideAuthOverlay();
+          hideLanding();
           localStorage.setItem(LANG_SET_KEY, '1');
           // ─── Compliance: Show onboarding if not seen ───────────
           if (!localStorage.getItem('aatman_onboarding_seen')) {
@@ -438,6 +453,7 @@
       } catch (e) {
         // Network error — allow offline with cached user
         updateProfileUI();
+        hideLanding();
       }
     } else {
       // No saved session — show auth
@@ -529,6 +545,7 @@
     updateProfileLanguage,
     saveHistoryToServer,
     updateProfileUI,
+    showAuthOverlay,
   };
 
   // Run init
