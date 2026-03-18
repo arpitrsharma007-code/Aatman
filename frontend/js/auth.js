@@ -56,10 +56,15 @@
 
   function hideAuthOverlay() {
     if (authOverlay) {
-      authOverlay.classList.add('hiding');
-      setTimeout(() => {
+      if (authOverlay.classList.contains('visible')) {
+        authOverlay.classList.add('hiding');
+        setTimeout(() => {
+          authOverlay.classList.remove('visible', 'hiding');
+        }, 400);
+      } else {
+        // Never shown — just ensure classes are clean, no animation
         authOverlay.classList.remove('visible', 'hiding');
-      }, 400);
+      }
     }
   }
 
@@ -345,9 +350,7 @@
     // Keep language preference
     // Clear chat history from localStorage
     localStorage.removeItem('aatman_chat_history');
-    // Show auth overlay
-    showAuthOverlay();
-    // Show landing page
+    // Show landing page (user clicks CTA to get auth overlay)
     showLanding();
     // Clear chat UI
     if (window.Aatman?.chat?.clearHistory) {
@@ -443,12 +446,11 @@
             if (modal) modal.classList.remove('hidden');
           }
         } else {
-          // Token invalid
+          // Token invalid — landing page stays visible, user clicks CTA to auth
           localStorage.removeItem(TOKEN_KEY);
           localStorage.removeItem(USER_KEY);
           currentToken = null;
           currentUser  = null;
-          showAuthOverlay();
         }
       } catch (e) {
         // Network error — allow offline with cached user
@@ -456,8 +458,7 @@
         hideLanding();
       }
     } else {
-      // No saved session — show auth
-      showAuthOverlay();
+      // No saved session — landing page is already visible, user clicks CTA to auth
     }
   }
 
