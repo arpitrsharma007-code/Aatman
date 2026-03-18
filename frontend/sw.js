@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aatman-v4';
+const CACHE_NAME = 'aatman-v5';
 const STATIC_ASSETS = [
   '/',
   '/css/styles.css',

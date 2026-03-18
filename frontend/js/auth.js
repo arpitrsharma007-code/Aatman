@@ -68,15 +68,25 @@
     }
   }
 
-  // ─── Landing Page Visibility ────────────────────────────────────
+  // ─── Landing Page & App Shell Visibility ────────────────────────
   function hideLanding() {
     const lp = document.getElementById('aatmanLanding');
     if (lp) lp.style.display = 'none';
+    // Show the app
+    const header = document.querySelector('header.header');
+    const main = document.querySelector('main.main');
+    if (header) header.style.display = '';
+    if (main) main.style.display = '';
   }
 
   function showLanding() {
     const lp = document.getElementById('aatmanLanding');
     if (lp) lp.style.display = '';
+    // Hide the app
+    const header = document.querySelector('header.header');
+    const main = document.querySelector('main.main');
+    if (header) header.style.display = 'none';
+    if (main) main.style.display = 'none';
   }
 
   // ─── Tab switching ────────────────────────────────────────────────────
