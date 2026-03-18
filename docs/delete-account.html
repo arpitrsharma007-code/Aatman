@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aatman — Delete Your Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --saffron: #E65100;
+      --saffron-light: #FF8A50;
+      --gold: #F5A623;
+      --cream: #FFF8F0;
+      --dark: #1A1A2E;
+      --text: #2D2D3A;
+      --text-light: #666680;
+      --border: #E8E0D8;
+      --white: #FFFFFF;
+      --red: #C62828;
+      --red-light: #FFEBEE;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    .top-bar { background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%); padding: 16px 24px; text-align: center; }
+    .top-bar a { color: var(--gold); text-decoration: none; font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: 2px; }
+    .hero { background: linear-gradient(135deg, var(--dark) 0%, #16213E 60%, var(--red) 100%); padding: 80px 24px 60px; text-align: center; position: relative; overflow: hidden; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .hero p { color: rgba(255,255,255,0.7); font-size: 1rem; }
+    .container { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    .warning-card {
+      background: var(--red-light);
+      border: 2px solid var(--red);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 36px;
+    }
+    .warning-card h3 { color: var(--red); font-size: 1.1rem; margin-bottom: 12px; }
+    .warning-card p { font-size: 0.95rem; color: #5D4037; margin-bottom: 8px; }
+
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--dark); margin: 36px 0 16px; }
+
+    .step-list { margin: 16px 0 24px; counter-reset: steps; }
+    .step-item {
+      display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start;
+      background: var(--white); border-radius: 10px; padding: 18px 20px;
+      border: 1px solid var(--border); transition: border-color 0.2s;
+    }
+    .step-item:hover { border-color: var(--saffron); }
+    .step-num {
+      flex-shrink: 0; width: 36px; height: 36px; background: var(--dark); color: var(--white);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+    }
+    .step-content h4 { font-size: 1rem; color: var(--dark); margin-bottom: 4px; }
+    .step-content p { font-size: 0.9rem; color: var(--text-light); margin: 0; }
+
+    .data-section { margin: 24px 0; }
+    .data-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem;
+    }
+    .data-row:last-child { border-bottom: none; }
+    .data-label { font-weight: 600; color: var(--dark); }
+    .data-action { color: var(--red); font-weight: 500; font-size: 0.85rem; }
+
+    .alt-method {
+      background: var(--white); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px 24px; margin: 20px 0;
+    }
+    .alt-method p { font-size: 0.95rem; margin-bottom: 8px; }
+    .alt-method a { color: var(--saffron); font-weight: 600; text-decoration: none; }
+
+    .timeline-box {
+      background: linear-gradient(135deg, #FFF3E0 0%, var(--cream) 100%);
+      border: 1px solid #FFE0B2; border-radius: 10px; padding: 20px 24px; margin: 24px 0;
+    }
+    .timeline-box h4 { color: var(--saffron); margin-bottom: 12px; }
+    .timeline-row { display: flex; gap: 12px; margin-bottom: 8px; font-size: 0.9rem; }
+    .timeline-dot { flex-shrink: 0; width: 8px; height: 8px; background: var(--saffron); border-radius: 50%; margin-top: 7px; }
+
+    .contact-box { background: var(--dark); color: var(--white); border-radius: 12px; padding: 28px 32px; margin: 32px 0; }
+    .contact-box h3 { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin-bottom: 12px; }
+    .contact-box p { color: rgba(255,255,255,0.8); margin-bottom: 6px; font-size: 0.95rem; }
+    .contact-box a { color: var(--saffron-light); text-decoration: none; }
+
+    footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 24px; font-size: 0.85rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 60px 20px 40px; } .hero h1 { font-size: 2rem; }
+      .container { padding: 32px 16px 60px; }
+      .data-row { flex-direction: column; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar"><a href="/">AATMAN</a></div>
+
+  <div class="hero">
+    <h1>Delete Your Account</h1>
+    <p>We respect your right to control your personal data</p>
+  </div>
+
+  <div class="container">
+
+    <div class="warning-card">
+      <h3>⚠ Please Read Before Proceeding</h3>
+      <p>Deleting your Aatman account is <strong>permanent and irreversible</strong>. Once deleted, you will lose access to your account, all conversation history, and any active subscription benefits.</p>
+      <p>If you have an active paid subscription, please cancel it first to avoid being charged after deletion.</p>
+    </div>
+
+    <h2>How to Delete Your Account</h2>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Open Aatman</h4>
+          <p>Log in to your Aatman account on the web app</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Go to Settings</h4>
+          <p>Tap the menu icon and navigate to Account Settings</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Select "Delete My Account"</h4>
+          <p>Scroll to the bottom of the settings page and tap "Delete My Account"</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Confirm Your Identity</h4>
+          <p>Re-enter your password to verify your identity</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Confirm Deletion</h4>
+          <p>Review the data that will be deleted and confirm your decision</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>What Data Gets Deleted</h2>
+    <div class="data-section">
+      <div class="data-row">
+        <span class="data-label">Account information (name, email)</span>
+        <span class="data-action">Permanently deleted</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Conversation history</span>
+        <span class="data-action">Permanently deleted</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Subscription data</span>
+        <span class="data-action">Permanently deleted</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Authentication credentials</span>
+        <span class="data-action">Permanently deleted</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Security logs (IP, device info)</span>
+        <span class="data-action">Deleted within 30 days</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Payment records</span>
+        <span class="data-action">Retained by Razorpay per their policy</span>
+      </div>
+    </div>
+
+    <div class="timeline-box">
+      <h4>Deletion Timeline</h4>
+      <div class="timeline-row">
+        <div class="timeline-dot"></div>
+        <span><strong>Immediately:</strong> Account access revoked, login disabled</span>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-dot"></div>
+        <span><strong>Within 24 hours:</strong> Account and conversation data purged from primary database</span>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-dot"></div>
+        <span><strong>Within 30 days:</strong> All remaining data (backups, security logs) permanently erased</span>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-dot"></div>
+        <span><strong>Confirmation email</strong> sent to your registered email upon successful deletion</span>
+      </div>
+    </div>
+
+    <h2>Alternative: Request Deletion via Email</h2>
+    <div class="alt-method">
+      <p>If you are unable to delete your account through the app, you can request deletion by emailing us:</p>
+      <p><strong>Email:</strong> <a href="mailto:grievance@aatman.app">grievance@aatman.app</a></p>
+      <p>Please include your registered email address in the request. We will verify your identity and process the deletion within <strong>72 hours</strong>.</p>
+    </div>
+
+    <h2>Your Rights</h2>
+    <p>Under the Digital Personal Data Protection Act, 2023, you have the right to request erasure of your personal data at any time. We are legally obligated to comply with such requests. If you are unsatisfied with how your deletion request was handled, you may file a complaint with the Data Protection Board of India.</p>
+
+    <div class="contact-box">
+      <h3>Need Help?</h3>
+      <p><strong>Grievance Officer:</strong> Arpit Sharma</p>
+      <p><strong>Email:</strong> <a href="mailto:grievance@aatman.app">grievance@aatman.app</a></p>
+      <p><strong>Response time:</strong> Within 24 hours</p>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Aatman. All rights reserved.</p>
+    <p style="margin-top: 8px;">
+      <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+      <a href="terms.html">Terms of Service</a> &nbsp;|&nbsp;
+      <a href="delete-account.html">Delete Account</a>
+    </p>
+  </footer>
+
+</body>
+</html>

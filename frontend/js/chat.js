@@ -113,6 +113,7 @@
       <div class="msg-avatar" aria-hidden="true">ॐ</div>
       <div class="msg-body">
         <div class="msg-bubble">${Aatman.utils.parseMarkdown(text)}</div>
+        <div class="ai-response-footer"><span class="ai-tag">AI</span> AI-generated · May not be accurate</div>
         <span class="msg-time">${now}</span>
       </div>
     `;
@@ -130,6 +131,7 @@
       <div class="msg-avatar" aria-hidden="true">ॐ</div>
       <div class="msg-body">
         <div class="msg-bubble" id="streaming-bubble"></div>
+        <div class="ai-response-footer"><span class="ai-tag">AI</span> AI-generated · May not be accurate</div>
         <span class="msg-time">${now}</span>
       </div>
     `;

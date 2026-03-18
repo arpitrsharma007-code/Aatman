@@ -2801,3 +2801,208 @@ img { max-width: 100%; display: block; }
     flex-direction: column;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   COMPLIANCE UI (DPDP Act + IT Rules 2026)
+════════════════════════════════════════════════════════════════════ */
+
+/* ─── Consent Checkboxes (Registration) ──────────────────────────── */
+.consent-section {
+  margin: 16px 0 12px;
+  padding: 14px;
+  background: rgba(var(--brown-rgb, 139, 90, 43), 0.06);
+  border-radius: 10px;
+  border: 1px solid rgba(var(--brown-rgb, 139, 90, 43), 0.15);
+}
+
+.consent-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--brown-muted, #8B7355);
+}
+
+.consent-item:last-of-type { margin-bottom: 0; }
+
+.consent-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  accent-color: var(--saffron, #E65100);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.consent-item a {
+  color: var(--saffron, #E65100);
+  text-decoration: underline;
+}
+
+.consent-error {
+  color: #C62828;
+  font-size: 0.75rem;
+  margin-top: 8px;
+  font-weight: 600;
+}
+.consent-error.hidden { display: none; }
+
+/* ─── AI Disclosure Banner ───────────────────────────────────────── */
+.ai-disclosure-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--bg-card, #1a1a2e);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.7rem;
+  text-align: center;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.ai-badge {
+  background: var(--saffron, #E65100);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* ─── AI Response Footer ─────────────────────────────────────────── */
+.ai-response-footer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.3);
+}
+
+.ai-response-footer .ai-tag {
+  background: rgba(230,81,0,0.15);
+  color: var(--saffron, #E65100);
+  padding: 0 4px;
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 0.55rem;
+}
+
+/* ─── Onboarding Modal ───────────────────────────────────────────── */
+.onboarding-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+.onboarding-overlay.hidden { display: none; }
+
+.onboarding-card {
+  background: var(--bg-main, #0f0f1a);
+  border-radius: 16px;
+  max-width: 400px;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.onboarding-header {
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 60%, #E65100 100%);
+  padding: 28px 24px 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.onboarding-om {
+  font-size: 36px;
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
+.onboarding-header h2 { font-size: 1.4rem; margin-bottom: 4px; }
+.onboarding-header p { font-size: 0.85rem; opacity: 0.6; }
+
+.onboarding-body { padding: 20px; }
+
+.onboarding-point {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+
+.onboarding-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.onboarding-point strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-primary, #fff);
+  margin-bottom: 2px;
+}
+
+.onboarding-point p {
+  font-size: 0.75rem;
+  color: var(--text-muted, #888);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ─── Data & Privacy Card ────────────────────────────────────────── */
+.data-privacy-card .btn { text-align: left; }
+
+/* ─── Legal & Grievance Card ─────────────────────────────────────── */
+.legal-link {
+  display: block;
+  padding: 8px 0;
+  color: var(--text-primary, #fff);
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: color 0.2s;
+}
+.legal-link:hover { color: var(--saffron, #E65100); }
+
+.grievance-info-box {
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.grievance-info-box strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--gold, #F5A623);
+  margin-bottom: 6px;
+}
+.grievance-info-box p {
+  font-size: 0.82rem;
+  color: var(--text-muted, #888);
+  margin: 2px 0;
+}
+.grievance-info-box a {
+  color: var(--saffron, #E65100);
+  text-decoration: none;
+}

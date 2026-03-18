@@ -20,6 +20,13 @@ const userSchema = new mongoose.Schema({
     currentPeriodEnd: { type: Date, default: null },
     cancelledAt: { type: Date, default: null },
   },
+  // ─── Compliance Fields (DPDP Act 2023) ──────────────────────────
+  consentGiven: { type: Boolean, default: false },
+  consentTimestamp: { type: Date, default: null },
+  consentVersion: { type: String, default: null },
+  aiDisclosureAccepted: { type: Boolean, default: false },
+  ageVerified: { type: Boolean, default: false },
+  // ────────────────────────────────────────────────────────────────
   dailyMessageCount: { type: Number, default: 0 },
   lastMessageDate: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now },

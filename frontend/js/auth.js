@@ -140,12 +140,24 @@
       if (!name || !email || !password) return showError(signupError, 'Please fill in all fields');
       if (password.length < 6) return showError(signupError, 'Password must be at least 6 characters');
 
+      // ─── Compliance: Validate consent checkboxes ───────────────
+      const ageOk     = document.getElementById('ageVerify')?.checked;
+      const aiOk      = document.getElementById('aiDisclosure')?.checked;
+      const privacyOk = document.getElementById('privacyConsent')?.checked;
+      const tosOk     = document.getElementById('tosAccept')?.checked;
+      const consentErr = document.getElementById('consentError');
+      if (!ageOk || !aiOk || !privacyOk || !tosOk) {
+        if (consentErr) consentErr.classList.remove('hidden');
+        return showError(signupError, 'Please accept all required items.');
+      }
+      if (consentErr) consentErr.classList.add('hidden');
+
       setButtonLoading(signupSubmitBtn, true);
       try {
         const res  = await fetch('/api/auth/register', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ name, email, password }),
+          body:    JSON.stringify({ name, email, password, consentGiven: true, aiDisclosureAccepted: true, ageVerified: true }),
         });
         const data = await res.json();
         if (!res.ok) return showError(signupError, data.error || 'Registration failed');
@@ -215,6 +227,13 @@
       Aatman.subscription.handleAuthSubscription(data.subscription);
     } else if (window.Aatman?.subscription) {
       Aatman.subscription.fetchStatus();
+    }
+
+    // ─── Compliance: Show onboarding modal on first login ────────
+    const hasSeenOnboarding = localStorage.getItem('aatman_onboarding_seen');
+    if (!hasSeenOnboarding) {
+      const modal = document.getElementById('onboardingModal');
+      if (modal) modal.classList.remove('hidden');
     }
   }
 
@@ -419,6 +438,79 @@
       // No saved session — show auth
       showAuthOverlay();
     }
+  }
+
+  // ─── Onboarding Modal Dismiss ────────────────────────────────────
+  const onboardingDismissBtn = document.getElementById('onboardingDismissBtn');
+  if (onboardingDismissBtn) {
+    onboardingDismissBtn.addEventListener('click', () => {
+      const modal = document.getElementById('onboardingModal');
+      if (modal) modal.classList.add('hidden');
+      localStorage.setItem('aatman_onboarding_seen', 'true');
+    });
+  }
+
+  // ─── Compliance: Data & Privacy Buttons ─────────────────────────
+  const exportDataBtn = document.getElementById('exportDataBtn');
+  if (exportDataBtn) {
+    exportDataBtn.addEventListener('click', async () => {
+      if (!isLoggedIn()) return Aatman.toast('Please sign in first.', 'error');
+      try {
+        const res = await fetch('/api/account/export-data', { headers: getAuthHeaders() });
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'aatman-data-export.json'; a.click();
+        URL.revokeObjectURL(url);
+        Aatman.toast('Data exported successfully.', 'success');
+      } catch (err) {
+        Aatman.toast('Export failed. Please try again.', 'error');
+      }
+    });
+  }
+
+  const withdrawConsentBtn = document.getElementById('withdrawConsentBtn');
+  if (withdrawConsentBtn) {
+    withdrawConsentBtn.addEventListener('click', async () => {
+      if (!isLoggedIn()) return;
+      if (!confirm('Withdrawing consent will deactivate your account. Continue?')) return;
+      try {
+        const res = await fetch('/api/account/withdraw-consent', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        });
+        const data = await res.json();
+        Aatman.toast(data.message || 'Consent withdrawn.', 'info');
+        logout();
+      } catch (err) {
+        Aatman.toast('Failed. Please try again.', 'error');
+      }
+    });
+  }
+
+  const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+  if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener('click', async () => {
+      if (!isLoggedIn()) return;
+      if (!confirm('This will PERMANENTLY delete your account and ALL data. This cannot be undone. Are you sure?')) return;
+      const password = prompt('Enter your password to confirm deletion:');
+      if (!password) return;
+      try {
+        const res = await fetch('/api/account/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+          body: JSON.stringify({ password }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          Aatman.toast('Account deleted. All data will be erased.', 'info');
+          logout();
+        } else {
+          Aatman.toast(data.error || 'Deletion failed.', 'error');
+        }
+      } catch (err) {
+        Aatman.toast('Failed. Please contact support.', 'error');
+      }
+    });
   }
 
   // ─── Expose ────────────────────────────────────────────────────────────

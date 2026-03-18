@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aatman — Terms of Service</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --saffron: #E65100;
+      --saffron-light: #FF8A50;
+      --gold: #F5A623;
+      --cream: #FFF8F0;
+      --dark: #1A1A2E;
+      --text: #2D2D3A;
+      --text-light: #666680;
+      --border: #E8E0D8;
+      --white: #FFFFFF;
+      --red: #C62828;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    .top-bar { background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%); padding: 16px 24px; text-align: center; }
+    .top-bar a { color: var(--gold); text-decoration: none; font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: 2px; }
+    .hero { background: linear-gradient(135deg, var(--dark) 0%, #16213E 60%, var(--saffron) 100%); padding: 80px 24px 60px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: 'ॐ'; position: absolute; font-size: 200px; color: rgba(255,255,255,0.03); top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: serif; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--white); margin-bottom: 12px; position: relative; }
+    .hero p { color: rgba(255,255,255,0.7); font-size: 1rem; position: relative; }
+    .container { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+    .last-updated { text-align: center; color: var(--text-light); font-size: 0.9rem; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .intro { background: var(--white); border-left: 4px solid var(--saffron); padding: 20px 24px; border-radius: 0 8px 8px 0; margin-bottom: 40px; font-size: 0.95rem; color: var(--text-light); }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--dark); margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--gold); display: inline-block; }
+    h2::before { content: '✦ '; color: var(--saffron); font-size: 0.9rem; }
+    p { margin-bottom: 14px; font-size: 0.95rem; }
+    ul { margin: 10px 0 18px 20px; list-style: none; }
+    ul li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 0.95rem; }
+    ul li::before { content: '•'; color: var(--saffron); font-weight: bold; position: absolute; left: 0; }
+    .warning-box { background: #FFF3E0; border: 2px solid var(--saffron); border-radius: 8px; padding: 20px 24px; margin: 20px 0; }
+    .warning-box strong { color: var(--red); }
+    .critical-box { background: #FFEBEE; border: 2px solid var(--red); border-radius: 8px; padding: 20px 24px; margin: 20px 0; }
+    .critical-box p { color: var(--red); font-weight: 600; }
+    .pricing-table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9rem; border-radius: 8px; overflow: hidden; }
+    .pricing-table th { background: var(--dark); color: var(--white); padding: 12px 16px; text-align: left; font-weight: 600; }
+    .pricing-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+    .pricing-table tr:nth-child(even) td { background: #FAF6F1; }
+    .contact-box { background: var(--dark); color: var(--white); border-radius: 12px; padding: 28px 32px; margin: 32px 0; }
+    .contact-box h3 { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin-bottom: 16px; }
+    .contact-box p { color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+    .contact-box a { color: var(--saffron-light); text-decoration: none; }
+    footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 24px; font-size: 0.85rem; }
+    footer a { color: var(--gold); text-decoration: none; }
+    @media (max-width: 600px) { .hero { padding: 60px 20px 40px; } .hero h1 { font-size: 2rem; } .container { padding: 32px 16px 60px; } h2 { font-size: 1.3rem; } }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar"><a href="/">AATMAN</a></div>
+
+  <div class="hero">
+    <h1>Terms of Service</h1>
+    <p>Please read these terms carefully before using Aatman</p>
+  </div>
+
+  <div class="container">
+    <div class="last-updated">Last Updated: March 2026 &nbsp;|&nbsp; Effective: March 2026</div>
+
+    <div class="intro">
+      These Terms of Service ("Terms") govern your use of the Aatman spiritual AI companion service. By creating an account or using Aatman, you agree to be bound by these Terms. If you do not agree, please do not use the Service.
+    </div>
+
+    <h2>1. About the Service</h2>
+    <p>Aatman is an AI-powered spiritual companion that provides guidance inspired by Hindu philosophy (Sanatan Dharma). Aatman draws from sacred texts including the Bhagavad Gita, Upanishads, Vedas, and Yoga Sutras to offer thoughtful spiritual perspectives.</p>
+    <div class="warning-box">
+      <strong>Important:</strong> Aatman uses artificial intelligence technology and is <strong>NOT</strong> a human guru, priest, pandit, or religious authority. All responses are AI-generated and should be treated as informational, not as authoritative religious instruction.
+    </div>
+
+    <h2>2. Eligibility</h2>
+    <p>You must be at least <strong>18 years old</strong> to use Aatman. By creating an account, you confirm that you are 18 or older. If we discover that a user is under 18, we will terminate their account and delete their data immediately.</p>
+
+    <h2>3. Account Responsibilities</h2>
+    <ul>
+      <li>You are responsible for maintaining the confidentiality of your account credentials</li>
+      <li>You are responsible for all activity that occurs under your account</li>
+      <li>You must provide accurate and complete information during registration</li>
+      <li>You must notify us immediately of any unauthorized access to your account</li>
+    </ul>
+
+    <h2>4. AI Disclaimer</h2>
+    <div class="critical-box">
+      <p>AATMAN IS AN AI TOOL, NOT A REPLACEMENT FOR HUMAN RELIGIOUS GUIDANCE, MENTAL HEALTH SUPPORT, MEDICAL ADVICE, OR PROFESSIONAL COUNSELLING.</p>
+    </div>
+    <ul>
+      <li>Aatman's responses are generated by artificial intelligence and may contain inaccuracies or errors</li>
+      <li>The spiritual guidance provided is for informational and reflective purposes only</li>
+      <li>Aatman does not represent the views of any specific religious institution, sect, sampradaya, or authority</li>
+      <li>Aatman should not be used as a substitute for speaking with a qualified religious leader, mental health professional, or medical practitioner</li>
+    </ul>
+    <div class="warning-box">
+      <strong>In case of mental health emergency:</strong><br>
+      iCall: 9152987821 &nbsp;|&nbsp; Vandrevala Foundation: 1860-2662-2345 &nbsp;|&nbsp; AASRA: 9820466726
+    </div>
+
+    <h2>5. Acceptable Use</h2>
+    <p>You agree <strong>NOT</strong> to:</p>
+    <ul>
+      <li>Use Aatman to generate content that is hateful, discriminatory, or derogatory toward any religion, caste, community, or individual</li>
+      <li>Attempt to make Aatman produce content that violates Indian law</li>
+      <li>Use the Service to harass, abuse, or harm others</li>
+      <li>Use the Service for any commercial purpose without our written permission</li>
+      <li>Attempt to reverse-engineer, hack, or disrupt the Service</li>
+      <li>Use automated tools, bots, or scripts to access the Service</li>
+      <li>Attempt to extract political opinions or religiously divisive content</li>
+      <li>Share AI-generated responses as if they were from a human religious authority</li>
+    </ul>
+    <p>Violation of these terms may result in immediate account suspension or termination.</p>
+
+    <h2>6. Content &amp; Intellectual Property</h2>
+    <ul>
+      <li><strong>Your inputs:</strong> You retain ownership of the messages you send to Aatman</li>
+      <li><strong>AI outputs:</strong> Responses generated by Aatman are provided for your personal, non-commercial use</li>
+      <li><strong>Our IP:</strong> Aatman's brand, design, technology, and system architecture are our intellectual property</li>
+      <li>You may not reproduce, distribute, or commercially exploit Aatman's responses without prior written permission</li>
+    </ul>
+
+    <h2>7. Subscription &amp; Payments</h2>
+    <table class="pricing-table">
+      <thead>
+        <tr><th>Plan</th><th>Price</th><th>Features</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Sadhak</strong> (Free)</td><td>₹0</td><td>5 messages per day, basic features</td></tr>
+        <tr><td><strong>Bhakt</strong> (Monthly)</td><td>₹149/month</td><td>Unlimited messages, priority access</td></tr>
+        <tr><td><strong>Bhakt</strong> (Annual)</td><td>₹999/year</td><td>Unlimited messages, priority access, best value</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>Payments are securely processed by <strong>Razorpay</strong>. We do not store your payment details.</li>
+      <li>You may cancel your subscription at any time from your account settings</li>
+      <li>Monthly subscriptions: No refunds for partial months</li>
+      <li>Annual subscriptions: Full refund available within 7 days of purchase</li>
+      <li>Cancellation takes effect at the end of your current billing period</li>
+    </ul>
+
+    <h2>8. Privacy</h2>
+    <p>Your privacy is important to us. Please review our <a href="privacy.html" style="color: var(--saffron); font-weight: 600;">Privacy Policy</a> for details on how we collect, use, and protect your personal data. By using Aatman, you consent to data practices described in our Privacy Policy.</p>
+
+    <h2>9. Limitation of Liability</h2>
+    <p>To the maximum extent permitted by Indian law:</p>
+    <ul>
+      <li>Aatman is provided <strong>"as is"</strong> and <strong>"as available"</strong> without warranties of any kind, express or implied</li>
+      <li>We do not warrant that responses will be accurate, complete, or suitable for any purpose</li>
+      <li>We are not liable for any spiritual, emotional, psychological, or other harm arising from use of the Service</li>
+      <li>We are not liable for any decisions you make based on Aatman's responses</li>
+      <li>Our total aggregate liability shall not exceed the amount you paid for the Service in the preceding 12 months</li>
+    </ul>
+
+    <h2>10. Account Termination</h2>
+    <ul>
+      <li>We may suspend or terminate your account if you violate these Terms</li>
+      <li>You may delete your account at any time from Settings or via our <a href="delete-account.html" style="color: var(--saffron);">Account Deletion page</a></li>
+      <li>Upon termination, your data will be handled per our Privacy Policy (deleted within 30 days)</li>
+      <li>Termination does not affect any rights or obligations that accrued before termination</li>
+    </ul>
+
+    <h2>11. Governing Law &amp; Disputes</h2>
+    <p>These Terms are governed by the laws of India. Any disputes arising from or related to these Terms or the Service shall be subject to the exclusive jurisdiction of the courts in <strong>New Delhi, India</strong>.</p>
+    <p>We encourage resolution through our grievance mechanism before initiating formal legal proceedings.</p>
+
+    <h2>12. Changes to These Terms</h2>
+    <p>We may modify these Terms from time to time. Material changes will be communicated via email or in-app notification at least <strong>15 days</strong> before taking effect. Continued use of the Service after the effective date constitutes acceptance of the updated Terms.</p>
+
+    <h2>13. Grievance Redressal</h2>
+    <div class="contact-box">
+      <h3>Grievance Officer</h3>
+      <p><strong>Name:</strong> Arpit Sharma</p>
+      <p><strong>Email:</strong> <a href="mailto:grievance@aatman.app">grievance@aatman.app</a></p>
+      <p><strong>Acknowledgment:</strong> Within 24 hours</p>
+      <p><strong>Resolution:</strong> Within 15 days (30 days for complex cases)</p>
+    </div>
+
+    <h2>14. Contact</h2>
+    <p>For questions about these Terms, contact us at <a href="mailto:hello@aatman.app" style="color: var(--saffron);">hello@aatman.app</a>.</p>
+
+    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); text-align: center; color: var(--text-light); font-size: 0.85rem;">
+      <p>These Terms of Service are governed by the laws of India.</p>
+      <p style="margin-top: 8px;">Available in: <a href="#" style="color: var(--saffron);">English</a> | <a href="#" style="color: var(--saffron);">हिन्दी</a></p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Aatman. All rights reserved.</p>
+    <p style="margin-top: 8px;">
+      <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+      <a href="terms.html">Terms of Service</a> &nbsp;|&nbsp;
+      <a href="delete-account.html">Delete Account</a>
+    </p>
+  </footer>
+
+</body>
+</html>

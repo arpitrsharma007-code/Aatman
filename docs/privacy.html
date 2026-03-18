@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aatman — Privacy Policy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --saffron: #E65100;
+      --saffron-light: #FF8A50;
+      --gold: #F5A623;
+      --cream: #FFF8F0;
+      --dark: #1A1A2E;
+      --text: #2D2D3A;
+      --text-light: #666680;
+      --border: #E8E0D8;
+      --white: #FFFFFF;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%);
+      padding: 16px 24px;
+      text-align: center;
+    }
+
+    .top-bar a {
+      color: var(--gold);
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, #16213E 60%, var(--saffron) 100%);
+      padding: 80px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: 'ॐ';
+      position: absolute;
+      font-size: 200px;
+      color: rgba(255,255,255,0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: serif;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      position: relative;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .last-updated {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .intro {
+      background: var(--white);
+      border-left: 4px solid var(--saffron);
+      padding: 20px 24px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 40px;
+      font-size: 0.95rem;
+      color: var(--text-light);
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin: 40px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gold);
+      display: inline-block;
+    }
+
+    h2::before {
+      content: '✦ ';
+      color: var(--saffron);
+      font-size: 0.9rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin: 24px 0 10px;
+    }
+
+    p { margin-bottom: 14px; font-size: 0.95rem; }
+
+    ul {
+      margin: 10px 0 18px 20px;
+      list-style: none;
+    }
+
+    ul li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    ul li::before {
+      content: '•';
+      color: var(--saffron);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #FFF3E0 0%, #FFF8F0 100%);
+      border: 1px solid #FFE0B2;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+
+    .highlight-box strong { color: var(--saffron); }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .data-table th {
+      background: var(--dark);
+      color: var(--white);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .data-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table tr:nth-child(even) td { background: #FAF6F1; }
+    .data-table tr:hover td { background: #FFF3E0; }
+
+    .contact-box {
+      background: var(--dark);
+      color: var(--white);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin: 32px 0;
+    }
+
+    .contact-box h3 {
+      color: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+    }
+
+    .contact-box p {
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 8px;
+    }
+
+    .contact-box a {
+      color: var(--saffron-light);
+      text-decoration: none;
+    }
+
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 24px;
+      font-size: 0.85rem;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 60px 20px 40px; }
+      .hero h1 { font-size: 2rem; }
+      .container { padding: 32px 16px 60px; }
+      h2 { font-size: 1.3rem; }
+      .data-table { font-size: 0.8rem; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="/">AATMAN</a>
+  </div>
+
+  <div class="hero">
+    <h1>Privacy Policy</h1>
+    <p>How we protect your personal data and spiritual journey</p>
+  </div>
+
+  <div class="container">
+    <div class="last-updated">Last Updated: March 2026</div>
+
+    <div class="intro">
+      Aatman ("we," "our," or "us") is committed to protecting your personal data. This Privacy Policy explains how we collect, use, store, and protect your information when you use the Aatman spiritual AI companion service (the "Service"). This policy complies with the <strong>Digital Personal Data Protection Act, 2023</strong>, the <strong>Information Technology Act, 2000</strong>, and applicable Indian laws.
+    </div>
+
+    <h2>1. Data We Collect</h2>
+    <p>We collect the following personal data, limited strictly to what is necessary for providing the Service:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data Type</th>
+          <th>Purpose</th>
+          <th>Retention Period</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Name</td><td>Account identification</td><td>Until account deletion</td></tr>
+        <tr><td>Email address</td><td>Authentication &amp; communication</td><td>Until account deletion</td></tr>
+        <tr><td>Password (hashed)</td><td>Secure authentication</td><td>Until account deletion</td></tr>
+        <tr><td>Conversation logs</td><td>Providing spiritual guidance</td><td>90 days (rolling)</td></tr>
+        <tr><td>IP address &amp; device info</td><td>Security &amp; fraud prevention</td><td>30 days</td></tr>
+        <tr><td>Subscription status</td><td>Service delivery</td><td>Until account deletion</td></tr>
+        <tr><td>Payment information</td><td>Processed by Razorpay only</td><td>Per Razorpay's policy</td></tr>
+      </tbody>
+    </table>
+
+    <p>We do <strong>not</strong> collect: location data, contacts, photos, biometric data, or any sensitive personal data beyond what is listed above.</p>
+
+    <h2>2. How We Use Your Data</h2>
+    <p>We process your personal data for the following specific purposes:</p>
+    <ul>
+      <li>Providing you with spiritual guidance through AI-powered conversations</li>
+      <li>Managing your account and subscription</li>
+      <li>Ensuring the security and integrity of our Service</li>
+      <li>Improving the quality and accuracy of our Service</li>
+      <li>Communicating with you about service updates or changes</li>
+    </ul>
+    <p>We will <strong>never</strong> sell, rent, or share your personal data with third parties for marketing purposes.</p>
+
+    <h2>3. AI Processing Disclosure</h2>
+    <div class="highlight-box">
+      <strong>Important:</strong> Aatman uses artificial intelligence (Anthropic's Claude API) to generate responses. Your messages are sent to Anthropic's servers in the United States for processing. Under Anthropic's Commercial Terms, <strong>they do not train AI models on your data</strong>. AI-generated responses may not always be accurate and should not be treated as authoritative religious scripture or professional advice.
+    </div>
+
+    <h2>4. Data Storage &amp; Security</h2>
+    <p>Your account data is stored in MongoDB Atlas (cloud database). Conversation data is transmitted to Anthropic's servers (United States) for AI processing. We implement the following security measures:</p>
+    <ul>
+      <li>Encryption in transit (TLS/SSL) and at rest</li>
+      <li>Access controls with role-based permissions</li>
+      <li>Secure password hashing (bcrypt)</li>
+      <li>Regular security monitoring and audit logging</li>
+    </ul>
+
+    <h2>5. Data Retention</h2>
+    <ul>
+      <li><strong>Account data:</strong> Retained until you delete your account</li>
+      <li><strong>Conversation logs:</strong> Retained for up to 90 days on a rolling basis, then automatically purged</li>
+      <li><strong>Security logs:</strong> Retained for 30 days</li>
+      <li><strong>Post-deletion:</strong> All personal data erased within 30 days of account deletion, except where retention is required by law</li>
+    </ul>
+
+    <h2>6. Your Rights Under the DPDP Act</h2>
+    <p>As a Data Principal under Indian law, you have the right to:</p>
+    <ul>
+      <li><strong>Access:</strong> Obtain a summary of your personal data and processing activities</li>
+      <li><strong>Correction:</strong> Request correction of inaccurate personal data</li>
+      <li><strong>Erasure:</strong> Request deletion of your personal data</li>
+      <li><strong>Withdraw consent:</strong> Withdraw your consent at any time — the process is as simple as providing consent</li>
+      <li><strong>Grievance:</strong> File a complaint with us or with the Data Protection Board of India</li>
+    </ul>
+    <p>To exercise any of these rights, contact our Grievance Officer (details below).</p>
+
+    <h2>7. Cross-Border Data Transfer</h2>
+    <p>Your conversation data is processed by Anthropic's servers located in the United States. This transfer is currently permitted under Indian law. We will notify you promptly if any regulatory changes affect this arrangement.</p>
+
+    <h2>8. Children's Privacy</h2>
+    <p>Aatman is intended for users aged <strong>18 and above</strong>. We do not knowingly collect personal data from anyone under 18. If we become aware that we have collected data from a minor, we will delete it promptly and terminate the associated account.</p>
+
+    <h2>9. Third-Party Services</h2>
+    <p>We use the following third-party services, each with their own privacy policies:</p>
+    <ul>
+      <li><strong>Anthropic</strong> — AI processing (Claude API)</li>
+      <li><strong>Razorpay</strong> — Payment processing</li>
+      <li><strong>MongoDB Atlas</strong> — Data storage</li>
+      <li><strong>Railway</strong> — Application hosting</li>
+    </ul>
+    <p>We do not control these services' data practices and encourage you to review their respective policies.</p>
+
+    <h2>10. Data Breach Notification</h2>
+    <p>In the event of a personal data breach, we will:</p>
+    <ul>
+      <li>Notify the Data Protection Board of India without delay</li>
+      <li>Submit a detailed report within 72 hours</li>
+      <li>Notify affected users with details for protective action</li>
+      <li>Take immediate steps to contain and remediate the breach</li>
+    </ul>
+
+    <h2>11. Grievance Redressal</h2>
+    <div class="contact-box">
+      <h3>Grievance Officer</h3>
+      <p><strong>Name:</strong> Arpit Sharma</p>
+      <p><strong>Email:</strong> <a href="mailto:grievance@aatman.app">grievance@aatman.app</a></p>
+      <p><strong>Response time:</strong> We will acknowledge your complaint within 24 hours and resolve it within 90 days, as required by law.</p>
+    </div>
+
+    <h2>12. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. We will notify you of material changes via email or in-app notification at least 15 days before they take effect. Continued use of the Service after notification constitutes acceptance of the updated policy.</p>
+
+    <h2>13. Contact Us</h2>
+    <p>For any questions about this Privacy Policy or your personal data, please contact us at <a href="mailto:grievance@aatman.app" style="color: var(--saffron);">grievance@aatman.app</a>.</p>
+
+    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); text-align: center; color: var(--text-light); font-size: 0.85rem;">
+      <p>This Privacy Policy is governed by the laws of India.</p>
+      <p style="margin-top: 8px;">Available in: <a href="#" style="color: var(--saffron);">English</a> | <a href="#" style="color: var(--saffron);">हिन्दी</a></p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Aatman. All rights reserved.</p>
+    <p style="margin-top: 8px;">
+      <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+      <a href="terms.html">Terms of Service</a> &nbsp;|&nbsp;
+      <a href="delete-account.html">Delete Account</a>
+    </p>
+  </footer>
+
+</body>
+</html>
