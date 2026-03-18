@@ -57,9 +57,15 @@ function optionalAuth(req, res, next) {
 }
 
 // ─── Feature Gating: Message Limit for Free Users ───────────────────────────
+// ⚠️ TEMPORARILY DISABLED — Growth phase, unlimited for all users
+// To reactivate: remove the early return below and uncomment nothing else needed
 const FREE_DAILY_LIMIT = 5;
 
 async function checkMessageLimit(req, res, next) {
+  // ──── GROWTH MODE: Skip all limits ────
+  return next();
+
+  // ──── Original logic below (preserved for reactivation) ────
   // If not authenticated, allow (optionalAuth may not have user)
   if (!req.user) return next();
 
