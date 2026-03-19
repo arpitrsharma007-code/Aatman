@@ -1,0 +1,621 @@
+diff --git a/backend/models/AstrologyWaitlist.js b/backend/models/AstrologyWaitlist.js
+new file mode 100644
+index 0000000..f1d786d
+--- /dev/null
++++ b/backend/models/AstrologyWaitlist.js
+@@ -0,0 +1,10 @@
++const mongoose = require('mongoose');
++
++const astrologyWaitlistSchema = new mongoose.Schema({
++  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
++  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
++  source: { type: String, enum: ['modal', 'banner', 'chat_nudge'], default: 'modal' },
++  createdAt: { type: Date, default: Date.now },
++});
++
++module.exports = mongoose.model('AstrologyWaitlist', astrologyWaitlistSchema);
+diff --git a/backend/server.js b/backend/server.js
+index 5493974..e0f24b7 100644
+--- a/backend/server.js
++++ b/backend/server.js
+@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
+ const bcrypt = require('bcryptjs');
+ const User = require('./models/User');
+ const Payment = require('./models/Payment');
++const AstrologyWaitlist = require('./models/AstrologyWaitlist');
+ const subscriptionRoutes = require('./routes/subscription');
+ const webhookRoutes = require('./routes/webhook');
+ 
+@@ -678,6 +679,39 @@ app.post('/api/grievance', async (req, res) => {
+   }
+ });
+ 
++// ─── Astrology Waitlist ───────────────────────────────────────────────────────
++app.post('/api/waitlist/astrology', optionalAuth, async (req, res) => {
++  const { email, source } = req.body;
++  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
++    return res.status(400).json({ error: 'Valid email is required' });
++  }
++  try {
++    const entry = await AstrologyWaitlist.findOneAndUpdate(
++      { email: email.toLowerCase().trim() },
++      {
++        email: email.toLowerCase().trim(),
++        userId: req.user?.id || null,
++        source: source || 'modal',
++      },
++      { upsert: true, new: true }
++    );
++    const count = await AstrologyWaitlist.countDocuments();
++    res.json({ success: true, message: 'You\'re on the list!', totalWaitlist: count });
++  } catch (err) {
++    console.error('Astrology waitlist error:', err);
++    res.status(500).json({ error: 'Could not join waitlist. Please try again.' });
++  }
++});
++
++app.get('/api/waitlist/astrology/count', async (req, res) => {
++  try {
++    const count = await AstrologyWaitlist.countDocuments();
++    res.json({ count });
++  } catch (err) {
++    res.json({ count: 0 });
++  }
++});
++
+ // ─── Catch-all ─────────────────────────────────────────────────────────────────
+ app.get('*', (req, res) => {
+   res.sendFile(path.join(__dirname, '../frontend/index.html'));
+diff --git a/frontend/css/styles.css b/frontend/css/styles.css
+index e3803b0..595da78 100644
+--- a/frontend/css/styles.css
++++ b/frontend/css/styles.css
+@@ -3634,3 +3634,180 @@ img { max-width: 100%; display: block; }
+         padding: 32px 16px;
+     }
+ }
++
++/* ═══════════════════════════════════════════════════════════════════
++   ASTROLOGY WAITLIST — Modal, Banner & Chat Nudge
++═══════════════════════════════════════════════════════════════════ */
++
++/* ─── Modal extras (reuses onboarding-overlay / onboarding-card) ── */
++.astrology-email-input {
++  width: 100%;
++  padding: 12px 14px;
++  border: 1.5px solid var(--border-light);
++  border-radius: 8px;
++  font-family: var(--font-ui, 'Inter', sans-serif);
++  font-size: 0.9rem;
++  background: var(--cream-warm, #FFFCF0);
++  color: var(--text-primary);
++  outline: none;
++  transition: border-color 0.2s;
++  box-sizing: border-box;
++}
++.astrology-email-input:focus {
++  border-color: var(--saffron);
++}
++.astrology-email-input::placeholder {
++  color: var(--text-muted);
++}
++
++.astrology-dismiss-link {
++  display: block;
++  width: 100%;
++  text-align: center;
++  margin-top: 10px;
++  background: none;
++  border: none;
++  color: var(--text-muted);
++  font-size: 0.8rem;
++  cursor: pointer;
++  padding: 6px;
++  transition: color 0.2s;
++}
++.astrology-dismiss-link:hover {
++  color: var(--text-secondary);
++}
++
++/* ─── Persistent Banner ───────────────────────────────────────────── */
++.astrology-banner {
++  margin: 0;
++  animation: astroBannerSlide 0.4s ease;
++}
++.astrology-banner.hidden { display: none; }
++
++@keyframes astroBannerSlide {
++  from { opacity: 0; transform: translateY(-4px); }
++  to   { opacity: 1; transform: translateY(0); }
++}
++
++.astrology-banner-inner {
++  display: flex;
++  align-items: center;
++  gap: 8px;
++  padding: 8px 14px;
++  background: linear-gradient(135deg, rgba(255,153,51,0.08), rgba(200,150,12,0.06));
++  border-bottom: 1px solid rgba(255,153,51,0.15);
++}
++
++.astrology-banner-icon {
++  font-size: 1rem;
++  flex-shrink: 0;
++}
++
++.astrology-banner-text {
++  flex: 1;
++  font-family: var(--font-body, 'Crimson Text', serif);
++  font-size: 0.82rem;
++  color: var(--text-secondary);
++}
++
++.astrology-banner-cta {
++  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-dark) 100%);
++  color: #fff;
++  border: none;
++  border-radius: 6px;
++  padding: 5px 12px;
++  font-family: var(--font-ui, 'Inter', sans-serif);
++  font-size: 0.72rem;
++  font-weight: 600;
++  cursor: pointer;
++  white-space: nowrap;
++  transition: transform 0.15s, opacity 0.2s;
++}
++.astrology-banner-cta:hover {
++  transform: scale(1.03);
++}
++.astrology-banner-cta:active {
++  transform: scale(0.97);
++}
++
++.astrology-banner-close {
++  background: none;
++  border: none;
++  color: var(--text-muted);
++  font-size: 0.8rem;
++  cursor: pointer;
++  padding: 4px;
++  opacity: 0.4;
++  transition: opacity 0.2s;
++  flex-shrink: 0;
++}
++.astrology-banner-close:hover {
++  opacity: 1;
++}
++
++/* ─── Chat Nudge (inline, similar to wa-share-prompt) ─────────── */
++.astrology-chat-nudge {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  background: linear-gradient(135deg, rgba(255,153,51,0.08), rgba(200,150,12,0.04));
++  border: 1px solid rgba(255,153,51,0.18);
++  border-radius: 12px;
++  padding: 12px 16px;
++  margin: 8px 48px;
++  animation: waShareFadeIn 0.4s ease;
++  transition: opacity 0.3s ease;
++}
++
++.astrology-nudge-text {
++  flex: 1;
++  font-family: var(--font-body, 'Crimson Text', serif);
++  font-size: 0.82rem;
++  color: var(--text-secondary);
++  line-height: 1.4;
++}
++
++.astrology-nudge-btn {
++  display: inline-flex;
++  align-items: center;
++  gap: 5px;
++  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-dark) 100%);
++  color: #fff;
++  border: none;
++  border-radius: 8px;
++  padding: 8px 14px;
++  font-family: var(--font-ui, 'Inter', sans-serif);
++  font-size: 0.75rem;
++  font-weight: 600;
++  cursor: pointer;
++  white-space: nowrap;
++  transition: transform 0.15s;
++}
++.astrology-nudge-btn:hover {
++  transform: scale(1.03);
++}
++
++.astrology-nudge-dismiss {
++  background: none;
++  border: none;
++  color: var(--text-muted);
++  font-size: 1rem;
++  cursor: pointer;
++  padding: 4px;
++  opacity: 0.5;
++  transition: opacity 0.2s;
++}
++.astrology-nudge-dismiss:hover {
++  opacity: 1;
++}
++
++@media (max-width: 600px) {
++  .astrology-chat-nudge {
++    margin: 8px 8px;
++    flex-wrap: wrap;
++  }
++  .astrology-nudge-text {
++    width: 100%;
++    margin-bottom: 4px;
++  }
++}
+diff --git a/frontend/index.html b/frontend/index.html
+index d0f981e..967acb9 100644
+--- a/frontend/index.html
++++ b/frontend/index.html
+@@ -447,6 +447,16 @@
+         <span>Aatman is an AI companion. Responses are AI-generated and may not always be accurate.</span>
+       </div>
+ 
++      <!-- ─── Astrology Waitlist Banner (persistent, dismissible) ─── -->
++      <div class="astrology-banner hidden" id="astrologyBanner">
++        <div class="astrology-banner-inner">
++          <span class="astrology-banner-icon">&#x2729;</span>
++          <span class="astrology-banner-text">Vedic Astrology is coming to Aatman</span>
++          <button class="astrology-banner-cta" id="astrologyBannerCta">Join waitlist</button>
++          <button class="astrology-banner-close" id="astrologyBannerClose" aria-label="Close">&#x2715;</button>
++        </div>
++      </div>
++
+       <!-- Horoscope Dashboard Card (shown when user has sign set) -->
+       <div class="horoscope-banner hidden" id="horoscopeBanner">
+         <div class="horoscope-banner-inner">
+@@ -1184,6 +1194,43 @@
+     </div>
+   </div>
+ 
++  <!-- ════════════════════════════════════════════
++       ASTROLOGY WAITLIST MODAL (shown once per user)
++  ════════════════════════════════════════════ -->
++  <div class="onboarding-overlay hidden" id="astrologyPromoModal">
++    <div class="onboarding-card">
++      <div class="onboarding-header" style="background: linear-gradient(135deg, #1A1A2E 0%, #0D1B3E 50%, #FF6F00 100%);">
++        <div class="onboarding-om" style="opacity:0.7;">&#x2729;</div>
++        <h2>Jyotish is Coming to Aatman</h2>
++        <p>Real Vedic astrology, powered by AI</p>
++      </div>
++      <div class="onboarding-body">
++        <div class="onboarding-point">
++          <span class="onboarding-icon" style="background:#FFF3E0;">&#x2B50;</span>
++          <div>
++            <strong>Kundli-based guidance</strong>
++            <p>Personalized jyotish insights based on your birth chart — not generic sun-sign horoscopes.</p>
++          </div>
++        </div>
++        <div class="onboarding-point">
++          <span class="onboarding-icon" style="background:#E8EAF6;">&#x1F52E;</span>
++          <div>
++            <strong>Built with a real astrologer</strong>
++            <p>Developed alongside a jyotishi with 20+ years of experience reading kundlis.</p>
++          </div>
++        </div>
++        <div class="astrology-waitlist-form" id="astrologyModalForm">
++          <input type="email" class="astrology-email-input" id="astrologyModalEmail" placeholder="Enter your email for early access" autocomplete="email" />
++          <button class="btn btn--primary" id="astrologyModalSubmit" style="width:100%;margin-top:8px;">Notify me when it launches</button>
++        </div>
++        <div class="astrology-waitlist-success hidden" id="astrologyModalSuccess">
++          <p style="text-align:center;color:var(--saffron-dark);font-weight:600;margin:8px 0 0;">You're on the list! We'll let you know.</p>
++        </div>
++        <button class="astrology-dismiss-link" id="astrologyModalDismiss">Not now</button>
++      </div>
++    </div>
++  </div>
++
+   <!-- ════════════════════════════════════════════
+        TOAST NOTIFICATIONS
+   ════════════════════════════════════════════ -->
+@@ -1225,6 +1272,7 @@
+   <script src="js/auth.js"></script>
+   <script src="js/subscription.js"></script>
+   <script src="js/chat.js"></script>
++  <script src="js/astrology-promo.js"></script>
+   <script src="js/wisdom.js"></script>
+   <script src="js/bhakti.js"></script>
+   <script src="js/profile.js"></script>
+diff --git a/frontend/js/astrology-promo.js b/frontend/js/astrology-promo.js
+new file mode 100644
+index 0000000..fc262cb
+--- /dev/null
++++ b/frontend/js/astrology-promo.js
+@@ -0,0 +1,257 @@
++/* ════════════════════════════════════════════════════════════════════
++   AATMAN · astrology-promo.js
++   Astrology waitlist: one-time modal, persistent banner, chat nudge
++════════════════════════════════════════════════════════════════════ */
++
++'use strict';
++
++(function initAstrologyPromo() {
++  const PROMO_SEEN_KEY  = 'aatman_astrology_promo_seen';
++  const WAITLIST_KEY    = 'aatman_astrology_joined';
++  const BANNER_CLOSED   = 'aatman_astrology_banner_closed';
++  const NUDGE_SHOWN_KEY = 'aatman_astrology_nudge_shown';
++
++  // ─── DOM refs ──────────────────────────────────────────────────────
++  const modal         = document.getElementById('astrologyPromoModal');
++  const modalForm     = document.getElementById('astrologyModalForm');
++  const modalEmail    = document.getElementById('astrologyModalEmail');
++  const modalSubmit   = document.getElementById('astrologyModalSubmit');
++  const modalSuccess  = document.getElementById('astrologyModalSuccess');
++  const modalDismiss  = document.getElementById('astrologyModalDismiss');
++  const banner        = document.getElementById('astrologyBanner');
++  const bannerCta     = document.getElementById('astrologyBannerCta');
++  const bannerClose   = document.getElementById('astrologyBannerClose');
++
++  // ─── Helper: submit email to waitlist ─────────────────────────────
++  async function joinWaitlist(email, source) {
++    const headers = { 'Content-Type': 'application/json' };
++    if (Aatman.auth && Aatman.auth.getToken()) {
++      headers['Authorization'] = `Bearer ${Aatman.auth.getToken()}`;
++    }
++    const res = await fetch('/api/waitlist/astrology', {
++      method: 'POST',
++      headers,
++      body: JSON.stringify({ email, source }),
++    });
++    return res.json();
++  }
++
++  // ─── Helper: get user email if logged in ──────────────────────────
++  function getUserEmail() {
++    if (Aatman.auth && Aatman.auth.isLoggedIn()) {
++      const user = Aatman.auth.getUser();
++      return user?.email || '';
++    }
++    return '';
++  }
++
++  // ═══════════════════════════════════════════════════════════════════
++  // 1. ONE-TIME MODAL — show once after login (after onboarding clears)
++  // ═══════════════════════════════════════════════════════════════════
++  function maybeShowModal() {
++    if (!modal) return;
++    const alreadySeen = localStorage.getItem(PROMO_SEEN_KEY);
++    const alreadyJoined = localStorage.getItem(WAITLIST_KEY);
++    if (alreadySeen || alreadyJoined) {
++      // Skip modal, but maybe show banner
++      maybeShowBanner();
++      return;
++    }
++
++    // Delay modal slightly so it doesn't clash with onboarding
++    setTimeout(() => {
++      // Don't show if onboarding is still visible
++      const onboarding = document.getElementById('onboardingModal');
++      if (onboarding && !onboarding.classList.contains('hidden')) {
++        // Wait for onboarding to close, then show
++        const observer = new MutationObserver(() => {
++          if (onboarding.classList.contains('hidden')) {
++            observer.disconnect();
++            setTimeout(() => showModal(), 500);
++          }
++        });
++        observer.observe(onboarding, { attributes: true, attributeFilter: ['class'] });
++        return;
++      }
++      showModal();
++    }, 800);
++  }
++
++  function showModal() {
++    if (!modal) return;
++    // Pre-fill email if logged in
++    const email = getUserEmail();
++    if (email && modalEmail) modalEmail.value = email;
++
++    modal.classList.remove('hidden');
++    localStorage.setItem(PROMO_SEEN_KEY, '1');
++  }
++
++  function hideModal() {
++    if (!modal) return;
++    modal.classList.add('hiding');
++    setTimeout(() => {
++      modal.classList.add('hidden');
++      modal.classList.remove('hiding');
++      // After modal closes, show banner if they didn't join
++      if (!localStorage.getItem(WAITLIST_KEY)) {
++        maybeShowBanner();
++      }
++    }, 300);
++  }
++
++  // Modal submit
++  if (modalSubmit) {
++    modalSubmit.addEventListener('click', async () => {
++      const email = modalEmail?.value?.trim();
++      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
++        Aatman.toast('Please enter a valid email', 'error');
++        return;
++      }
++      modalSubmit.disabled = true;
++      modalSubmit.textContent = 'Joining...';
++      try {
++        const data = await joinWaitlist(email, 'modal');
++        if (data.success) {
++          localStorage.setItem(WAITLIST_KEY, '1');
++          if (modalForm) modalForm.classList.add('hidden');
++          if (modalSuccess) modalSuccess.classList.remove('hidden');
++          if (modalDismiss) modalDismiss.textContent = 'Close';
++          Aatman.toast('You\'re on the Jyotish waitlist!', 'success');
++          // Hide banner since they joined
++          if (banner) banner.classList.add('hidden');
++        } else {
++          Aatman.toast(data.error || 'Something went wrong', 'error');
++        }
++      } catch (err) {
++        Aatman.toast('Could not join waitlist. Try again.', 'error');
++      }
++      modalSubmit.disabled = false;
++      modalSubmit.textContent = 'Notify me when it launches';
++    });
++  }
++
++  // Modal dismiss
++  if (modalDismiss) {
++    modalDismiss.addEventListener('click', hideModal);
++  }
++
++  // Close on overlay click
++  if (modal) {
++    modal.addEventListener('click', (e) => {
++      if (e.target === modal) hideModal();
++    });
++  }
++
++  // ═══════════════════════════════════════════════════════════════════
++  // 2. PERSISTENT BANNER — shown after modal dismissed (if not joined)
++  // ═══════════════════════════════════════════════════════════════════
++  function maybeShowBanner() {
++    if (!banner) return;
++    const joined = localStorage.getItem(WAITLIST_KEY);
++    const closed = localStorage.getItem(BANNER_CLOSED);
++    if (joined || closed) return;
++    banner.classList.remove('hidden');
++  }
++
++  // Banner CTA — open modal for email input
++  if (bannerCta) {
++    bannerCta.addEventListener('click', () => {
++      // Reset modal form state
++      if (modalForm) modalForm.classList.remove('hidden');
++      if (modalSuccess) modalSuccess.classList.add('hidden');
++      if (modalSubmit) {
++        modalSubmit.disabled = false;
++        modalSubmit.textContent = 'Notify me when it launches';
++      }
++      const email = getUserEmail();
++      if (email && modalEmail) modalEmail.value = email;
++      if (modal) modal.classList.remove('hidden');
++    });
++  }
++
++  // Banner close
++  if (bannerClose) {
++    bannerClose.addEventListener('click', () => {
++      localStorage.setItem(BANNER_CLOSED, '1');
++      banner.classList.add('hidden');
++    });
++  }
++
++  // ═══════════════════════════════════════════════════════════════════
++  // 3. CHAT NUDGE — after conversations about life/relationships/career
++  // ═══════════════════════════════════════════════════════════════════
++  const NUDGE_TOPICS = [
++    'career', 'job', 'naukri', 'kaam', 'promotion', 'salary', 'business',
++    'marriage', 'shaadi', 'relationship', 'rishta', 'partner', 'husband', 'wife', 'pyaar', 'love',
++    'future', 'bhavishya', 'destiny', 'kismat', 'luck', 'fate',
++    'health', 'sehat', 'illness', 'bimari',
++    'money', 'paisa', 'wealth', 'dhan', 'finance', 'investment',
++    'child', 'bachcha', 'baby', 'santan', 'fertility',
++    'travel', 'move', 'abroad', 'videsh',
++    'education', 'exam', 'padhai', 'study',
++    'decision', 'confused', 'choice', 'faisla',
++  ];
++
++  function shouldShowNudge(userMessage) {
++    // Don't show if already joined or nudge was already shown this session
++    if (localStorage.getItem(WAITLIST_KEY)) return false;
++    if (sessionStorage.getItem(NUDGE_SHOWN_KEY)) return false;
++
++    const lower = userMessage.toLowerCase();
++    return NUDGE_TOPICS.some(topic => lower.includes(topic));
++  }
++
++  function showChatNudge() {
++    const messagesEl = document.getElementById('messagesContainer');
++    if (!messagesEl) return;
++
++    // Remove any existing nudge
++    document.querySelector('.astrology-chat-nudge')?.remove();
++
++    sessionStorage.setItem(NUDGE_SHOWN_KEY, '1');
++
++    const div = document.createElement('div');
++    div.className = 'astrology-chat-nudge';
++    div.innerHTML = `
++      <span class="astrology-nudge-text">Want deeper guidance? Vedic astrology is coming to Aatman — get personalized jyotish insights.</span>
++      <button class="astrology-nudge-btn">Join waitlist</button>
++      <button class="astrology-nudge-dismiss" aria-label="Dismiss">&#x2715;</button>
++    `;
++
++    messagesEl.appendChild(div);
++    requestAnimationFrame(() => {
++      messagesEl.scrollTop = messagesEl.scrollHeight;
++    });
++
++    // Join handler — open the modal
++    div.querySelector('.astrology-nudge-btn').addEventListener('click', () => {
++      if (modalForm) modalForm.classList.remove('hidden');
++      if (modalSuccess) modalSuccess.classList.add('hidden');
++      if (modalSubmit) {
++        modalSubmit.disabled = false;
++        modalSubmit.textContent = 'Notify me when it launches';
++      }
++      const email = getUserEmail();
++      if (email && modalEmail) modalEmail.value = email;
++      if (modal) modal.classList.remove('hidden');
++      div.remove();
++    });
++
++    // Dismiss
++    div.querySelector('.astrology-nudge-dismiss').addEventListener('click', () => {
++      div.style.opacity = '0';
++      setTimeout(() => div.remove(), 300);
++    });
++  }
++
++  // ═══════════════════════════════════════════════════════════════════
++  // EXPOSE for other modules
++  // ═══════════════════════════════════════════════════════════════════
++  Aatman.astrologyPromo = {
++    maybeShowModal,
++    maybeShowBanner,
++    shouldShowNudge,
++    showChatNudge,
++  };
++})();
+diff --git a/frontend/js/auth.js b/frontend/js/auth.js
+index 08dc2d2..3846b41 100644
+--- a/frontend/js/auth.js
++++ b/frontend/js/auth.js
+@@ -262,6 +262,11 @@
+       const modal = document.getElementById('onboardingModal');
+       if (modal) modal.classList.remove('hidden');
+     }
++
++    // ─── Astrology promo: show modal (waits for onboarding to clear) ─
++    if (window.Aatman?.astrologyPromo?.maybeShowModal) {
++      Aatman.astrologyPromo.maybeShowModal();
++    }
+   }
+ 
+   // ─── Language Modal ────────────────────────────────────────────────────
+diff --git a/frontend/js/chat.js b/frontend/js/chat.js
+index 7bc1490..38c8f4e 100644
+--- a/frontend/js/chat.js
++++ b/frontend/js/chat.js
+@@ -308,6 +308,11 @@
+         conversationHistory.push({ role: 'assistant', content: fullText });
+         saveHistory();
+         maybeShowWhatsAppShare(userText);
++
++        // Astrology nudge: show after relevant life-topic conversations
++        if (window.Aatman?.astrologyPromo?.shouldShowNudge?.(userText)) {
++          setTimeout(() => Aatman.astrologyPromo.showChatNudge(), 1500);
++        }
+       }
+ 
+     } catch (err) {

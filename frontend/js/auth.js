@@ -262,6 +262,11 @@
       const modal = document.getElementById('onboardingModal');
       if (modal) modal.classList.remove('hidden');
     }
+
+    // ─── Astrology promo: show modal (waits for onboarding to clear) ─
+    if (window.Aatman?.astrologyPromo?.maybeShowModal) {
+      Aatman.astrologyPromo.maybeShowModal();
+    }
   }
 
   // ─── Language Modal ────────────────────────────────────────────────────

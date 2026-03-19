@@ -308,6 +308,11 @@
         conversationHistory.push({ role: 'assistant', content: fullText });
         saveHistory();
         maybeShowWhatsAppShare(userText);
+
+        // Astrology nudge: show after relevant life-topic conversations
+        if (window.Aatman?.astrologyPromo?.shouldShowNudge?.(userText)) {
+          setTimeout(() => Aatman.astrologyPromo.showChatNudge(), 1500);
+        }
       }
 
     } catch (err) {

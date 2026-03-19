@@ -447,6 +447,16 @@
         <span>Aatman is an AI companion. Responses are AI-generated and may not always be accurate.</span>
       </div>
 
+      <!-- ─── Astrology Waitlist Banner (persistent, dismissible) ─── -->
+      <div class="astrology-banner hidden" id="astrologyBanner">
+        <div class="astrology-banner-inner">
+          <span class="astrology-banner-icon">&#x2729;</span>
+          <span class="astrology-banner-text">Vedic Astrology is coming to Aatman</span>
+          <button class="astrology-banner-cta" id="astrologyBannerCta">Join waitlist</button>
+          <button class="astrology-banner-close" id="astrologyBannerClose" aria-label="Close">&#x2715;</button>
+        </div>
+      </div>
+
       <!-- Horoscope Dashboard Card (shown when user has sign set) -->
       <div class="horoscope-banner hidden" id="horoscopeBanner">
         <div class="horoscope-banner-inner">
@@ -1185,6 +1195,43 @@
   </div>
 
   <!-- ════════════════════════════════════════════
+       ASTROLOGY WAITLIST MODAL (shown once per user)
+  ════════════════════════════════════════════ -->
+  <div class="onboarding-overlay hidden" id="astrologyPromoModal">
+    <div class="onboarding-card">
+      <div class="onboarding-header" style="background: linear-gradient(135deg, #1A1A2E 0%, #0D1B3E 50%, #FF6F00 100%);">
+        <div class="onboarding-om" style="opacity:0.7;">&#x2729;</div>
+        <h2>Jyotish is Coming to Aatman</h2>
+        <p>Real Vedic astrology, powered by AI</p>
+      </div>
+      <div class="onboarding-body">
+        <div class="onboarding-point">
+          <span class="onboarding-icon" style="background:#FFF3E0;">&#x2B50;</span>
+          <div>
+            <strong>Kundli-based guidance</strong>
+            <p>Personalized jyotish insights based on your birth chart — not generic sun-sign horoscopes.</p>
+          </div>
+        </div>
+        <div class="onboarding-point">
+          <span class="onboarding-icon" style="background:#E8EAF6;">&#x1F52E;</span>
+          <div>
+            <strong>Built with a real astrologer</strong>
+            <p>Developed alongside a jyotishi with 20+ years of experience reading kundlis.</p>
+          </div>
+        </div>
+        <div class="astrology-waitlist-form" id="astrologyModalForm">
+          <input type="email" class="astrology-email-input" id="astrologyModalEmail" placeholder="Enter your email for early access" autocomplete="email" />
+          <button class="btn btn--primary" id="astrologyModalSubmit" style="width:100%;margin-top:8px;">Notify me when it launches</button>
+        </div>
+        <div class="astrology-waitlist-success hidden" id="astrologyModalSuccess">
+          <p style="text-align:center;color:var(--saffron-dark);font-weight:600;margin:8px 0 0;">You're on the list! We'll let you know.</p>
+        </div>
+        <button class="astrology-dismiss-link" id="astrologyModalDismiss">Not now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
        TOAST NOTIFICATIONS
   ════════════════════════════════════════════ -->
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
@@ -1225,6 +1272,7 @@
   <script src="js/auth.js"></script>
   <script src="js/subscription.js"></script>
   <script src="js/chat.js"></script>
+  <script src="js/astrology-promo.js"></script>
   <script src="js/wisdom.js"></script>
   <script src="js/bhakti.js"></script>
   <script src="js/profile.js"></script>

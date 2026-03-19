@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const Payment = require('./models/Payment');
+const AstrologyWaitlist = require('./models/AstrologyWaitlist');
 const subscriptionRoutes = require('./routes/subscription');
 const webhookRoutes = require('./routes/webhook');
 
@@ -675,6 +676,39 @@ app.post('/api/grievance', async (req, res) => {
   } catch (err) {
     console.error('Grievance error:', err);
     res.status(500).json({ error: 'Submission failed. Please email support directly.' });
+  }
+});
+
+// ─── Astrology Waitlist ───────────────────────────────────────────────────────
+app.post('/api/waitlist/astrology', optionalAuth, async (req, res) => {
+  const { email, source } = req.body;
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Valid email is required' });
+  }
+  try {
+    const entry = await AstrologyWaitlist.findOneAndUpdate(
+      { email: email.toLowerCase().trim() },
+      {
+        email: email.toLowerCase().trim(),
+        userId: req.user?.id || null,
+        source: source || 'modal',
+      },
+      { upsert: true, new: true }
+    );
+    const count = await AstrologyWaitlist.countDocuments();
+    res.json({ success: true, message: 'You\'re on the list!', totalWaitlist: count });
+  } catch (err) {
+    console.error('Astrology waitlist error:', err);
+    res.status(500).json({ error: 'Could not join waitlist. Please try again.' });
+  }
+});
+
+app.get('/api/waitlist/astrology/count', async (req, res) => {
+  try {
+    const count = await AstrologyWaitlist.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.json({ count: 0 });
   }
 });
 

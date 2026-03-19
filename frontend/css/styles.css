@@ -3634,3 +3634,180 @@ img { max-width: 100%; display: block; }
         padding: 32px 16px;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   ASTROLOGY WAITLIST — Modal, Banner & Chat Nudge
+═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Modal extras (reuses onboarding-overlay / onboarding-card) ── */
+.astrology-email-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 8px;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  background: var(--cream-warm, #FFFCF0);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.astrology-email-input:focus {
+  border-color: var(--saffron);
+}
+.astrology-email-input::placeholder {
+  color: var(--text-muted);
+}
+
+.astrology-dismiss-link {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 6px;
+  transition: color 0.2s;
+}
+.astrology-dismiss-link:hover {
+  color: var(--text-secondary);
+}
+
+/* ─── Persistent Banner ───────────────────────────────────────────── */
+.astrology-banner {
+  margin: 0;
+  animation: astroBannerSlide 0.4s ease;
+}
+.astrology-banner.hidden { display: none; }
+
+@keyframes astroBannerSlide {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.astrology-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, rgba(255,153,51,0.08), rgba(200,150,12,0.06));
+  border-bottom: 1px solid rgba(255,153,51,0.15);
+}
+
+.astrology-banner-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.astrology-banner-text {
+  flex: 1;
+  font-family: var(--font-body, 'Crimson Text', serif);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.astrology-banner-cta {
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-dark) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s, opacity 0.2s;
+}
+.astrology-banner-cta:hover {
+  transform: scale(1.03);
+}
+.astrology-banner-cta:active {
+  transform: scale(0.97);
+}
+
+.astrology-banner-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+.astrology-banner-close:hover {
+  opacity: 1;
+}
+
+/* ─── Chat Nudge (inline, similar to wa-share-prompt) ─────────── */
+.astrology-chat-nudge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(255,153,51,0.08), rgba(200,150,12,0.04));
+  border: 1px solid rgba(255,153,51,0.18);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 8px 48px;
+  animation: waShareFadeIn 0.4s ease;
+  transition: opacity 0.3s ease;
+}
+
+.astrology-nudge-text {
+  flex: 1;
+  font-family: var(--font-body, 'Crimson Text', serif);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.astrology-nudge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-dark) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s;
+}
+.astrology-nudge-btn:hover {
+  transform: scale(1.03);
+}
+
+.astrology-nudge-dismiss {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.astrology-nudge-dismiss:hover {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .astrology-chat-nudge {
+    margin: 8px 8px;
+    flex-wrap: wrap;
+  }
+  .astrology-nudge-text {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+}
