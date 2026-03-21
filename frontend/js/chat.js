@@ -214,6 +214,11 @@
     let streamingBubble = null;
     abortController = new AbortController();
 
+    // Auto-timeout if no response in 30s (Railway cold starts can be slow)
+    const connectionTimeout = setTimeout(() => {
+      if (!streamingBubble) abortController.abort();
+    }, 30000);
+
     const language = getCurrentLanguage();
 
     // Build auth headers
@@ -262,6 +267,7 @@
       let buffer    = '';
 
       removeTypingIndicator();
+      clearTimeout(connectionTimeout);
       streamingBubble = createStreamingBubble();
 
       while (true) {
@@ -316,9 +322,10 @@
       }
 
     } catch (err) {
+      clearTimeout(connectionTimeout);
       removeTypingIndicator();
 
-      // User-initiated stop
+      // User-initiated stop (but NOT auto-timeout)
       if (err.name === 'AbortError') {
         if (streamingBubble && fullText) {
           streamingBubble.innerHTML = Aatman.utils.parseMarkdown(fullText);
@@ -326,20 +333,28 @@
           document.getElementById('streaming-bubble')?.removeAttribute('id');
           conversationHistory.push({ role: 'assistant', content: fullText });
           saveHistory();
-        } else {
-          // Remove empty bubble
-          document.getElementById('streaming-msg')?.remove();
-          // Remove the user message from history since we stopped before any response
-          if (conversationHistory[conversationHistory.length - 1]?.role === 'user') {
-            conversationHistory.pop();
-          }
+          return;
         }
-        return; // exit cleanly without error toast
+        // No streaming bubble = either user pressed stop early, or connection timed out
+        document.getElementById('streaming-msg')?.remove();
+        if (conversationHistory[conversationHistory.length - 1]?.role === 'user') {
+          conversationHistory.pop();
+        }
+        // If there's no streamingBubble and it's a timeout, show a message
+        if (!streamingBubble) {
+          const lastMsg = messagesEl.querySelector('.message--user:last-of-type');
+          if (lastMsg) lastMsg.remove();
+          Aatman.toast('Connection timed out. Please try again. 🙏', 'error', 5000);
+        }
+        return;
       }
 
       console.error('Chat error:', err);
-      const errMsg = err.message.includes('Failed to fetch')
-        ? 'Could not connect to Aatman. Please ensure the server is running. 🙏'
+      const isNetworkError = err.message.includes('Failed to fetch')
+        || err.message.includes('Load failed')
+        || err.message.includes('NetworkError');
+      const errMsg = isNetworkError
+        ? 'Could not connect to Aatman. Please check your connection and try again. 🙏'
         : err.message || 'Something went quiet. Please try again.';
 
       if (streamingBubble) {

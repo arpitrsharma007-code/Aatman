@@ -377,6 +377,30 @@ const LANGUAGE_MAP = {
   gujarati: 'Gujarati (ગુજરાતી)',
 };
 
+// ─── Health Check (tests Claude API connection) ─────────────────────────────
+app.get('/api/health', async (req, res) => {
+  const checks = {
+    server: 'ok',
+    mongodb: mongoose.connection.readyState === 1 ? 'ok' : 'disconnected',
+    anthropic: 'untested',
+  };
+  try {
+    const msg = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 20,
+      messages: [{ role: 'user', content: 'Say "om shanti" and nothing else.' }],
+    });
+    checks.anthropic = 'ok';
+    checks.claude_response = msg.content[0]?.text || '(empty)';
+  } catch (e) {
+    checks.anthropic = 'error';
+    checks.anthropic_error = e.message;
+    checks.anthropic_status = e.status || null;
+  }
+  const allOk = checks.server === 'ok' && checks.mongodb === 'ok' && checks.anthropic === 'ok';
+  res.status(allOk ? 200 : 503).json(checks);
+});
+
 app.post('/api/chat', optionalAuth, checkMessageLimit, async (req, res) => {
   console.log('📨 /api/chat hit — body keys:', Object.keys(req.body || {}));
   const { message, history = [], language = 'english' } = req.body || {};
@@ -418,16 +442,28 @@ app.post('/api/chat', optionalAuth, checkMessageLimit, async (req, res) => {
   res.on('close', () => {
     if (streamAborted) return;
     streamAborted = true;
+    if (heartbeat) clearInterval(heartbeat);
     console.log('🔌 Client disconnected mid-stream');
   });
 
+  let heartbeat;
   try {
+    // Limit history to last 20 messages to stay within context window
+    const trimmedHistory = history.slice(-20);
     const messages = [
-      ...history.map(h => ({ role: h.role, content: h.content })),
+      ...trimmedHistory.map(h => ({ role: h.role, content: h.content })),
       { role: 'user', content: message },
     ];
 
-    console.log('🚀 Starting Anthropic stream, history length:', history.length);
+    console.log('🚀 Starting Anthropic stream, history length:', trimmedHistory.length, '(original:', history.length, ')');
+
+    // Send heartbeat every 3s to keep connection alive while Claude thinks
+    // SSE comments (lines starting with `:`) are ignored by the frontend parser
+    heartbeat = setInterval(() => {
+      if (!streamAborted) {
+        res.write(': heartbeat\n\n');
+      }
+    }, 3000);
 
     const stream = anthropic.messages.stream({
       model: 'claude-sonnet-4-6',
@@ -445,6 +481,7 @@ app.post('/api/chat', optionalAuth, checkMessageLimit, async (req, res) => {
       }
     }
 
+    clearInterval(heartbeat);
     console.log(`✅ Stream complete — ${chunkCount} chunks sent`);
 
     if (!streamAborted) {
@@ -452,9 +489,20 @@ app.post('/api/chat', optionalAuth, checkMessageLimit, async (req, res) => {
     }
     res.end();
   } catch (error) {
+    clearInterval(heartbeat);
     console.error('❌ Chat error:', error.message || error);
+    console.error('   Status:', error.status || 'N/A');
+    console.error('   Type:', error.error?.type || error.name || 'unknown');
+    if (error.status === 401) console.error('   🔑 API key invalid or expired! Check ANTHROPIC_API_KEY.');
+    if (error.status === 429) console.error('   💸 Rate limited or credits exhausted! Check billing.');
+    if (error.status === 404) console.error('   🔍 Model not found! Check model string.');
+
     if (!streamAborted) {
-      res.write(`data: ${JSON.stringify({ error: 'I am experiencing a moment of stillness. Please try again shortly. 🙏' })}\n\n`);
+      // Send a more helpful error to the frontend
+      let userMsg = 'I am experiencing a moment of stillness. Please try again shortly. 🙏';
+      if (error.status === 429) userMsg = 'Aatman is receiving many seekers right now. Please wait a moment and try again. 🙏';
+      if (error.status === 401) userMsg = 'Aatman is temporarily unable to connect. The team has been notified. 🙏';
+      res.write(`data: ${JSON.stringify({ error: userMsg })}\n\n`);
       res.end();
     }
   }
