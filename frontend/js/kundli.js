@@ -10,29 +10,79 @@
 
   // ─── Indian cities for quick selection ───────────────────────────────────
   const CITIES = [
+    // Major metros
     { name: 'Delhi', lat: 28.6139, lon: 77.2090 },
+    { name: 'New Delhi', lat: 28.6139, lon: 77.2090 },
     { name: 'Mumbai', lat: 19.0760, lon: 72.8777 },
     { name: 'Bangalore', lat: 12.9716, lon: 77.5946 },
+    { name: 'Bengaluru', lat: 12.9716, lon: 77.5946 },
     { name: 'Hyderabad', lat: 17.3850, lon: 78.4867 },
     { name: 'Chennai', lat: 13.0827, lon: 80.2707 },
     { name: 'Kolkata', lat: 22.5726, lon: 88.3639 },
-    { name: 'Jaipur', lat: 26.9124, lon: 75.7873 },
     { name: 'Pune', lat: 18.5204, lon: 73.8567 },
     { name: 'Ahmedabad', lat: 23.0225, lon: 72.5714 },
+    // Rajasthan
+    { name: 'Jaipur', lat: 26.9124, lon: 75.7873 },
+    { name: 'Jodhpur', lat: 26.2389, lon: 73.0243 },
+    { name: 'Udaipur', lat: 24.5854, lon: 73.7125 },
+    { name: 'Ajmer', lat: 26.4499, lon: 74.6399 },
+    { name: 'Kota', lat: 25.2138, lon: 75.8648 },
+    { name: 'Bikaner', lat: 28.0229, lon: 73.3119 },
+    { name: 'Pushkar', lat: 26.4897, lon: 74.5511 },
+    { name: 'Jaisalmer', lat: 26.9157, lon: 70.9083 },
+    { name: 'Sikar', lat: 27.6094, lon: 75.1399 },
+    { name: 'Alwar', lat: 27.5530, lon: 76.6346 },
+    // North India
     { name: 'Lucknow', lat: 26.8467, lon: 80.9462 },
     { name: 'Varanasi', lat: 25.3176, lon: 82.9739 },
     { name: 'Patna', lat: 25.6093, lon: 85.1376 },
-    { name: 'Bhopal', lat: 23.2599, lon: 77.4126 },
-    { name: 'Indore', lat: 22.7196, lon: 75.8577 },
     { name: 'Chandigarh', lat: 30.7333, lon: 76.7794 },
-    { name: 'Nagpur', lat: 21.1458, lon: 79.0882 },
-    { name: 'Coimbatore', lat: 11.0168, lon: 76.9558 },
-    { name: 'Surat', lat: 21.1702, lon: 72.8311 },
     { name: 'Amritsar', lat: 31.6340, lon: 74.8723 },
-    { name: 'Ujjain', lat: 23.1765, lon: 75.7885 },
     { name: 'Haridwar', lat: 29.9457, lon: 78.1642 },
     { name: 'Rishikesh', lat: 30.0869, lon: 78.2676 },
+    { name: 'Dehradun', lat: 30.3165, lon: 78.0322 },
+    { name: 'Agra', lat: 27.1767, lon: 78.0081 },
+    { name: 'Kanpur', lat: 26.4499, lon: 80.3319 },
+    { name: 'Prayagraj', lat: 25.4358, lon: 81.8463 },
+    { name: 'Allahabad', lat: 25.4358, lon: 81.8463 },
+    { name: 'Mathura', lat: 27.4924, lon: 77.6737 },
+    { name: 'Vrindavan', lat: 27.5806, lon: 77.6961 },
+    { name: 'Ayodhya', lat: 26.7922, lon: 82.1998 },
+    { name: 'Gorakhpur', lat: 26.7606, lon: 83.3732 },
+    { name: 'Ranchi', lat: 23.3441, lon: 85.3096 },
+    { name: 'Guwahati', lat: 26.1445, lon: 91.7362 },
+    // Central India
+    { name: 'Bhopal', lat: 23.2599, lon: 77.4126 },
+    { name: 'Indore', lat: 22.7196, lon: 75.8577 },
+    { name: 'Nagpur', lat: 21.1458, lon: 79.0882 },
+    { name: 'Ujjain', lat: 23.1765, lon: 75.7885 },
+    { name: 'Raipur', lat: 21.2514, lon: 81.6296 },
+    // West India
+    { name: 'Surat', lat: 21.1702, lon: 72.8311 },
+    { name: 'Vadodara', lat: 22.3072, lon: 73.1812 },
+    { name: 'Rajkot', lat: 22.3039, lon: 70.8022 },
+    { name: 'Nashik', lat: 19.9975, lon: 73.7898 },
+    { name: 'Dwarka', lat: 22.2394, lon: 68.9678 },
+    { name: 'Somnath', lat: 20.8880, lon: 70.4013 },
+    { name: 'Goa', lat: 15.2993, lon: 74.1240 },
+    // South India
+    { name: 'Coimbatore', lat: 11.0168, lon: 76.9558 },
     { name: 'Tirupati', lat: 13.6288, lon: 79.4192 },
+    { name: 'Madurai', lat: 9.9252, lon: 78.1198 },
+    { name: 'Mysore', lat: 12.2958, lon: 76.6394 },
+    { name: 'Mysuru', lat: 12.2958, lon: 76.6394 },
+    { name: 'Kochi', lat: 9.9312, lon: 76.2673 },
+    { name: 'Thiruvananthapuram', lat: 8.5241, lon: 76.9366 },
+    { name: 'Visakhapatnam', lat: 17.6868, lon: 83.2185 },
+    { name: 'Vijayawada', lat: 16.5062, lon: 80.6480 },
+    { name: 'Mangalore', lat: 12.9141, lon: 74.8560 },
+    { name: 'Pondicherry', lat: 11.9416, lon: 79.8083 },
+    { name: 'Thanjavur', lat: 10.7870, lon: 79.1378 },
+    { name: 'Rameshwaram', lat: 9.2881, lon: 79.3174 },
+    // East India
+    { name: 'Bhubaneswar', lat: 20.2961, lon: 85.8245 },
+    { name: 'Puri', lat: 19.8135, lon: 85.8312 },
+    // International (Hindu diaspora)
     { name: 'New York', lat: 40.7128, lon: -74.0060 },
     { name: 'London', lat: 51.5074, lon: -0.1278 },
     { name: 'Singapore', lat: 1.3521, lon: 103.8198 },
@@ -40,18 +90,34 @@
     { name: 'Sydney', lat: -33.8688, lon: 151.2093 },
     { name: 'Toronto', lat: 43.6532, lon: -79.3832 },
     { name: 'San Francisco', lat: 37.7749, lon: -122.4194 },
+    { name: 'Los Angeles', lat: 34.0522, lon: -118.2437 },
+    { name: 'Chicago', lat: 41.8781, lon: -87.6298 },
+    { name: 'Houston', lat: 29.7604, lon: -95.3698 },
+    { name: 'Kuala Lumpur', lat: 3.1390, lon: 101.6869 },
+    { name: 'Kathmandu', lat: 27.7172, lon: 85.3240 },
+    { name: 'Colombo', lat: 6.9271, lon: 79.8612 },
+    { name: 'Mauritius', lat: -20.1609, lon: 57.5012 },
+    { name: 'Fiji', lat: -17.7134, lon: 178.0650 },
+    { name: 'Durban', lat: -29.8587, lon: 31.0218 },
+    { name: 'Nairobi', lat: -1.2921, lon: 36.8219 },
+    { name: 'Berlin', lat: 52.5200, lon: 13.4050 },
+    { name: 'Amsterdam', lat: 52.3676, lon: 4.9041 },
+    { name: 'Melbourne', lat: -37.8136, lon: 144.9631 },
+    { name: 'Auckland', lat: -36.8485, lon: 174.7633 },
+    { name: 'Vancouver', lat: 49.2827, lon: -123.1207 },
+    { name: 'Sao Paulo', lat: -23.5505, lon: -46.6333 },
   ];
 
+  // Timezone lookup — all Indian cities default to 5.5 via fallback
   const TIMEZONES = {
-    'Delhi': 5.5, 'Mumbai': 5.5, 'Bangalore': 5.5, 'Hyderabad': 5.5,
-    'Chennai': 5.5, 'Kolkata': 5.5, 'Jaipur': 5.5, 'Pune': 5.5,
-    'Ahmedabad': 5.5, 'Lucknow': 5.5, 'Varanasi': 5.5, 'Patna': 5.5,
-    'Bhopal': 5.5, 'Indore': 5.5, 'Chandigarh': 5.5, 'Nagpur': 5.5,
-    'Coimbatore': 5.5, 'Surat': 5.5, 'Amritsar': 5.5, 'Ujjain': 5.5,
-    'Haridwar': 5.5, 'Rishikesh': 5.5, 'Tirupati': 5.5,
     'New York': -5, 'London': 0, 'Singapore': 8, 'Dubai': 4,
-    'Sydney': 11, 'Toronto': -5, 'San Francisco': -8,
+    'Sydney': 11, 'Toronto': -5, 'San Francisco': -8, 'Los Angeles': -8,
+    'Chicago': -6, 'Houston': -6, 'Kuala Lumpur': 8, 'Kathmandu': 5.75,
+    'Colombo': 5.5, 'Mauritius': 4, 'Fiji': 12, 'Durban': 2,
+    'Nairobi': 3, 'Berlin': 1, 'Amsterdam': 1, 'Melbourne': 11,
+    'Auckland': 13, 'Vancouver': -8, 'Sao Paulo': -3,
   };
+  // Indian cities all use IST 5.5 — handled by fallback in the lookup
 
   // ─── Lazy init — called when section becomes visible ────────────────────
   function setup() {
@@ -120,7 +186,11 @@
       const tz = parseFloat(tzInput.value);
 
       if (!date || !time || isNaN(lat) || isNaN(lon)) {
-        showError('Please fill in all birth details and select a city.');
+        if (!date || !time) {
+          showError('Please fill in your date and time of birth.');
+        } else {
+          showError('Please select a city from the dropdown list. Start typing and tap on a city name.');
+        }
         return;
       }
 
