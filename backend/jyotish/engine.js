@@ -6,6 +6,8 @@ const {
   RASHIS, NAKSHATRAS, VIMSHOTTARI_ORDER, VIMSHOTTARI_YEARS,
   GRAHAS, GRAHA_DIGNITY, OWN_SIGNS,
 } = require('./data');
+const fs = require('fs');
+const path = require('path');
 
 let swe = null; // Swiss Ephemeris instance (lazy-loaded)
 
@@ -13,8 +15,22 @@ let swe = null; // Swiss Ephemeris instance (lazy-loaded)
 async function initSwissEph() {
   if (swe) return swe;
   try {
+    // Load WASM binary from disk (fetch() doesn't work in Node.js server)
+    // Resolve paths relative to the installed package location
+    const mainPath = require.resolve('sweph-wasm');
+    const wasmDir = path.join(path.dirname(mainPath), 'wasm');
+    const wasmPath = path.join(wasmDir, 'swisseph.wasm');
+    const wasmBinary = fs.readFileSync(wasmPath);
+    console.log(`  📁 WASM loaded: ${wasmBinary.length} bytes`);
+
+    // Load Emscripten factory by absolute path (bypasses package exports restriction)
+    const { default: factory } = require(path.join(wasmDir, 'swisseph.cjs'));
+    const wasmModule = await factory({ wasmBinary });
+
+    // Create the SwissEPH wrapper with our pre-loaded module
     const SwissEPH = require('sweph-wasm');
-    swe = await SwissEPH.init();
+    swe = new SwissEPH(wasmModule);
+
     console.log('  ✅ Swiss Ephemeris WASM initialized — version:', swe.swe_version());
     return swe;
   } catch (err) {
