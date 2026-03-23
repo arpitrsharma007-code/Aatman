@@ -594,16 +594,36 @@ Return ONLY the JSON object. Be specific to THIS chart — never generic.`;
   try {
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1200,
-      system: 'You are an expert Vedic astrologer (Jyotishi) with deep knowledge of Brihat Parashara Hora Shastra, Brihat Jataka, and classical Jyotish texts. Interpret birth charts with precision and wisdom. Always respond in JSON format only.',
+      max_tokens: 2048,
+      system: 'You are an expert Vedic astrologer (Jyotishi) with deep knowledge of Brihat Parashara Hora Shastra, Brihat Jataka, and classical Jyotish texts. Interpret birth charts with precision and wisdom. Respond with ONLY a raw JSON object — no markdown, no code fences, no explanation before or after.',
       messages: [{ role: 'user', content: prompt }],
     });
 
-    const rawText = message.content[0].text.trim();
-    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('Invalid interpretation format');
+    const textContent = message.content?.find(c => c.type === 'text');
+    if (!textContent?.text) {
+      console.error('❌ No text content in Claude response. Content types:', message.content?.map(c => c.type));
+      throw new Error('Empty response from Claude');
+    }
+    let rawText = textContent.text.trim();
+    console.log('📝 Interpretation raw response length:', rawText.length);
+    console.log('📝 First 100 chars:', rawText.slice(0, 100));
 
-    const interpretation = JSON.parse(jsonMatch[0]);
+    // Strip markdown code fences if present
+    rawText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.error('❌ No JSON found in response. First 200 chars:', rawText.slice(0, 200));
+      throw new Error('Invalid interpretation format');
+    }
+
+    let interpretation;
+    try {
+      interpretation = JSON.parse(jsonMatch[0]);
+    } catch (parseErr) {
+      console.error('❌ JSON parse failed. First 300 chars:', jsonMatch[0].slice(0, 300));
+      throw new Error('Failed to parse interpretation JSON');
+    }
     res.json({ success: true, interpretation });
   } catch (err) {
     console.error('❌ Kundli interpretation error:', err.message);
