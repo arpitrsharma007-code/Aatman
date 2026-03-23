@@ -6,19 +6,7 @@
 
   // ─── State ───────────────────────────────────────────────────────────────
   let currentKundli = null;
-
-  // ─── DOM refs ────────────────────────────────────────────────────────────
-  const form = document.getElementById('kundliForm');
-  const generateBtn = document.getElementById('kundliGenerateBtn');
-  const resultArea = document.getElementById('kundliResult');
-  const chartSvg = document.getElementById('kundliChartSvg');
-  const loadingEl = document.getElementById('kundliLoading');
-  const errorEl = document.getElementById('kundliError');
-  const interpretBtn = document.getElementById('kundliInterpretBtn');
-  const interpretArea = document.getElementById('kundliInterpretation');
-  const interpretLoading = document.getElementById('interpretLoading');
-
-  if (!form) return; // Section not in DOM yet
+  let initialized = false;
 
   // ─── Indian cities for quick selection ───────────────────────────────────
   const CITIES = [
@@ -65,95 +53,81 @@
     'Sydney': 11, 'Toronto': -5, 'San Francisco': -8,
   };
 
-  // ─── City autocomplete ───────────────────────────────────────────────────
-  const placeInput = document.getElementById('kundliPlace');
-  const cityDropdown = document.getElementById('kundliCityDropdown');
-  const latInput = document.getElementById('kundliLat');
-  const lonInput = document.getElementById('kundliLon');
-  const tzInput = document.getElementById('kundliTz');
+  // ─── Lazy init — called when section becomes visible ────────────────────
+  function setup() {
+    if (initialized) return;
 
-  if (placeInput && cityDropdown) {
-    placeInput.addEventListener('input', () => {
-      const q = placeInput.value.toLowerCase().trim();
-      if (q.length < 2) { cityDropdown.classList.add('hidden'); return; }
-      const matches = CITIES.filter(c => c.name.toLowerCase().includes(q)).slice(0, 6);
-      if (matches.length === 0) { cityDropdown.classList.add('hidden'); return; }
-      cityDropdown.innerHTML = matches.map(c =>
-        `<button type="button" class="city-option" data-lat="${c.lat}" data-lon="${c.lon}" data-name="${c.name}">${c.name}</button>`
-      ).join('');
-      cityDropdown.classList.remove('hidden');
-    });
+    const form = document.getElementById('kundliForm');
+    const generateBtn = document.getElementById('kundliGenerateBtn');
+    const resultArea = document.getElementById('kundliResult');
+    const chartSvg = document.getElementById('kundliChartSvg');
+    const loadingEl = document.getElementById('kundliLoading');
+    const errorEl = document.getElementById('kundliError');
+    const interpretBtn = document.getElementById('kundliInterpretBtn');
+    const interpretArea = document.getElementById('kundliInterpretation');
+    const interpretLoading = document.getElementById('interpretLoading');
 
-    cityDropdown.addEventListener('click', (e) => {
-      const btn = e.target.closest('.city-option');
-      if (!btn) return;
-      placeInput.value = btn.dataset.name;
-      latInput.value = btn.dataset.lat;
-      lonInput.value = btn.dataset.lon;
-      tzInput.value = TIMEZONES[btn.dataset.name] || 5.5;
-      cityDropdown.classList.add('hidden');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.place-input-wrapper')) cityDropdown.classList.add('hidden');
-    });
-  }
-
-  // ─── Generate Kundli ─────────────────────────────────────────────────────
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const date = document.getElementById('kundliDate').value;
-    const time = document.getElementById('kundliTime').value;
-    const place = placeInput.value;
-    const lat = parseFloat(latInput.value);
-    const lon = parseFloat(lonInput.value);
-    const tz = parseFloat(tzInput.value);
-
-    if (!date || !time || isNaN(lat) || isNaN(lon)) {
-      showError('Please fill in all birth details and select a city.');
+    if (!form) {
+      console.error('Kundli: #kundliForm not found in DOM');
       return;
     }
 
-    showLoading(true);
-    hideError();
-    resultArea.classList.add('hidden');
-    interpretArea.classList.add('hidden');
+    initialized = true;
+    console.log('Kundli: initialized');
 
-    try {
-      const headers = { 'Content-Type': 'application/json' };
-      if (Aatman.auth?.getToken()) {
-        headers['Authorization'] = `Bearer ${Aatman.auth.getToken()}`;
-      }
+    // ─── City autocomplete ───────────────────────────────────────────────
+    const placeInput = document.getElementById('kundliPlace');
+    const cityDropdown = document.getElementById('kundliCityDropdown');
+    const latInput = document.getElementById('kundliLat');
+    const lonInput = document.getElementById('kundliLon');
+    const tzInput = document.getElementById('kundliTz');
 
-      const response = await fetch('/api/kundli/generate', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ date, time, lat, lon, timezone: tz, place }),
+    if (placeInput && cityDropdown) {
+      placeInput.addEventListener('input', () => {
+        const q = placeInput.value.toLowerCase().trim();
+        if (q.length < 2) { cityDropdown.classList.add('hidden'); return; }
+        const matches = CITIES.filter(c => c.name.toLowerCase().includes(q)).slice(0, 6);
+        if (matches.length === 0) { cityDropdown.classList.add('hidden'); return; }
+        cityDropdown.innerHTML = matches.map(c =>
+          `<button type="button" class="city-option" data-lat="${c.lat}" data-lon="${c.lon}" data-name="${c.name}">${c.name}</button>`
+        ).join('');
+        cityDropdown.classList.remove('hidden');
       });
 
-      const data = await response.json();
-      if (!data.success) throw new Error(data.error || 'Failed to generate kundli');
+      cityDropdown.addEventListener('click', (e) => {
+        const btn = e.target.closest('.city-option');
+        if (!btn) return;
+        placeInput.value = btn.dataset.name;
+        latInput.value = btn.dataset.lat;
+        lonInput.value = btn.dataset.lon;
+        tzInput.value = TIMEZONES[btn.dataset.name] || 5.5;
+        cityDropdown.classList.add('hidden');
+      });
 
-      currentKundli = data.kundli;
-      renderKundli(data.kundli);
-      resultArea.classList.remove('hidden');
-    } catch (err) {
-      showError(err.message);
-    } finally {
-      showLoading(false);
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.place-input-wrapper')) cityDropdown.classList.add('hidden');
+      });
     }
-  });
 
-  // ─── Interpret Kundli ────────────────────────────────────────────────────
-  if (interpretBtn) {
-    interpretBtn.addEventListener('click', async () => {
-      if (!currentKundli) return;
+    // ─── Generate Kundli ─────────────────────────────────────────────────
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const date = document.getElementById('kundliDate').value;
+      const time = document.getElementById('kundliTime').value;
+      const place = placeInput.value;
+      const lat = parseFloat(latInput.value);
+      const lon = parseFloat(lonInput.value);
+      const tz = parseFloat(tzInput.value);
 
-      interpretBtn.disabled = true;
-      interpretBtn.textContent = 'Consulting the stars...';
-      interpretLoading.classList.remove('hidden');
-      interpretArea.classList.remove('hidden');
-      document.getElementById('interpretContent').innerHTML = '';
+      if (!date || !time || isNaN(lat) || isNaN(lon)) {
+        showError('Please fill in all birth details and select a city.');
+        return;
+      }
+
+      showLoading(true);
+      hideError();
+      resultArea.classList.add('hidden');
+      interpretArea.classList.add('hidden');
 
       try {
         const headers = { 'Content-Type': 'application/json' };
@@ -161,25 +135,93 @@
           headers['Authorization'] = `Bearer ${Aatman.auth.getToken()}`;
         }
 
-        const response = await fetch('/api/kundli/interpret', {
+        const response = await fetch('/api/kundli/generate', {
           method: 'POST',
           headers,
-          body: JSON.stringify({ kundli: currentKundli }),
+          body: JSON.stringify({ date, time, lat, lon, timezone: tz, place }),
         });
 
         const data = await response.json();
-        if (!data.success) throw new Error(data.error || 'Interpretation failed');
+        if (!data.success) throw new Error(data.error || 'Failed to generate kundli');
 
-        renderInterpretation(data.interpretation);
+        currentKundli = data.kundli;
+        renderKundli(data.kundli);
+        resultArea.classList.remove('hidden');
       } catch (err) {
-        document.getElementById('interpretContent').innerHTML =
-          `<p class="kundli-error-text">${err.message}</p>`;
+        showError(err.message);
       } finally {
-        interpretLoading.classList.add('hidden');
-        interpretBtn.disabled = false;
-        interpretBtn.textContent = 'Get AI Jyotish Reading';
+        showLoading(false);
       }
     });
+
+    // ─── Interpret Kundli ────────────────────────────────────────────────
+    if (interpretBtn) {
+      interpretBtn.addEventListener('click', async () => {
+        if (!currentKundli) return;
+
+        interpretBtn.disabled = true;
+        interpretBtn.textContent = 'Consulting the stars...';
+        interpretLoading.classList.remove('hidden');
+        interpretArea.classList.remove('hidden');
+        document.getElementById('interpretContent').innerHTML = '';
+
+        try {
+          const headers = { 'Content-Type': 'application/json' };
+          if (Aatman.auth?.getToken()) {
+            headers['Authorization'] = `Bearer ${Aatman.auth.getToken()}`;
+          }
+
+          const response = await fetch('/api/kundli/interpret', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ kundli: currentKundli }),
+          });
+
+          const data = await response.json();
+          if (!data.success) throw new Error(data.error || 'Interpretation failed');
+
+          renderInterpretation(data.interpretation);
+        } catch (err) {
+          document.getElementById('interpretContent').innerHTML =
+            `<p class="kundli-error-text">${err.message}</p>`;
+        } finally {
+          interpretLoading.classList.add('hidden');
+          interpretBtn.disabled = false;
+          interpretBtn.textContent = 'Get AI Jyotish Reading';
+        }
+      });
+    }
+
+    // ─── Share Kundli on WhatsApp ────────────────────────────────────────
+    const shareBtn = document.getElementById('kundliShareBtn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        if (!currentKundli) return;
+        const lagna = currentKundli.lagna?.rashi?.name || '';
+        const moon = currentKundli.grahas?.find(g => g.id === 'Moon');
+        const moonSign = moon?.rashi || '';
+        const text = `I just generated my Vedic Janam Kundli on Aatman! Lagna: ${lagna}, Moon Sign: ${moonSign}. Try yours for free — it takes 30 seconds.\n\nhttps://aatman-production.up.railway.app?ref=wa-kundli`;
+        const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank');
+      });
+    }
+
+    // ─── Helper functions ────────────────────────────────────────────────
+    function showLoading(show) {
+      if (loadingEl) loadingEl.classList.toggle('hidden', !show);
+      if (generateBtn) generateBtn.disabled = show;
+    }
+
+    function showError(msg) {
+      if (errorEl) {
+        errorEl.textContent = msg;
+        errorEl.classList.remove('hidden');
+      }
+    }
+
+    function hideError() {
+      if (errorEl) errorEl.classList.add('hidden');
+    }
   }
 
   // ─── Render Kundli Chart + Details ───────────────────────────────────────
@@ -192,39 +234,28 @@
 
   // ─── North Indian Chart SVG ──────────────────────────────────────────────
   function renderNorthIndianChart(kundli) {
+    const chartSvg = document.getElementById('kundliChartSvg');
+    if (!chartSvg) return;
+
     const size = 360;
     const mid = size / 2;
     const pad = 10;
     const outer = mid - pad;
 
     // House positions in North Indian chart (diamond layout)
-    // Each house is a triangular/trapezoidal region
-    // Houses 1-12 positioned clockwise from top-center
     const housePositions = [
-      // house 1 (Lagna) — top center diamond
-      { textX: mid, textY: mid - outer * 0.35, house: 1 },
-      // house 2 — top-left triangle
-      { textX: mid - outer * 0.45, textY: mid - outer * 0.55, house: 2 },
-      // house 3 — left-top triangle
-      { textX: mid - outer * 0.7, textY: mid - outer * 0.35, house: 3 },
-      // house 4 — left center diamond
-      { textX: mid - outer * 0.7, textY: mid, house: 4 },
-      // house 5 — left-bottom triangle
-      { textX: mid - outer * 0.7, textY: mid + outer * 0.35, house: 5 },
-      // house 6 — bottom-left triangle
-      { textX: mid - outer * 0.45, textY: mid + outer * 0.55, house: 6 },
-      // house 7 — bottom center diamond
-      { textX: mid, textY: mid + outer * 0.35, house: 7 },
-      // house 8 — bottom-right triangle
-      { textX: mid + outer * 0.45, textY: mid + outer * 0.55, house: 8 },
-      // house 9 — right-bottom triangle
-      { textX: mid + outer * 0.7, textY: mid + outer * 0.35, house: 9 },
-      // house 10 — right center diamond
-      { textX: mid + outer * 0.7, textY: mid, house: 10 },
-      // house 11 — right-top triangle
-      { textX: mid + outer * 0.7, textY: mid - outer * 0.35, house: 11 },
-      // house 12 — top-right triangle
-      { textX: mid + outer * 0.45, textY: mid - outer * 0.55, house: 12 },
+      { house: 1,  textX: mid,         textY: mid - outer/2 - 10 },
+      { house: 2,  textX: mid - outer/2, textY: mid - outer/2 + 10 },
+      { house: 3,  textX: pad + outer/4, textY: mid - outer/4 },
+      { house: 4,  textX: mid - outer/2 - 10, textY: mid + 5 },
+      { house: 5,  textX: pad + outer/4, textY: mid + outer/4 },
+      { house: 6,  textX: mid - outer/2, textY: mid + outer/2 },
+      { house: 7,  textX: mid,         textY: mid + outer/2 + 15 },
+      { house: 8,  textX: mid + outer/2, textY: mid + outer/2 },
+      { house: 9,  textX: pad + outer*2 - outer/4, textY: mid + outer/4 },
+      { house: 10, textX: mid + outer/2 + 10, textY: mid + 5 },
+      { house: 11, textX: pad + outer*2 - outer/4, textY: mid - outer/4 },
+      { house: 12, textX: mid + outer/2, textY: mid - outer/2 + 10 },
     ];
 
     // Map planets to houses
@@ -237,47 +268,35 @@
         g.id === 'Venus' ? 'Sk' : g.id === 'Saturn' ? 'Sa' :
         g.id === 'Sun' ? 'Su' : g.id === 'Moon' ? 'Mo' :
         g.id === 'Mars' ? 'Ma' : g.id === 'Rahu' ? 'Ra' : 'Ke';
-      planetsInHouse[house].push(label + (g.isRetrograde ? '®' : ''));
+      planetsInHouse[house].push(label + (g.isRetrograde ? '\u00AE' : ''));
     }
 
     // Build SVG
+    const t = pad;
+    const b = pad + outer * 2;
+    const l = pad;
+    const r = pad + outer * 2;
+
     let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" class="kundli-chart-svg">`;
-
-    // Outer square
     svg += `<rect x="${pad}" y="${pad}" width="${outer*2}" height="${outer*2}" fill="none" stroke="var(--saffron-dark)" stroke-width="2" rx="3"/>`;
-
-    // Inner diamond (connecting midpoints of outer square)
-    const t = pad + 0; // top
-    const b = pad + outer * 2; // bottom
-    const l = pad + 0; // left
-    const r = pad + outer * 2; // right
     svg += `<line x1="${mid}" y1="${t}" x2="${l}" y2="${mid}" stroke="var(--saffron-dark)" stroke-width="1.5"/>`;
     svg += `<line x1="${l}" y1="${mid}" x2="${mid}" y2="${b}" stroke="var(--saffron-dark)" stroke-width="1.5"/>`;
     svg += `<line x1="${mid}" y1="${b}" x2="${r}" y2="${mid}" stroke="var(--saffron-dark)" stroke-width="1.5"/>`;
     svg += `<line x1="${r}" y1="${mid}" x2="${mid}" y2="${t}" stroke="var(--saffron-dark)" stroke-width="1.5"/>`;
-
-    // Cross lines dividing the square into triangles
     svg += `<line x1="${l}" y1="${t}" x2="${r}" y2="${b}" stroke="var(--border)" stroke-width="0.8"/>`;
     svg += `<line x1="${r}" y1="${t}" x2="${l}" y2="${b}" stroke="var(--border)" stroke-width="0.8"/>`;
 
-    // House numbers + planets
     for (const hp of housePositions) {
       const planets = planetsInHouse[hp.house] || [];
-
-      // Rashi number (small, muted)
       const rashiIndex = (lagnaRashi + hp.house - 1) % 12;
       svg += `<text x="${hp.textX}" y="${hp.textY - 12}" text-anchor="middle" class="chart-rashi-num">${rashiIndex + 1}</text>`;
-
-      // Planets
       if (planets.length > 0) {
         const planetStr = planets.join(' ');
         svg += `<text x="${hp.textX}" y="${hp.textY + 4}" text-anchor="middle" class="chart-planet-text">${planetStr}</text>`;
       }
     }
 
-    // Lagna indicator
     svg += `<text x="${mid}" y="${t + 16}" text-anchor="middle" class="chart-lagna-label">As</text>`;
-
     svg += '</svg>';
     chartSvg.innerHTML = svg;
   }
@@ -293,9 +312,9 @@
         g.dignity === 'own_sign' ? 'dignity-own' : '';
       return `<tr>
         <td class="graha-name">${g.symbol} ${g.vedic}</td>
-        <td>${g.rashi} ${g.degrees.toFixed(1)}°</td>
+        <td>${g.rashi} ${g.degrees.toFixed(1)}\u00B0</td>
         <td>${g.nakshatra} (${g.pada})</td>
-        <td class="${dignityClass}">${g.dignity.replace('_', ' ')}${g.isRetrograde ? ' ↺' : ''}</td>
+        <td class="${dignityClass}">${g.dignity.replace('_', ' ')}${g.isRetrograde ? ' \u21BA' : ''}</td>
       </tr>`;
     }).join('');
 
@@ -316,7 +335,7 @@
     if (current.mahadasha) {
       html += `<div class="dasha-current">
         <div class="dasha-current-label">Current Period</div>
-        <div class="dasha-current-value">${current.mahadasha} Mahadasha → ${current.antardasha} Antardasha</div>
+        <div class="dasha-current-value">${current.mahadasha} Mahadasha \u2192 ${current.antardasha} Antardasha</div>
         <div class="dasha-current-dates">Until ${current.antardashaEnd || 'N/A'}</div>
       </div>`;
     }
@@ -333,7 +352,6 @@
       </div>`;
     }
     html += '</div>';
-
     el.innerHTML = html;
   }
 
@@ -361,7 +379,7 @@
           <div class="dosha-name">${d.name}</div>
           <div class="dosha-desc">${d.description}</div>
           <div class="dosha-remedies">
-            <strong>Remedies:</strong> ${d.remedies.join(' · ')}
+            <strong>Remedies:</strong> ${d.remedies.join(' \u00B7 ')}
           </div>
         </div>`;
       }
@@ -380,16 +398,16 @@
     if (!el) return;
 
     const sections = [
-      { key: 'personality', icon: '🧘', title: 'Personality' },
-      { key: 'strengths', icon: '💪', title: 'Strengths' },
-      { key: 'challenges', icon: '⚡', title: 'Challenges' },
-      { key: 'career', icon: '💼', title: 'Career' },
-      { key: 'relationships', icon: '❤️', title: 'Relationships' },
-      { key: 'spirituality', icon: '🙏', title: 'Spiritual Path' },
-      { key: 'currentPhase', icon: '🔮', title: 'Current Phase' },
-      { key: 'yogaInterpretation', icon: '✨', title: 'Yoga Effects' },
-      { key: 'doshaRemedies', icon: '🙏', title: 'Remedies' },
-      { key: 'overallGuidance', icon: '🕉️', title: 'Overall Guidance' },
+      { key: 'personality', icon: '\uD83E\uDDD8', title: 'Personality' },
+      { key: 'strengths', icon: '\uD83D\uDCAA', title: 'Strengths' },
+      { key: 'challenges', icon: '\u26A1', title: 'Challenges' },
+      { key: 'career', icon: '\uD83D\uDCBC', title: 'Career' },
+      { key: 'relationships', icon: '\u2764\uFE0F', title: 'Relationships' },
+      { key: 'spirituality', icon: '\uD83D\uDE4F', title: 'Spiritual Path' },
+      { key: 'currentPhase', icon: '\uD83D\uDD2E', title: 'Current Phase' },
+      { key: 'yogaInterpretation', icon: '\u2728', title: 'Yoga Effects' },
+      { key: 'doshaRemedies', icon: '\uD83D\uDE4F', title: 'Remedies' },
+      { key: 'overallGuidance', icon: '\uD83D\uDD49\uFE0F', title: 'Overall Guidance' },
     ];
 
     let html = '';
@@ -405,23 +423,8 @@
     el.innerHTML = html;
   }
 
-  // ─── Helpers ─────────────────────────────────────────────────────────────
-  function showLoading(show) {
-    if (loadingEl) loadingEl.classList.toggle('hidden', !show);
-    if (generateBtn) generateBtn.disabled = show;
-  }
-
-  function showError(msg) {
-    if (errorEl) {
-      errorEl.textContent = msg;
-      errorEl.classList.remove('hidden');
-    }
-  }
-
-  function hideError() {
-    if (errorEl) errorEl.classList.add('hidden');
-  }
-
-  // ─── Expose ──────────────────────────────────────────────────────────────
-  Aatman.kundli = { onShow: () => {} };
+  // ─── Expose — onShow triggers lazy init ──────────────────────────────────
+  Aatman.kundli = {
+    onShow: setup,
+  };
 })();
