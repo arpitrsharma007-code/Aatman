@@ -19,6 +19,7 @@ Aatman.state = {
     chat:    document.getElementById('section-chat'),
     wisdom:  document.getElementById('section-wisdom'),
     bhakti:  document.getElementById('section-bhakti'),
+    kundli:  document.getElementById('section-kundli'),
     profile: document.getElementById('section-profile'),
   };
 
@@ -58,6 +59,9 @@ Aatman.state = {
     }
     if (name === 'profile' && typeof Aatman.profile?.onShow === 'function') {
       Aatman.profile.onShow();
+    }
+    if (name === 'kundli' && typeof Aatman.kundli?.onShow === 'function') {
+      Aatman.kundli.onShow();
     }
 
     // Close mobile nav

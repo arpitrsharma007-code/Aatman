@@ -3811,3 +3811,495 @@ img { max-width: 100%; display: block; }
     margin-bottom: 4px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   KUNDLI SECTION
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.kundli-layout {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.kundli-hero {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.kundli-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--text-primary);
+}
+
+.kundli-title .devanagari-large {
+  font-family: var(--font-devanagari);
+  color: var(--saffron-dark);
+  font-size: 1.8rem;
+}
+
+.kundli-subtitle {
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+}
+
+/* Form card */
+.kundli-form-card {
+  margin-bottom: 1.5rem;
+}
+
+.kundli-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .kundli-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* City autocomplete dropdown */
+.place-input-wrapper {
+  position: relative;
+}
+
+.city-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--cream-warm);
+  border: 1.5px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+  z-index: 20;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+}
+
+.city-option {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.85rem;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.92rem;
+  color: var(--text-body);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background var(--t-base);
+}
+
+.city-option:hover {
+  background: var(--cream-dark);
+  color: var(--saffron-dark);
+}
+
+/* Loading & error */
+.kundli-loading {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.kundli-loading .loading-mandala {
+  font-size: 2rem;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.kundli-loading p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.kundli-error {
+  background: #FFF0F0;
+  border: 1px solid #E8A0A0;
+  color: #8B2020;
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-sm);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.kundli-error-text {
+  color: #8B2020;
+  font-size: 0.9rem;
+}
+
+/* Result area */
+.kundli-result {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Chart + Graha row */
+.kundli-chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 700px) {
+  .kundli-chart-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* SVG Chart */
+.kundli-chart-container {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.kundli-chart-svg {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+}
+
+.chart-rashi-num {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  fill: var(--text-pale);
+  font-weight: 500;
+}
+
+.chart-planet-text {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  fill: var(--brown-deep);
+  font-weight: 600;
+}
+
+.chart-lagna-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  fill: var(--saffron-dark);
+  font-weight: 700;
+}
+
+/* Graha table */
+.graha-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.graha-table th {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-pale);
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.graha-table td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--border-pale);
+  color: var(--text-body);
+  font-family: var(--font-body);
+}
+
+.graha-table tr:last-child td {
+  border-bottom: none;
+}
+
+.graha-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dignity-exalted {
+  color: #2E7D32;
+  font-weight: 600;
+}
+
+.dignity-debilitated {
+  color: #C62828;
+  font-weight: 600;
+}
+
+.dignity-own {
+  color: var(--saffron-dark);
+  font-weight: 600;
+}
+
+/* Dasha */
+.kundli-dasha-card {
+  margin-bottom: 1.25rem;
+}
+
+.dasha-current {
+  background: linear-gradient(135deg, rgba(255,153,51,0.08) 0%, rgba(200,150,12,0.08) 100%);
+  border: 1px solid var(--cream-border);
+  border-radius: var(--r-sm);
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.dasha-current-label {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-pale);
+  margin-bottom: 0.25rem;
+}
+
+.dasha-current-value {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--saffron-dark);
+  font-weight: 600;
+}
+
+.dasha-current-dates {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.dasha-timeline {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dasha-block {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-sm);
+  background: var(--cream);
+  border: 1px solid var(--border-pale);
+  min-width: 70px;
+  transition: all var(--t-base);
+}
+
+.dasha-active {
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-dark) 100%);
+  color: white;
+  border-color: var(--saffron-dark);
+  box-shadow: var(--shadow-gold);
+}
+
+.dasha-active .dasha-lord,
+.dasha-active .dasha-years,
+.dasha-active .dasha-dates {
+  color: white;
+}
+
+.dasha-past {
+  opacity: 0.5;
+}
+
+.dasha-lord {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dasha-years {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.dasha-dates {
+  font-size: 0.65rem;
+  color: var(--text-pale);
+  margin-top: 0.15rem;
+}
+
+/* Yogas & Doshas */
+.kundli-yd-card {
+  margin-bottom: 1.25rem;
+}
+
+.yd-heading {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.yd-empty {
+  color: var(--text-pale);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.yoga-card {
+  background: rgba(46,125,50,0.05);
+  border: 1px solid rgba(46,125,50,0.15);
+  border-radius: var(--r-sm);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.yoga-strong { border-left: 3px solid #2E7D32; }
+.yoga-moderate { border-left: 3px solid var(--saffron); }
+
+.yoga-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.yoga-desc {
+  font-size: 0.85rem;
+  color: var(--text-body);
+  margin-top: 0.2rem;
+  line-height: 1.45;
+}
+
+.dosha-card {
+  background: rgba(198,40,40,0.04);
+  border: 1px solid rgba(198,40,40,0.12);
+  border-radius: var(--r-sm);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.dosha-strong { border-left: 3px solid #C62828; }
+.dosha-moderate { border-left: 3px solid var(--saffron-dark); }
+.dosha-mild { border-left: 3px solid var(--gold); }
+
+.dosha-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.dosha-desc {
+  font-size: 0.85rem;
+  color: var(--text-body);
+  margin-top: 0.2rem;
+  line-height: 1.45;
+}
+
+.dosha-remedies {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(198,40,40,0.08);
+  line-height: 1.5;
+}
+
+/* Interpret CTA */
+.kundli-interpret-cta {
+  margin-bottom: 1.25rem;
+}
+
+/* Interpretation */
+.kundli-interp-card {
+  margin-bottom: 1.25rem;
+}
+
+.kundli-interp-loading {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.kundli-interp-loading .loading-mandala {
+  font-size: 1.8rem;
+  animation: spin 3s linear infinite;
+}
+
+.interp-section {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-pale);
+}
+
+.interp-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.interp-title {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--saffron-dark);
+  margin-bottom: 0.35rem;
+}
+
+.interp-text {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--text-body);
+  line-height: 1.55;
+}
+
+/* Disclaimer */
+.kundli-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-pale);
+  padding: 0.75rem;
+  background: var(--cream-dark);
+  border-radius: var(--r-sm);
+  line-height: 1.4;
+  margin-top: 0.5rem;
+}
+
+/* Kundli responsive */
+@media (max-width: 600px) {
+  .kundli-layout {
+    padding: 1rem 0.75rem;
+  }
+  .kundli-title {
+    font-size: 1.3rem;
+  }
+  .graha-table {
+    font-size: 0.75rem;
+  }
+  .graha-table th,
+  .graha-table td {
+    padding: 0.35rem 0.35rem;
+  }
+  .dasha-block {
+    min-width: 60px;
+    padding: 0.4rem 0.5rem;
+  }
+}

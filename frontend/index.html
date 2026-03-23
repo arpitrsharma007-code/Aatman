@@ -399,6 +399,12 @@
           </svg>
           <span>Bhakti</span>
         </button>
+        <button class="nav-btn" data-section="kundli" aria-current="false">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span>Kundli</span>
+        </button>
         <button class="nav-btn" data-section="profile" aria-current="false" id="profileNavBtn">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -424,6 +430,9 @@
       </button>
       <button class="nav-btn" data-section="bhakti">
         <span>🎵</span> Bhakti
+      </button>
+      <button class="nav-btn" data-section="kundli">
+        <span>🔮</span> Kundli
       </button>
       <button class="nav-btn" data-section="profile">
         <span>🙏</span> Profile
@@ -906,7 +915,170 @@
     </section>
 
     <!-- ─────────────────────────────────────────
-         SECTION 4 · PROFILE
+         SECTION 4 · KUNDLI (Janam Kundali)
+    ───────────────────────────────────────── -->
+    <section id="section-kundli" class="section" aria-label="Janam Kundli" hidden>
+      <div class="kundli-layout">
+
+        <!-- Header -->
+        <div class="kundli-hero">
+          <h2 class="kundli-title">
+            <span class="devanagari-large">कुण्डली</span>
+            <span>Janam Kundli</span>
+          </h2>
+          <p class="kundli-subtitle">Generate your Vedic birth chart with Swiss Ephemeris precision and AI-powered Jyotish interpretation</p>
+        </div>
+
+        <!-- Birth Details Form -->
+        <div class="card kundli-form-card">
+          <h3 class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            Birth Details
+          </h3>
+          <form id="kundliForm">
+            <div class="kundli-form-grid">
+              <div class="form-group">
+                <label class="form-label" for="kundliDate">Date of Birth</label>
+                <input type="date" id="kundliDate" class="form-input" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="kundliTime">Time of Birth</label>
+                <input type="time" id="kundliTime" class="form-input" required />
+                <p class="form-hint">Exact birth time is crucial for accurate Lagna</p>
+              </div>
+              <div class="form-group place-input-wrapper">
+                <label class="form-label" for="kundliPlace">Place of Birth</label>
+                <input type="text" id="kundliPlace" class="form-input" placeholder="Start typing a city..." autocomplete="off" required />
+                <div class="city-dropdown hidden" id="kundliCityDropdown"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="kundliTz">Timezone (UTC)</label>
+                <input type="number" id="kundliTz" class="form-input" value="5.5" step="0.5" />
+              </div>
+              <input type="hidden" id="kundliLat" />
+              <input type="hidden" id="kundliLon" />
+            </div>
+            <button type="submit" class="btn btn--primary btn--full" id="kundliGenerateBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              Generate My Kundli
+            </button>
+          </form>
+
+          <!-- Error -->
+          <div class="kundli-error hidden" id="kundliError"></div>
+
+          <!-- Loading -->
+          <div class="kundli-loading hidden" id="kundliLoading">
+            <div class="loading-mandala">ॐ</div>
+            <p>Calculating planetary positions...</p>
+          </div>
+        </div>
+
+        <!-- Result Area -->
+        <div class="kundli-result hidden" id="kundliResult">
+
+          <!-- Chart + Graha Table row -->
+          <div class="kundli-chart-row">
+            <!-- North Indian Chart -->
+            <div class="card kundli-chart-card">
+              <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="3" y1="12" x2="21" y2="12"/>
+                  <line x1="12" y1="3" x2="12" y2="21"/>
+                </svg>
+                Rashi Chart (D1)
+              </h3>
+              <div id="kundliChartSvg" class="kundli-chart-container"></div>
+            </div>
+
+            <!-- Graha Positions Table -->
+            <div class="card kundli-graha-card">
+              <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <line x1="12" y1="2" x2="12" y2="6"/>
+                  <line x1="12" y1="18" x2="12" y2="22"/>
+                  <line x1="2" y1="12" x2="6" y2="12"/>
+                  <line x1="18" y1="12" x2="22" y2="12"/>
+                </svg>
+                Graha Positions
+              </h3>
+              <div id="kundliGrahaTable"></div>
+            </div>
+          </div>
+
+          <!-- Dasha -->
+          <div class="card kundli-dasha-card">
+            <h3 class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              Vimshottari Dasha
+            </h3>
+            <div id="kundliDasha"></div>
+          </div>
+
+          <!-- Yogas & Doshas -->
+          <div class="card kundli-yd-card">
+            <h3 class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              Yogas &amp; Doshas
+            </h3>
+            <div id="kundliYogasDoshas"></div>
+          </div>
+
+          <!-- AI Interpretation Button -->
+          <div class="kundli-interpret-cta">
+            <button class="btn btn--primary btn--full" id="kundliInterpretBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              Get AI Jyotish Reading
+            </button>
+            <p class="form-hint" style="text-align:center;margin-top:0.5rem;">Claude analyzes your complete chart and gives a personalized interpretation</p>
+          </div>
+
+          <!-- AI Interpretation -->
+          <div class="kundli-interpretation hidden" id="kundliInterpretation">
+            <div class="card kundli-interp-card">
+              <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                AI Jyotish Reading
+              </h3>
+              <div class="kundli-interp-loading hidden" id="interpretLoading">
+                <div class="loading-mandala">ॐ</div>
+                <p>Claude is reading your chart...</p>
+              </div>
+              <div id="interpretContent"></div>
+            </div>
+          </div>
+
+          <!-- Disclaimer -->
+          <div class="kundli-disclaimer">
+            <span class="ai-badge">AI</span>
+            This kundli is generated using Swiss Ephemeris (Lahiri Ayanamsha) and interpreted by AI. For important life decisions, please also consult an experienced Jyotishi.
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 5 · PROFILE
     ───────────────────────────────────────── -->
     <section id="section-profile" class="section" aria-label="User profile" hidden>
       <div class="profile-layout">
@@ -1275,6 +1447,7 @@
   <script src="js/astrology-promo.js"></script>
   <script src="js/wisdom.js"></script>
   <script src="js/bhakti.js"></script>
+  <script src="js/kundli.js"></script>
   <script src="js/profile.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
