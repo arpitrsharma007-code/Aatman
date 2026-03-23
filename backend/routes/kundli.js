@@ -53,18 +53,6 @@ router.post('/generate', async (req, res) => {
   }
 });
 
-// ─── POST /api/kundli/interpret ──────────────────────────────────────────────
-// Takes a generated kundli and returns Claude's Jyotish interpretation
-// This route is wired in server.js where the Anthropic client is available
-router.post('/interpret', async (req, res) => {
-  const { kundli } = req.body;
-  if (!kundli) {
-    return res.status(400).json({ error: 'Kundli data is required.' });
-  }
-
-  // The actual Claude call is handled in server.js since it has the anthropic client
-  // This route is a placeholder — server.js overrides it with the full implementation
-  res.status(501).json({ error: 'Interpretation endpoint not configured.' });
-});
+// Note: /api/kundli/interpret is handled in server.js where the Anthropic client is available
 
 module.exports = router;
