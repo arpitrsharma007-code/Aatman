@@ -11,6 +11,7 @@ const Payment = require('./models/Payment');
 const AstrologyWaitlist = require('./models/AstrologyWaitlist');
 const subscriptionRoutes = require('./routes/subscription');
 const webhookRoutes = require('./routes/webhook');
+const kundliRoutes = require('./routes/kundli');
 
 
 const app = express();
@@ -110,6 +111,7 @@ async function checkMessageLimit(req, res, next) {
 // ─── Mount Subscription & Webhook Routes ────────────────────────────────────
 app.use('/api/subscription', authMiddleware, subscriptionRoutes);
 app.use('/api/webhooks', webhookRoutes); // No auth — Razorpay calls this directly
+app.use('/api/kundli', optionalAuth, kundliRoutes);
 
 // ─── System Prompt (Compliance-Hardened v2.0 — March 2026) ────────────────────
 const AATMAN_SYSTEM_PROMPT = `You are Aatman, a deeply knowledgeable Hindu spiritual companion.
@@ -520,6 +522,95 @@ app.post('/api/chat', optionalAuth, checkMessageLimit, async (req, res) => {
   }
 });
 
+// ─── Kundli AI Interpretation ─────────────────────────────────────────────────
+app.post('/api/kundli/interpret', optionalAuth, async (req, res) => {
+  const { kundli } = req.body;
+  if (!kundli) return res.status(400).json({ error: 'Kundli data is required.' });
+
+  // Build a structured summary for Claude
+  const grahaList = kundli.grahas.map(g =>
+    `${g.vedic} (${g.id}): ${g.rashi} ${g.degrees}° — Nakshatra: ${g.nakshatra} Pada ${g.pada}${g.isRetrograde ? ' [R]' : ''} — Dignity: ${g.dignity}`
+  ).join('\n');
+
+  const houseList = kundli.houses.map(h =>
+    `House ${h.number} (${h.rashi}, lord: ${h.rashiLord}): ${h.planets.length > 0 ? h.planets.map(p => p.vedic + (p.isRetrograde ? ' [R]' : '')).join(', ') : 'empty'}`
+  ).join('\n');
+
+  const yogaList = kundli.yogas.length > 0
+    ? kundli.yogas.map(y => `${y.name} (${y.strength}): ${y.description}`).join('\n')
+    : 'No major yogas detected.';
+
+  const doshaList = kundli.doshas.length > 0
+    ? kundli.doshas.map(d => `${d.name} (${d.severity}): ${d.description}\nRemedies: ${d.remedies.join('; ')}`).join('\n\n')
+    : 'No major doshas detected.';
+
+  const currentDasha = kundli.dasha.current;
+  const dashaInfo = currentDasha.mahadasha
+    ? `Current Mahadasha: ${currentDasha.mahadasha} (until ${currentDasha.mahadashaEnd}), Antardasha: ${currentDasha.antardasha} (until ${currentDasha.antardashaEnd})`
+    : 'Dasha information unavailable.';
+
+  const prompt = `You are an expert Vedic astrologer (Jyotishi) interpreting a Janam Kundli. Provide a comprehensive yet accessible reading.
+
+BIRTH DETAILS:
+Date: ${kundli.birthDetails.date}, Time: ${kundli.birthDetails.time}
+Place: ${kundli.birthDetails.place} (${kundli.birthDetails.coordinates.lat}, ${kundli.birthDetails.coordinates.lon})
+Ayanamsha: ${kundli.meta.ayanamsha.system} (${kundli.meta.ayanamsha.value}°)
+
+LAGNA (ASCENDANT):
+${kundli.lagna.rashi.name} (${kundli.lagna.rashi.nameEn}) — Nakshatra: ${kundli.lagna.nakshatra.name} Pada ${kundli.lagna.nakshatra.pada}
+
+GRAHA POSITIONS (Sidereal):
+${grahaList}
+
+HOUSE CHART:
+${houseList}
+
+VIMSHOTTARI DASHA:
+Moon Nakshatra: ${kundli.dasha.moonNakshatra}
+${dashaInfo}
+
+YOGAS DETECTED:
+${yogaList}
+
+DOSHAS DETECTED:
+${doshaList}
+
+Provide a reading in this JSON format:
+{
+  "personality": "2-3 sentences about core personality based on Lagna, Moon sign, and Sun sign",
+  "strengths": "2-3 key strengths from the chart",
+  "challenges": "2-3 key challenges or areas of growth",
+  "career": "1-2 sentences on career and professional life based on 10th house, Sun, and Saturn",
+  "relationships": "1-2 sentences on love and relationships based on 7th house, Venus, and Moon",
+  "spirituality": "1-2 sentences on spiritual path based on 9th and 12th houses, Jupiter, and Ketu",
+  "currentPhase": "1-2 sentences interpreting the current Mahadasha-Antardasha period",
+  "yogaInterpretation": "Brief interpretation of detected yogas and their effects",
+  "doshaRemedies": "If doshas present, practical remedial measures. If none, affirm the chart's strength.",
+  "overallGuidance": "2-3 sentences of holistic guidance combining all chart factors"
+}
+
+Return ONLY the JSON object. Be specific to THIS chart — never generic.`;
+
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1200,
+      system: 'You are an expert Vedic astrologer (Jyotishi) with deep knowledge of Brihat Parashara Hora Shastra, Brihat Jataka, and classical Jyotish texts. Interpret birth charts with precision and wisdom. Always respond in JSON format only.',
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const rawText = message.content[0].text.trim();
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Invalid interpretation format');
+
+    const interpretation = JSON.parse(jsonMatch[0]);
+    res.json({ success: true, interpretation });
+  } catch (err) {
+    console.error('❌ Kundli interpretation error:', err.message);
+    res.status(500).json({ error: 'Could not generate interpretation. Please try again.' });
+  }
+});
+
 // ─── Daily Wisdom ──────────────────────────────────────────────────────────────
 app.post('/api/wisdom', async (req, res) => {
   const { scripture = 'Bhagavad Gita', theme } = req.body;
@@ -788,4 +879,10 @@ app.listen(PORT, () => {
   console.log(`  Razorpay:          ${process.env.RAZORPAY_KEY_ID ? 'configured' : 'not configured'}`);
   console.log(`  Razorpay mode:     ${process.env.RAZORPAY_KEY_ID?.startsWith('rzp_test_') ? 'TEST' : 'LIVE'}`);
   console.log('');
+
+  // Pre-load Jyotish engine (non-blocking)
+  const { initSwissEph } = require('./jyotish/engine');
+  initSwissEph()
+    .then(() => console.log('  🔮 Jyotish engine ready'))
+    .catch(err => console.warn('  ⚠️  Jyotish engine not available:', err.message));
 });
