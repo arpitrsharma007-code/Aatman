@@ -117,7 +117,7 @@
     showLoading(true);
     hideError();
     resultArea.classList.add('hidden');
-    interpretArea.classList.add('hidden');
+   
 
     try {
       const headers = { 'Content-Type': 'application/json' };
