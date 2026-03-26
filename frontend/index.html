@@ -6,24 +6,10 @@
   <meta name="description" content="Aatman — A Hindu Spiritual AI Companion. Find wisdom, peace, and guidance through the ancient teachings of the Bhagavad Gita, Upanishads, and more." />
   <title>Aatman ॐ — Hindu Spiritual AI Companion</title>
 
-  <!-- Open Graph — WhatsApp / Social Link Previews -->
-  <meta property="og:title" content="Aatman — Your Hindu Spiritual Companion" />
-  <meta property="og:description" content="AI-powered spiritual guidance rooted in the Gita, Upanishads, and Vedanta. In Hindi, English, or Hinglish." />
-  <meta property="og:image" content="https://aatman-production.up.railway.app/icon-512.png" />
-  <meta property="og:url" content="https://aatman-production.up.railway.app" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Aatman" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Aatman — Your Hindu Spiritual Companion" />
-  <meta name="twitter:description" content="AI-powered spiritual guidance rooted in the Gita, Upanishads, and Vedanta." />
-  <meta name="twitter:image" content="https://aatman-production.up.railway.app/icon-512.png" />
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#FF9933">
   <link rel="apple-touch-icon" href="/icon-192.png">
@@ -33,183 +19,6 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
-
-  <!-- ══════════════════════════════════════
-       LANDING PAGE (shown to unauthenticated visitors)
-  ══════════════════════════════════════ -->
-  <div class="aatman-landing" id="aatmanLanding">
-
-    <!-- Mandala watermark SVG -->
-    <svg class="mandala-watermark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-        <g fill="none" stroke="#D4A843" stroke-width="0.5">
-            <circle cx="200" cy="200" r="60"/>
-            <circle cx="200" cy="200" r="90"/>
-            <circle cx="200" cy="200" r="120"/>
-            <circle cx="200" cy="200" r="150"/>
-            <circle cx="200" cy="200" r="180"/>
-            <g transform="translate(200,200)">
-                <ellipse rx="20" ry="80" transform="rotate(0)"/>
-                <ellipse rx="20" ry="80" transform="rotate(30)"/>
-                <ellipse rx="20" ry="80" transform="rotate(60)"/>
-                <ellipse rx="20" ry="80" transform="rotate(90)"/>
-                <ellipse rx="20" ry="80" transform="rotate(120)"/>
-                <ellipse rx="20" ry="80" transform="rotate(150)"/>
-            </g>
-            <g transform="translate(200,200)">
-                <ellipse rx="15" ry="120" transform="rotate(15)"/>
-                <ellipse rx="15" ry="120" transform="rotate(45)"/>
-                <ellipse rx="15" ry="120" transform="rotate(75)"/>
-                <ellipse rx="15" ry="120" transform="rotate(105)"/>
-                <ellipse rx="15" ry="120" transform="rotate(135)"/>
-                <ellipse rx="15" ry="120" transform="rotate(165)"/>
-            </g>
-        </g>
-    </svg>
-
-    <!-- Nav -->
-    <nav class="aatman-nav">
-        <div class="aatman-logo">
-            <span class="om-symbol">🕉️</span>
-            <div>
-                <div class="logo-text">Aatman</div>
-                <div class="logo-sanskrit">आत्मन् · THE SOUL</div>
-            </div>
-        </div>
-        <div class="nav-lang">🌐 7 Languages</div>
-    </nav>
-
-    <!-- Hero -->
-    <section class="aatman-hero">
-        <div class="hero-badge">
-            <span class="dot"></span>
-            AI-powered · Available 24/7
-        </div>
-
-        <h1 class="hero-title">
-            Your <span class="saffron">spiritual companion</span>, powered by ancient wisdom
-        </h1>
-
-        <p class="hero-sanskrit">
-            "योगः कर्मसु कौशलम्" — Yoga is skill in action
-        </p>
-
-        <p class="hero-subtitle">
-            A 24/7 AI guide rooted in the Bhagavad Gita, Vedas, Upanishads &amp; Hindu tradition. Ask about life, purpose, anxiety, relationships — get personal, scripture-grounded answers in your language.
-        </p>
-
-        <div class="hero-cta">
-            <button class="cta-primary" onclick="Aatman.auth.showAuthOverlay()">
-                Begin Your Journey 🙏
-            </button>
-            <span class="cta-secondary">Free to start · <strong>No credit card needed</strong></span>
-        </div>
-    </section>
-
-    <!-- Social proof strip -->
-    <div class="social-proof">
-        <div class="proof-item">
-            <span class="proof-icon">🌍</span>
-            <span>Seekers in <span class="proof-number">5+ countries</span></span>
-        </div>
-        <div class="proof-item">
-            <span class="proof-icon">📖</span>
-            <span><span class="proof-number">7</span> Indian languages</span>
-        </div>
-        <div class="proof-item">
-            <span class="proof-icon">🙏</span>
-            <span><span class="proof-number">5</span> scripture traditions</span>
-        </div>
-    </div>
-
-    <!-- Demo chat preview -->
-    <section class="demo-section">
-        <div class="demo-label">See how Aatman guides you</div>
-
-        <div class="demo-chat">
-            <div class="demo-chat-header">
-                <div class="demo-avatar">🙏</div>
-                <span>Aatman</span>
-            </div>
-            <div class="demo-chat-body">
-                <div class="demo-msg-user">
-                    I feel lost in my career. I don't know if I'm on the right path. What does the Gita say?
-                </div>
-                <div class="demo-msg-ai">
-                    The Gita speaks directly to this confusion you feel. Krishna tells Arjuna:
-                    <span class="shloka">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन</span>
-                    <span class="shloka-ref">— Bhagavad Gita 2.47</span>
-                    Your right is to your work alone, never to its fruits. When you shift focus from outcomes to the sincerity of your effort, the path reveals itself. The confusion isn't about the wrong career — it's about attachment to a specific result. What if you gave your full energy to today's work without judging where it leads?
-                    <div class="demo-ai-footer">🕉️ AI · AI-generated · May not be accurate</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="sample-questions">
-            <span class="sample-q">How to deal with anxiety?</span>
-            <span class="sample-q">What is my dharma?</span>
-            <span class="sample-q">How to forgive someone?</span>
-            <span class="sample-q">Meditation for beginners</span>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonial-section">
-        <div class="testimonial-grid">
-            <div class="testimonial-card">
-                <p class="testimonial-text">
-                    I'm from Brazil but I've always been drawn to Hindu philosophy. Aatman feels like talking to a wise friend who actually knows the scriptures. I use it every night before sleep.
-                </p>
-                <div class="testimonial-author">
-                    <span class="testimonial-flag">🇧🇷</span>
-                    <div class="testimonial-info">
-                        <div class="author-name">Early User</div>
-                        <div class="author-location">São Paulo, Brazil</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <p class="testimonial-text">
-                    I found this app an amazing idea! I think it can unite technology, spirituality and mental health! I used this morning, and loved the message it sent me. Makes much sense to me.
-                </p>
-                <div class="testimonial-author">
-                    <span class="testimonial-flag">🙏</span>
-                    <div class="testimonial-info">
-                        <div class="author-name">Early User</div>
-                        <div class="author-location">Aatman Community</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features strip -->
-    <div class="features-strip">
-        <div class="feature-cell">
-            <div class="feature-emoji">📜</div>
-            <div class="feature-name">Scripture-Grounded</div>
-            <div class="feature-desc">Real shlokas from Gita, Vedas, Upanishads with translation</div>
-        </div>
-        <div class="feature-cell">
-            <div class="feature-emoji">🌙</div>
-            <div class="feature-name">Available 24/7</div>
-            <div class="feature-desc">Guidance at 2 AM when you need it most</div>
-        </div>
-        <div class="feature-cell">
-            <div class="feature-emoji">🔒</div>
-            <div class="feature-name">Private &amp; Safe</div>
-            <div class="feature-desc">Your conversations stay yours. DPDP Act compliant.</div>
-        </div>
-    </div>
-
-    <!-- Bottom CTA -->
-    <div class="bottom-cta">
-        <p>Join <strong>seekers across 5+ countries</strong> already using Aatman</p>
-        <button class="cta-primary" onclick="Aatman.auth.showAuthOverlay()">
-            Start Free · Ask Your First Question
-        </button>
-    </div>
-
-  </div>
 
   <!-- ════════════════════════════════════════════
        AUTH OVERLAY (shown before app if not authenticated)
@@ -265,26 +74,6 @@
           <input type="password" id="signupPassword" class="auth-input" placeholder="At least 6 characters" required autocomplete="new-password" />
         </div>
         <div class="auth-error hidden" id="signupError"></div>
-        <!-- ─── Compliance: Consent Checkboxes (DPDP Act 2023) ─── -->
-        <div class="consent-section">
-          <label class="consent-item">
-            <input type="checkbox" id="ageVerify" required>
-            <span>I confirm that I am <strong>18 years of age or older</strong>.</span>
-          </label>
-          <label class="consent-item">
-            <input type="checkbox" id="aiDisclosure" required>
-            <span>I understand that Aatman is an <strong>AI-powered service</strong>. Responses are generated by artificial intelligence, not by human spiritual advisors.</span>
-          </label>
-          <label class="consent-item">
-            <input type="checkbox" id="privacyConsent" required>
-            <span>I consent to the collection and processing of my data as described in the <a href="https://arpitrsharma007-code.github.io/Aatman/privacy.html" target="_blank">Privacy Policy</a>.</span>
-          </label>
-          <label class="consent-item">
-            <input type="checkbox" id="tosAccept" required>
-            <span>I agree to the <a href="https://arpitrsharma007-code.github.io/Aatman/terms.html" target="_blank">Terms of Service</a>.</span>
-          </label>
-          <div class="consent-error hidden" id="consentError">Please accept all required items to create your account.</div>
-        </div>
         <button type="submit" class="auth-submit-btn" id="signupSubmitBtn">
           <span>Begin Your Journey 🌸</span>
         </button>
@@ -358,7 +147,7 @@
   <!-- ════════════════════════════════════════════
        HEADER
   ════════════════════════════════════════════ -->
-  <header class="header" role="banner" style="display:none">
+  <header class="header" role="banner">
     <div class="header-inner">
       <!-- Logo -->
       <a class="logo" href="#" aria-label="Aatman Home">
@@ -399,14 +188,6 @@
           </svg>
           <span>Bhakti</span>
         </button>
-        <button class="nav-btn" data-section="kundli" aria-current="false">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2 L12 12 L17 7"/>
-            <circle cx="12" cy="12" r="2" fill="currentColor"/>
-          </svg>
-          <span>Kundli</span>
-        </button>
         <button class="nav-btn" data-section="profile" aria-current="false" id="profileNavBtn">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -433,9 +214,6 @@
       <button class="nav-btn" data-section="bhakti">
         <span>🎵</span> Bhakti
       </button>
-      <button class="nav-btn" data-section="kundli">
-        <span>🔮</span> Kundli
-      </button>
       <button class="nav-btn" data-section="profile">
         <span>🙏</span> Profile
       </button>
@@ -445,28 +223,12 @@
   <!-- ════════════════════════════════════════════
        MAIN CONTENT
   ════════════════════════════════════════════ -->
-  <main class="main" role="main" style="display:none">
+  <main class="main" role="main">
 
     <!-- ─────────────────────────────────────────
          SECTION 1 · CHAT
     ───────────────────────────────────────── -->
     <section id="section-chat" class="section active" aria-label="Spiritual chat">
-
-      <!-- ─── AI Disclosure Banner (IT Rules 2026 Compliance) ─── -->
-      <div class="ai-disclosure-banner">
-        <span class="ai-badge">AI</span>
-        <span>Aatman is an AI companion. Responses are AI-generated and may not always be accurate.</span>
-      </div>
-
-      <!-- ─── Astrology Waitlist Banner (persistent, dismissible) ─── -->
-      <div class="astrology-banner hidden" id="astrologyBanner">
-        <div class="astrology-banner-inner">
-          <span class="astrology-banner-icon">&#x2729;</span>
-          <span class="astrology-banner-text">Vedic Astrology is coming to Aatman</span>
-          <button class="astrology-banner-cta" id="astrologyBannerCta">Join waitlist</button>
-          <button class="astrology-banner-close" id="astrologyBannerClose" aria-label="Close">&#x2715;</button>
-        </div>
-      </div>
 
       <!-- Horoscope Dashboard Card (shown when user has sign set) -->
       <div class="horoscope-banner hidden" id="horoscopeBanner">
@@ -973,8 +735,7 @@
           </div>
 
           <!-- Subscription Plan Card -->
-          <!-- ⚠️ TEMPORARILY HIDDEN — Growth phase, no paywall. To reactivate: remove style="display:none" -->
-          <div class="card subscription-card" id="subscriptionCard" style="display:none">
+          <div class="card subscription-card" id="subscriptionCard">
             <h3 class="card-title">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
                 <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -1117,263 +878,11 @@
             </button>
           </div>
 
-          <!-- ─── Data & Privacy Card (DPDP Act Compliance) ─── -->
-          <div class="card data-privacy-card">
-            <h3 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              Data &amp; Privacy
-            </h3>
-            <p class="form-hint" style="margin-bottom:1rem;">Your rights under the Digital Personal Data Protection Act, 2023.</p>
-            <button class="btn btn--secondary" id="exportDataBtn" style="width:100%;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Export My Data
-            </button>
-            <button class="btn btn--secondary" id="withdrawConsentBtn" style="width:100%;margin-top:0.5rem;">
-              Withdraw Consent
-            </button>
-            <button class="btn btn--danger" id="deleteAccountBtn" style="width:100%;margin-top:0.5rem;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-              </svg>
-              Delete My Account
-            </button>
-          </div>
-
-          <!-- ─── Legal & Grievance Card (IT Rules 2026) ─── -->
-          <div class="card grievance-card">
-            <h3 class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-              </svg>
-              Legal
-            </h3>
-            <a href="https://arpitrsharma007-code.github.io/Aatman/privacy.html" target="_blank" class="legal-link">Privacy Policy →</a>
-            <a href="https://arpitrsharma007-code.github.io/Aatman/terms.html" target="_blank" class="legal-link">Terms of Service →</a>
-            <a href="https://arpitrsharma007-code.github.io/Aatman/delete-account.html" target="_blank" class="legal-link">Account Deletion Info →</a>
-            <div class="grievance-info-box">
-              <strong>Grievance Officer</strong>
-              <p>Arpit Sharma</p>
-              <p><a href="mailto:arpit.vibecode@gmail.com">arpit.vibecode@gmail.com</a></p>
-              <p class="form-hint">Response within 24 hours</p>
-            </div>
-          </div>
-
         </div>
-      </div>
-    </section>
-
-    <!-- ─────────────────────────────────────────
-         SECTION 5 · KUNDLI (Vedic Birth Chart)
-    ───────────────────────────────────────── -->
-    <section id="section-kundli" class="section" aria-label="Vedic Birth Chart" hidden>
-      <div class="kundli-layout">
-
-        <!-- Header -->
-        <div class="kundli-page-header">
-          <h2 class="kundli-page-title">
-            <span class="devanagari-large" style="font-size:1.4rem;">कुंडली</span>
-            Janma Kundli
-          </h2>
-          <p class="kundli-page-subtitle">Cast your Vedic birth chart based on ancient Jyotish shastra</p>
-        </div>
-
-        <!-- Birth Details Form -->
-        <div class="card kundli-form-card">
-          <h3 class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-            Enter Birth Details
-          </h3>
-          <form id="kundliForm" class="kundli-form" novalidate>
-            <div class="kundli-form-row">
-              <div class="form-group">
-                <label class="form-label" for="kundliDate">Date of Birth</label>
-                <input type="date" id="kundliDate" class="form-input" required />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="kundliTime">Time of Birth</label>
-                <input type="time" id="kundliTime" class="form-input" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="kundliPlace">Place of Birth</label>
-              <div class="place-input-wrapper">
-                <input type="text" id="kundliPlace" class="form-input" placeholder="Type city name..." autocomplete="off" required />
-                <div class="city-dropdown hidden" id="kundliCityDropdown"></div>
-              </div>
-              <input type="hidden" id="kundliLat" />
-              <input type="hidden" id="kundliLon" />
-              <input type="hidden" id="kundliTz" value="5.5" />
-              <p class="form-hint">Start typing — select from suggestions for accurate coordinates</p>
-            </div>
-            <div id="kundliError" class="kundli-error hidden"></div>
-            <button type="submit" class="btn btn--primary btn--full" id="kundliGenerateBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-              Generate My Kundli
-            </button>
-          </form>
-          <div id="kundliLoading" class="kundli-loading hidden">
-            <div class="loading-mandala">ॐ</div>
-            <p>Calculating planetary positions...</p>
-          </div>
-        </div>
-
-        <!-- Chart Result Area -->
-        <div id="kundliResult" class="kundli-result-area hidden">
-
-          <!-- North Indian Chart -->
-          <div class="card kundli-chart-card" id="kundliChartCard">
-            <h3 class="card-title">Janma Kundli Chart</h3>
-            <div class="kundli-chart-container">
-              <div id="kundliChartSvg" class="kundli-chart-svg-wrapper"></div>
-              <div id="kundliGrahaTable" class="graha-table-wrapper"></div>
-            </div>
-          </div>
-
-          <!-- Dasha -->
-          <div class="card">
-            <h3 class="card-title">Vimshottari Dasha</h3>
-            <div id="kundliDasha"></div>
-          </div>
-
-          <!-- Yogas & Doshas -->
-          <div class="card">
-            <h3 class="card-title">Yogas &amp; Doshas</h3>
-            <div id="kundliYogasDoshas"></div>
-          </div>
-
-          <!-- AI Interpretation -->
-          <div class="card kundli-interp-card" id="kundliInterpretation">
-            <h3 class="card-title">AI Jyotish Reading</h3>
-            <p class="kundli-interp-disclaimer">
-              This is a general AI-generated overview based on planetary positions. It is <strong>not a substitute</strong> for a trained Jyotishi's guidance.
-            </p>
-            <button class="btn btn--primary btn--full" id="kundliInterpretBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-              </svg>
-              Get AI Overview (Free Preview)
-            </button>
-            <div id="interpretLoading" class="hidden" style="text-align:center;padding:1rem;">
-              <div class="loading-mandala" style="font-size:1.5rem;">ॐ</div>
-              <p>Reading the stars...</p>
-            </div>
-            <div id="interpretContent"></div>
-
-            <!-- Consult Expert CTA — shown after interpretation -->
-            <div class="expert-consult-banner hidden" id="expertConsultBanner">
-              <div class="expert-banner-text">
-                <strong>Want a deeper reading?</strong>
-                <p>Our AI gives you a preview — a real Jyotishi unlocks the full picture. Be among the first to consult an expert through Aatman.</p>
-              </div>
-              <button class="btn btn--gold btn--full" id="consultExpertBtn">
-                &#x2729; Consult a Jyotish Expert
-              </button>
-            </div>
-          </div>
-
-          <!-- Export PDF Button -->
-          <div class="kundli-actions">
-            <button class="btn btn--secondary" id="kundliExportPdfBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Export Kundli as PDF
-            </button>
-          </div>
-
-        </div>
-
       </div>
     </section>
 
   </main>
-
-  <!-- ════════════════════════════════════════════
-       FIRST-TIME ONBOARDING MODAL (AI Disclosure)
-  ════════════════════════════════════════════ -->
-  <div class="onboarding-overlay hidden" id="onboardingModal">
-    <div class="onboarding-card">
-      <div class="onboarding-header">
-        <div class="onboarding-om">ॐ</div>
-        <h2>Welcome to Aatman</h2>
-        <p>Your AI spiritual companion</p>
-      </div>
-      <div class="onboarding-body">
-        <div class="onboarding-point">
-          <span class="onboarding-icon" style="background:#FFF3E0;">🤖</span>
-          <div>
-            <strong>I am an AI, not a guru</strong>
-            <p>My responses are generated by artificial intelligence. I am not a human spiritual advisor or religious authority.</p>
-          </div>
-        </div>
-        <div class="onboarding-point">
-          <span class="onboarding-icon" style="background:#E3F2FD;">📖</span>
-          <div>
-            <strong>Guidance, not gospel</strong>
-            <p>I draw from Hindu scriptures for perspective, but my responses may not always be accurate. Verify with qualified teachers.</p>
-          </div>
-        </div>
-        <div class="onboarding-point">
-          <span class="onboarding-icon" style="background:#E8F5E9;">🛡️</span>
-          <div>
-            <strong>Your privacy matters</strong>
-            <p>Your conversations are private. Our AI provider does not train models on your data. You can delete your data at any time.</p>
-          </div>
-        </div>
-        <button class="btn btn--primary" id="onboardingDismissBtn" style="width:100%;margin-top:12px;">I understand — Begin my journey</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ════════════════════════════════════════════
-       ASTROLOGY WAITLIST MODAL (shown once per user)
-  ════════════════════════════════════════════ -->
-  <div class="onboarding-overlay hidden" id="astrologyPromoModal">
-    <div class="onboarding-card">
-      <div class="onboarding-header" style="background: linear-gradient(135deg, #1A1A2E 0%, #0D1B3E 50%, #FF6F00 100%);">
-        <div class="onboarding-om" style="opacity:0.7;">&#x2729;</div>
-        <h2>Jyotish is Coming to Aatman</h2>
-        <p>Real Vedic astrology, powered by AI</p>
-      </div>
-      <div class="onboarding-body">
-        <div class="onboarding-point">
-          <span class="onboarding-icon" style="background:#FFF3E0;">&#x2B50;</span>
-          <div>
-            <strong>Kundli-based guidance</strong>
-            <p>Personalized jyotish insights based on your birth chart — not generic sun-sign horoscopes.</p>
-          </div>
-        </div>
-        <div class="onboarding-point">
-          <span class="onboarding-icon" style="background:#E8EAF6;">&#x1F52E;</span>
-          <div>
-            <strong>Built with a real astrologer</strong>
-            <p>Developed alongside a jyotishi with 20+ years of experience reading kundlis.</p>
-          </div>
-        </div>
-        <div class="astrology-waitlist-form" id="astrologyModalForm">
-          <input type="email" class="astrology-email-input" id="astrologyModalEmail" placeholder="Enter your email for early access" autocomplete="email" />
-          <button class="btn btn--primary" id="astrologyModalSubmit" style="width:100%;margin-top:8px;">Notify me when it launches</button>
-        </div>
-        <div class="astrology-waitlist-success hidden" id="astrologyModalSuccess">
-          <p style="text-align:center;color:var(--saffron-dark);font-weight:600;margin:8px 0 0;">You're on the list! We'll let you know.</p>
-        </div>
-        <button class="astrology-dismiss-link" id="astrologyModalDismiss">Not now</button>
-      </div>
-    </div>
-  </div>
 
   <!-- ════════════════════════════════════════════
        TOAST NOTIFICATIONS
@@ -1397,8 +906,7 @@
   <!-- ════════════════════════════════════════════
        UPGRADE BANNER (shown when free user hits limit)
   ════════════════════════════════════════════ -->
-  <!-- ⚠️ TEMPORARILY HIDDEN — Growth phase, no paywall. To reactivate: remove style="display:none" -->
-  <div class="upgrade-banner hidden" id="upgradeBanner" role="alertdialog" aria-label="Upgrade to premium" style="display:none">
+  <div class="upgrade-banner hidden" id="upgradeBanner" role="alertdialog" aria-label="Upgrade to premium">
     <div class="upgrade-banner-inner">
       <button class="notif-close" id="upgradeBannerClose" aria-label="Close">✕</button>
       <div class="notif-symbol">🙏</div>
@@ -1411,68 +919,14 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════
-       JYOTISH EXPERT WAITLIST MODAL
-  ════════════════════════════════════════════ -->
-  <div class="onboarding-overlay hidden" id="jyotishExpertModal">
-    <div class="onboarding-card">
-      <div class="onboarding-header" style="background: linear-gradient(135deg, #1A1A2E 0%, #0D1B3E 60%, #FF6F00 100%);">
-        <div class="onboarding-om" style="font-size:2rem;">&#x2729;</div>
-        <h2>Consult a Jyotishi</h2>
-        <p>Real human astrologers. Coming soon to Aatman.</p>
-      </div>
-      <div class="onboarding-body">
-        <div class="onboarding-point">
-          <span class="onboarding-icon" style="background:#FFF3E0;">&#x1F4DC;</span>
-          <div>
-            <strong>Full chart consultation</strong>
-            <p>A trained Jyotishi will analyze your complete Kundli — Dashas, Yogas, Doshas, and life guidance.</p>
-          </div>
-        </div>
-        <div class="onboarding-point">
-          <span class="onboarding-icon" style="background:#E8EAF6;">&#x1F4AC;</span>
-          <div>
-            <strong>1-on-1 via Aatman</strong>
-            <p>Connect directly through the app. No middlemen. Authenticated experts only.</p>
-          </div>
-        </div>
-        <div class="onboarding-point" style="background:var(--surface-alt,#fdf6ec);border-radius:8px;padding:0.75rem;">
-          <span class="onboarding-icon" style="background:#E8F5E9;">&#x2B50;</span>
-          <div>
-            <strong>Be first in line</strong>
-            <p>Sign up for early access and get a discounted introductory session.</p>
-          </div>
-        </div>
-        <div id="jyotishExpertForm" style="margin-top:1rem;">
-          <input type="email" class="astrology-email-input" id="jyotishExpertEmail" placeholder="Your email for early access" autocomplete="email" />
-          <button class="btn btn--primary" id="jyotishExpertSubmitBtn" style="width:100%;margin-top:8px;">
-            Reserve My Spot
-          </button>
-        </div>
-        <div class="astrology-waitlist-success hidden" id="jyotishExpertSuccess">
-          <p style="text-align:center;color:var(--saffron-dark);font-weight:600;margin:8px 0 0;">
-            &#x2714; You're on the list! We'll reach out when experts go live.
-          </p>
-        </div>
-        <button class="astrology-dismiss-link" id="jyotishExpertDismiss">Maybe later</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- jsPDF for Kundli export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
   <!-- Scripts (order matters) -->
   <script src="js/app.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/subscription.js"></script>
   <script src="js/chat.js"></script>
-  <script src="js/astrology-promo.js"></script>
   <script src="js/wisdom.js"></script>
   <script src="js/bhakti.js"></script>
   <script src="js/profile.js"></script>
-  <script src="js/Kundli.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
