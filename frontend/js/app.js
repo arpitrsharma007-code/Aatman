@@ -19,7 +19,6 @@ Aatman.state = {
     chat:    document.getElementById('section-chat'),
     wisdom:  document.getElementById('section-wisdom'),
     bhakti:  document.getElementById('section-bhakti'),
-    kundli:  document.getElementById('section-kundli'),
     profile: document.getElementById('section-profile'),
   };
 
@@ -29,6 +28,7 @@ Aatman.state = {
 
     // Hide current, show new
     Object.entries(sections).forEach(([key, el]) => {
+      if (!el) return; // guard against missing sections
       if (key === name) {
         el.removeAttribute('hidden');
         el.classList.add('active');
