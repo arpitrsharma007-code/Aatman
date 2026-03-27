@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aatman-v5';
+const CACHE_NAME = 'aatman-v6';
 const STATIC_ASSETS = [
   '/',
   '/css/styles.css',
@@ -8,6 +8,10 @@ const STATIC_ASSETS = [
   '/js/wisdom.js',
   '/js/bhakti.js',
   '/js/profile.js',
+  '/js/Kundli.js',
+  '/js/astrology-promo.js',
+  '/js/subscription.js',
+  '/js/share.js',
   '/icon-192.png',
   '/icon-512.png',
 ];

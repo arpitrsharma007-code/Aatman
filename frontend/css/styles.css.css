@@ -4601,3 +4601,55 @@ img { max-width: 100%; display: block; }
   display: flex; align-items: center; gap: 0.4rem;
   padding: 0.6rem 1.4rem;
 }
+
+/* ══════════════════════════════════════════════════════
+   GENERIC MODAL OVERLAY & CARD
+══════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(28, 8, 0, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.25s ease;
+}
+.modal-overlay.hidden { display: none; }
+.modal-overlay.hiding { opacity: 0; transition: opacity 0.3s; }
+
+.modal-card {
+  background: var(--cream-warm, #fdf6ec);
+  border: 1px solid var(--border-light, #f0e0c0);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 440px;
+  padding: 1.5rem;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+  animation: modalIn 0.3s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Astrology Promo Modal ─────────────────────────── */
+.astrology-promo-modal { text-align: center; }
+.astrology-promo-header { margin-bottom: 1rem; }
+.astrology-promo-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+.astrology-promo-header h3 {
+  font-family: 'Lora', serif;
+  font-size: 1.25rem;
+  color: var(--brown-deep, #1a0a00);
+  margin: 0 0 0.5rem;
+}
+.astrology-promo-header p {
+  font-size: 0.88rem;
+  color: var(--brown-muted, #7a5c3a);
+  margin: 0;
+  line-height: 1.5;
+}

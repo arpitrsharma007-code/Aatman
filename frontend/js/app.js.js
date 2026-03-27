@@ -20,6 +20,7 @@ Aatman.state = {
     wisdom:  document.getElementById('section-wisdom'),
     bhakti:  document.getElementById('section-bhakti'),
     profile: document.getElementById('section-profile'),
+    kundli:  document.getElementById('section-kundli'),
   };
 
   function switchSection(name) {

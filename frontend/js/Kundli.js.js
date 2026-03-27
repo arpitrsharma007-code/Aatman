@@ -421,8 +421,8 @@
     consultBtn.addEventListener('click', () => {
       expertModal.classList.remove('hidden');
       // Pre-fill with user's email if logged in
-      if (Aatman.auth?.currentUser?.email && expertEmailInput) {
-        expertEmailInput.value = Aatman.auth.currentUser.email;
+      if (Aatman.auth?.getUser()?.email && expertEmailInput) {
+        expertEmailInput.value = Aatman.auth.getUser().email;
       }
     });
   }
@@ -467,7 +467,7 @@
       } catch (err) {
         expertSubmitBtn.disabled = false;
         expertSubmitBtn.textContent = 'Reserve My Spot';
-        Aatman.showToast?.('Could not save. Please try again.', 'error');
+        Aatman.toast?.('Could not save. Please try again.', 'error');
       }
     });
   }
@@ -614,10 +614,10 @@
 
         const name = bd.place || 'kundli';
         pdf.save(`Aatman-Kundli-${name.replace(/\s+/g, '-')}-${bd.date}.pdf`);
-        Aatman.showToast?.('Kundli PDF downloaded!', 'success');
+        Aatman.toast?.('Kundli PDF downloaded!', 'success');
       } catch (err) {
         console.error('PDF export error:', err);
-        Aatman.showToast?.('PDF generation failed. Try again.', 'error');
+        Aatman.toast?.('PDF generation failed. Try again.', 'error');
       } finally {
         exportPdfBtn.disabled = false;
         exportPdfBtn.innerHTML = `
