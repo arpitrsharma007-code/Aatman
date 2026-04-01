@@ -4,7 +4,7 @@
 (function initShare() {
   'use strict';
 
-  const APP_URL = 'https://aatman-production.up.railway.app';
+  const APP_URL = 'https://aatmanai.in';
   let sessionMsgCount = 0;
   let sharePromptShown = false;
 

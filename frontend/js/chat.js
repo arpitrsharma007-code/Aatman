@@ -511,7 +511,7 @@
 
     // Share handler
     div.querySelector('.wa-share-btn').addEventListener('click', () => {
-      const refUrl = 'https://aatman-production.up.railway.app?ref=wa';
+      const refUrl = 'https://aatmanai.in?ref=wa';
       const message = encodeURIComponent(
         `Try this — Aatman, an AI that truly understands Hindu spirituality. I just had a meaningful conversation about ${topic}. ${refUrl}`
       );
