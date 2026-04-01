@@ -266,6 +266,26 @@
           <label class="auth-label" for="signupPassword">Password</label>
           <input type="password" id="signupPassword" class="auth-input" placeholder="At least 6 characters" required autocomplete="new-password" />
         </div>
+         <!-- ─── Consent checkboxes (required by auth.js) ─── -->
+        <div class="consent-section">
+          <label class="consent-item">
+            <input type="checkbox" id="ageVerify" />
+            I am 13 years of age or older
+          </label>
+          <label class="consent-item">
+            <input type="checkbox" id="aiDisclosure" />
+            I understand Aatman uses AI for spiritual guidance, not professional advice
+          </label>
+          <label class="consent-item">
+            <input type="checkbox" id="privacyConsent" />
+            I agree to the <a href="/docs/privacy.html" target="_blank">Privacy Policy</a>
+          </label>
+          <label class="consent-item">
+            <input type="checkbox" id="tosAccept" />
+            I accept the <a href="/docs/terms.html" target="_blank">Terms of Service</a>
+          </label>
+          <div class="consent-error hidden" id="consentError">Please check all boxes above to continue.</div>
+        </div>
         <div class="auth-error hidden" id="signupError"></div>
         <button type="submit" class="auth-submit-btn" id="signupSubmitBtn">
           <span>Begin Your Journey 🌸</span>
