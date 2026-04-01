@@ -89,6 +89,16 @@
     if (main) main.style.display = 'none';
   }
 
+  // Show landing page if it exists, otherwise fall back to auth overlay
+  function showLandingOrAuth() {
+    const lp = document.getElementById('aatmanLanding');
+    if (lp) {
+      showLanding();
+    } else {
+      showAuthOverlay();
+    }
+  }
+
   // ─── Tab switching ────────────────────────────────────────────────────
   if (loginTabBtn) {
     loginTabBtn.addEventListener('click', () => {
@@ -365,12 +375,12 @@
     // Keep language preference
     // Clear chat history from localStorage
     localStorage.removeItem('aatman_chat_history');
-    // Clear chat UI before reload
+    // Clear chat UI
     if (window.Aatman?.chat?.clearHistory) {
       Aatman.chat.clearHistory();
     }
-    // Reload page — cleanest way to reset all UI state
-    window.location.reload();
+    // Show landing page or auth overlay
+    showLandingOrAuth();
   }
 
   // ─── Server profile update ─────────────────────────────────────────────
@@ -461,12 +471,12 @@
             if (modal) modal.classList.remove('hidden');
           }
         } else {
-          // Token invalid — show auth overlay so user can sign in again
+          // Token invalid — clear and show landing or auth
           localStorage.removeItem(TOKEN_KEY);
           localStorage.removeItem(USER_KEY);
           currentToken = null;
           currentUser  = null;
-          showAuthOverlay();
+          showLandingOrAuth();
         }
       } catch (e) {
         // Network error — allow offline with cached user
@@ -474,8 +484,8 @@
         hideLanding();
       }
     } else {
-      // No saved session — show auth overlay
-      showAuthOverlay();
+      // No saved session — show landing page or auth overlay
+      showLandingOrAuth();
     }
   }
 

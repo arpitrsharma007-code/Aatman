@@ -6,10 +6,24 @@
   <meta name="description" content="Aatman — A Hindu Spiritual AI Companion. Find wisdom, peace, and guidance through the ancient teachings of the Bhagavad Gita, Upanishads, and more." />
   <title>Aatman ॐ — Hindu Spiritual AI Companion</title>
 
+  <!-- Open Graph — WhatsApp / Social Link Previews -->
+  <meta property="og:title" content="Aatman — Your Hindu Spiritual Companion" />
+  <meta property="og:description" content="AI-powered spiritual guidance rooted in the Gita, Upanishads, and Vedanta. In Hindi, English, or Hinglish." />
+  <meta property="og:image" content="https://aatmanai.in/icon-512.png" />
+  <meta property="og:url" content="https://aatmanai.in" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Aatman" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Aatman — Your Hindu Spiritual Companion" />
+  <meta name="twitter:description" content="AI-powered spiritual guidance rooted in the Gita, Upanishads, and Vedanta." />
+  <meta name="twitter:image" content="https://aatmanai.in/icon-512.png" />
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#FF9933">
   <link rel="apple-touch-icon" href="/icon-192.png">
@@ -19,6 +33,185 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
+
+  <!-- ══════════════════════════════════════
+       LANDING PAGE (shown to unauthenticated visitors)
+  ══════════════════════════════════════ -->
+  <div class="aatman-landing" id="aatmanLanding">
+
+    <!-- Mandala watermark SVG -->
+    <svg class="mandala-watermark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#D4A843" stroke-width="0.5">
+            <circle cx="200" cy="200" r="60"/>
+            <circle cx="200" cy="200" r="90"/>
+            <circle cx="200" cy="200" r="120"/>
+            <circle cx="200" cy="200" r="150"/>
+            <circle cx="200" cy="200" r="180"/>
+            <g transform="translate(200,200)">
+                <ellipse rx="20" ry="80" transform="rotate(0)"/>
+                <ellipse rx="20" ry="80" transform="rotate(30)"/>
+                <ellipse rx="20" ry="80" transform="rotate(60)"/>
+                <ellipse rx="20" ry="80" transform="rotate(90)"/>
+                <ellipse rx="20" ry="80" transform="rotate(120)"/>
+                <ellipse rx="20" ry="80" transform="rotate(150)"/>
+            </g>
+            <g transform="translate(200,200)">
+                <ellipse rx="15" ry="120" transform="rotate(15)"/>
+                <ellipse rx="15" ry="120" transform="rotate(45)"/>
+                <ellipse rx="15" ry="120" transform="rotate(75)"/>
+                <ellipse rx="15" ry="120" transform="rotate(105)"/>
+                <ellipse rx="15" ry="120" transform="rotate(135)"/>
+                <ellipse rx="15" ry="120" transform="rotate(165)"/>
+            </g>
+        </g>
+    </svg>
+
+    <!-- Nav -->
+    <nav class="aatman-nav">
+        <div class="aatman-logo">
+            <span class="om-symbol">🕉️</span>
+            <div>
+                <div class="logo-text">Aatman</div>
+                <div class="logo-sanskrit">आत्मन् · THE SOUL</div>
+            </div>
+        </div>
+        <div class="nav-lang">🌐 7 Languages</div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="aatman-hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            AI-powered · Available 24/7
+        </div>
+
+        <h1 class="hero-title">
+            Your <span class="saffron">spiritual companion</span>, powered by ancient wisdom
+        </h1>
+
+        <p class="hero-sanskrit">
+            "योगः कर्मसु कौशलम्" — Yoga is skill in action
+        </p>
+
+        <p class="hero-subtitle">
+            A 24/7 AI guide rooted in the Bhagavad Gita, Vedas, Upanishads &amp; Hindu tradition. Ask about life, purpose, anxiety, relationships — get personal, scripture-grounded answers in your language.
+        </p>
+
+        <div class="hero-cta">
+            <button class="cta-primary" onclick="Aatman.auth.showAuthOverlay()">
+                Begin Your Journey 🙏
+            </button>
+            <span class="cta-secondary">Free to start · <strong>No credit card needed</strong></span>
+        </div>
+    </section>
+
+    <!-- Social proof strip -->
+    <div class="social-proof">
+        <div class="proof-item">
+            <span class="proof-icon">🌍</span>
+            <span>Seekers in <span class="proof-number">5+ countries</span></span>
+        </div>
+        <div class="proof-item">
+            <span class="proof-icon">📖</span>
+            <span><span class="proof-number">7</span> Indian languages</span>
+        </div>
+        <div class="proof-item">
+            <span class="proof-icon">🙏</span>
+            <span><span class="proof-number">5</span> scripture traditions</span>
+        </div>
+    </div>
+
+    <!-- Demo chat preview -->
+    <section class="demo-section">
+        <div class="demo-label">See how Aatman guides you</div>
+
+        <div class="demo-chat">
+            <div class="demo-chat-header">
+                <div class="demo-avatar">🙏</div>
+                <span>Aatman</span>
+            </div>
+            <div class="demo-chat-body">
+                <div class="demo-msg-user">
+                    I feel lost in my career. I don't know if I'm on the right path. What does the Gita say?
+                </div>
+                <div class="demo-msg-ai">
+                    The Gita speaks directly to this confusion you feel. Krishna tells Arjuna:
+                    <span class="shloka">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन</span>
+                    <span class="shloka-ref">— Bhagavad Gita 2.47</span>
+                    Your right is to your work alone, never to its fruits. When you shift focus from outcomes to the sincerity of your effort, the path reveals itself. The confusion isn't about the wrong career — it's about attachment to a specific result. What if you gave your full energy to today's work without judging where it leads?
+                    <div class="demo-ai-footer">🕉️ AI · AI-generated · May not be accurate</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sample-questions">
+            <span class="sample-q">How to deal with anxiety?</span>
+            <span class="sample-q">What is my dharma?</span>
+            <span class="sample-q">How to forgive someone?</span>
+            <span class="sample-q">Meditation for beginners</span>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonial-section">
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    I'm from Brazil but I've always been drawn to Hindu philosophy. Aatman feels like talking to a wise friend who actually knows the scriptures. I use it every night before sleep.
+                </p>
+                <div class="testimonial-author">
+                    <span class="testimonial-flag">🇧🇷</span>
+                    <div class="testimonial-info">
+                        <div class="author-name">Early User</div>
+                        <div class="author-location">São Paulo, Brazil</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">
+                    I found this app an amazing idea! I think it can unite technology, spirituality and mental health! I used this morning, and loved the message it sent me. Makes much sense to me.
+                </p>
+                <div class="testimonial-author">
+                    <span class="testimonial-flag">🙏</span>
+                    <div class="testimonial-info">
+                        <div class="author-name">Early User</div>
+                        <div class="author-location">Aatman Community</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features strip -->
+    <div class="features-strip">
+        <div class="feature-cell">
+            <div class="feature-emoji">📜</div>
+            <div class="feature-name">Scripture-Grounded</div>
+            <div class="feature-desc">Real shlokas from Gita, Vedas, Upanishads with translation</div>
+        </div>
+        <div class="feature-cell">
+            <div class="feature-emoji">🌙</div>
+            <div class="feature-name">Available 24/7</div>
+            <div class="feature-desc">Guidance at 2 AM when you need it most</div>
+        </div>
+        <div class="feature-cell">
+            <div class="feature-emoji">🔒</div>
+            <div class="feature-name">Private &amp; Safe</div>
+            <div class="feature-desc">Your conversations stay yours. DPDP Act compliant.</div>
+        </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="bottom-cta">
+        <p>Join <strong>seekers across 5+ countries</strong> already using Aatman</p>
+        <button class="cta-primary" onclick="Aatman.auth.showAuthOverlay()">
+            Start Free · Ask Your First Question
+        </button>
+    </div>
+
+  </div>
+
+
 
   <!-- ════════════════════════════════════════════
        AUTH OVERLAY (shown before app if not authenticated)
@@ -147,7 +340,7 @@
   <!-- ════════════════════════════════════════════
        HEADER
   ════════════════════════════════════════════ -->
-  <header class="header" role="banner">
+  <header class="header" role="banner" style="display:none">
     <div class="header-inner">
       <!-- Logo -->
       <a class="logo" href="#" aria-label="Aatman Home">
@@ -236,7 +429,7 @@
   <!-- ════════════════════════════════════════════
        MAIN CONTENT
   ════════════════════════════════════════════ -->
-  <main class="main" role="main">
+  <main class="main" role="main" style="display:none">
 
     <!-- ─────────────────────────────────────────
          SECTION 1 · CHAT
@@ -1094,6 +1287,44 @@
         <p style="font-weight:600;margin-top:0.5rem;">Reserved! We'll reach out when expert sessions launch.</p>
       </div>
       <button class="btn btn--secondary" id="jyotishExpertDismiss" style="width:100%;margin-top:0.5rem;">Close</button>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════
+       FIRST-TIME ONBOARDING MODAL (AI Disclosure)
+  ════════════════════════════════════════════ -->
+  <div class="onboarding-overlay hidden" id="onboardingModal">
+    <div class="onboarding-card">
+      <div class="onboarding-header">
+        <div class="onboarding-om">ॐ</div>
+        <h2>Welcome to Aatman</h2>
+        <p>Your AI spiritual companion</p>
+      </div>
+      <div class="onboarding-body">
+        <div class="onboarding-point">
+          <span class="onboarding-icon" style="background:#FFF3E0;">🤖</span>
+          <div>
+            <strong>I am an AI, not a guru</strong>
+            <p>My responses are generated by artificial intelligence. I am not a human spiritual advisor or religious authority.</p>
+          </div>
+        </div>
+        <div class="onboarding-point">
+          <span class="onboarding-icon" style="background:#E3F2FD;">📖</span>
+          <div>
+            <strong>Guidance, not gospel</strong>
+            <p>I draw from Hindu scriptures for perspective, but my responses may not always be accurate. Verify with qualified teachers.</p>
+          </div>
+        </div>
+        <div class="onboarding-point">
+          <span class="onboarding-icon" style="background:#E8F5E9;">🛡️</span>
+          <div>
+            <strong>Your privacy matters</strong>
+            <p>Your conversations are private. Our AI provider does not train models on your data. You can delete your data at any time.</p>
+          </div>
+        </div>
+        <button class="btn btn--primary" id="onboardingDismissBtn" style="width:100%;margin-top:12px;">I understand — Begin my journey</button>
+      </div>
     </div>
   </div>
 
